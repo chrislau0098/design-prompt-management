@@ -1,0 +1,174 @@
+{
+    "_comment": "Festive Editorial · Crimson Wash v0.1 (2026-05-24 Phase C R-91 #25). Light mode + sans + brutalist editorial + red GrainGradient shader.",
+    "style_meta": {
+        "style_name": "Festive Editorial · Crimson Wash",
+        "style_handle": "festive-editorial-crimson",
+        "version": "v0.1",
+        "mode": "light",
+        "brand_hue": 28,
+        "chromatic_background": null,
+        "display_typeface_class": "sans",
+        "long_scroll": true,
+        "ground_truth_images": null,
+        "ground_truth_signature": "白底大块红 blur + 黑色无衬线大字 / 编辑大气",
+        "evidence_chain": "ivory bg + crimson primary + GrainGradient red corners blur + 黑色 Helvetica 800 weight + negative letter-spacing → festive-editorial decorative pack",
+        "mood_adjectives": ["Festive", "Editorial", "Crimson-Wash", "Brutalist-Bold", "Declarative"],
+        "proposition": "An ivory editorial campaign report where massive black sans-serif headlines stamp the page with conviction, large crimson numerals carry every focal claim, and red GrainGradient blur washes drift across the page like brushstrokes.",
+        "decorative_pack": "festive-editorial",
+        "focal_numeral_strategy": "primary_on_neutral"
+    },
+    "atomic": {
+        "color": {
+            "neutral_hue": 28,
+            "foreground_hue": null,
+            "background": [0.985, 0.003, 28],
+            "surface_l1": [0.985, 0.003, 28],
+            "surface_l2": [0.965, 0.004, 28],
+            "surface_l3": [0.935, 0.005, 28],
+            "foreground": [0.14, 0.008, 28],
+            "foreground_2": [0.4, 0.008, 28],
+            "foreground_3": [0.6, 0.008, 28],
+            "border": [0.14, 0.008, 28, 0.1],
+            "border_strong": [0.14, 0.008, 28, 0.24],
+            "primary": {"L": 0.58, "C": 0.22},
+            "primary_hl": {"L": 0.66, "C": 0.2},
+            "primary_soft": null,
+            "primary_glow_alpha": 0.16,
+            "chart_ramp": [
+                {"L": 0.55, "C": 0.2},
+                {"L": 0.45, "C": 0.16},
+                {"L": 0.35, "C": 0.12},
+                {"L": 0.25, "C": 0.08}
+            ],
+            "chart_hover": [0.14, 0.008, 28, 0.05],
+            "primary_wash": [0.58, 0.22, 28, 0.1],
+            "ambient_ink": null
+        },
+        "typography": {
+            "sans_stack": ["Helvetica Neue", "IBM Plex Sans", "Inter", "Noto Sans SC", "PingFang SC", "sans-serif"],
+            "display_stack": ["Helvetica Neue", "IBM Plex Sans", "Inter", "Noto Sans SC", "PingFang SC", "sans-serif"],
+            "mono_stack": ["IBM Plex Mono", "ui-monospace", "monospace"],
+            "font_loading": "import-cdn",
+            "weight_ceiling": "500",
+            "emphasis_tier": "regular",
+            "display_number_lg": 220,
+            "display_number_mobile": 96,
+            "display_lh": 0.82,
+            "display_ls_em": -0.05,
+            "hero_title_lg": 140,
+            "hero_title_mobile": 64,
+            "page_title_lg": null,
+            "page_title_mobile": null,
+            "section_primary_lg": 88,
+            "section_secondary_lg": 52,
+            "section_tertiary_lg": 30,
+            "quote_lg": 40,
+            "body": 15,
+            "caption": 13,
+            "lead_paragraph_lg": 18,
+            "unit_suffix_lg": 56,
+            "meta_tracking_em": 0.08,
+            "eyebrow_tracking_em": 0.18,
+            "eyebrow_px": 11,
+            "font_feature_settings": "\"kern\", \"tnum\", \"lnum\"",
+            "cjk_body_max_ch": 44,
+            "cjk_hero_max_ch": 16
+        },
+        "spacing": {
+            "base_px": 8,
+            "scale_extra": [],
+            "section_py_mobile": 28,
+            "section_py_lg": 48,
+            "section_px_lg": 16,
+            "container_max_w": "max-w-5xl"
+        },
+        "radius": {
+            "pill": "none",
+            "sharp_panel_max_px": 0,
+            "card_chrome": 0
+        },
+        "material": {
+            "depth_mechanism": "hairline-only",
+            "shadow": "none",
+            "double_bezel_spec": null,
+            "noise_overlay": "none"
+        },
+        "motion_timing": {
+            "ease_out": [0.16, 0.84, 0.24, 1],
+            "ease_inout": [0.7, 0, 0.3, 1],
+            "ease_snap": [0.18, 0, 0.05, 1],
+            "ease_spring": [0.4, 0, 0.3, 1],
+            "hover_ms": 150,
+            "button_press_ms": 100,
+            "entrance_ms_range": [500, 900],
+            "number_rolling_s_range": [1.0, 1.8],
+            "curve_path_s_range": [2.0, 2.6],
+            "spotlight_drift_s": null,
+            "signature_stroke_s": null,
+            "stagger_children_s": 0.08,
+            "inview_margin": "0px 0px -15% 0px"
+        },
+        "iconography": {
+            "stroke_width_px": 1.5,
+            "allowed_unicode": ["▲", "▼", "→", "·", "—", "•"],
+            "custom_svg_scope": "structural-plus-motion-paths"
+        }
+    },
+    "molecular": {
+        "hero_shader": {
+            "component": "GrainGradient",
+            "props": {
+                "shape": "corners",
+                "softness": 0.7,
+                "intensity": 0.65,
+                "noise": 0.1,
+                "scale": 1.6,
+                "rotation": 0,
+                "offsetX": 0,
+                "offsetY": 0,
+                "fit": "cover",
+                "colors": ["#FFFAF7", "#FFC4B0", "#FF5E40", "#E81F00"],
+                "colorBack": "#FFFAF7",
+                "speed": 1.3,
+                "speed_off_viewport": 0
+            }
+        },
+        "hero_geometry": {
+            "default_treatment": "typographic-field",
+            "radial_wash_css": null,
+            "extra_svg_layer": "none",
+            "stamp_constraint": "optional"
+        },
+        "overlay_stack": ["shader"],
+        "chart": {
+            "area_fill_opacity": 0.22,
+            "area_type": "monotone",
+            "grid_dasharray": "2 4",
+            "grid_vertical": false,
+            "grid_density_descriptor": "neutral grid, moderate density, recessive",
+            "last_point_treatment": "activeDot",
+            "cursor_style": "fill-hover",
+            "tooltip_card": "content-style"
+        },
+        "dividers": {
+            "accent_divider": "alpha-hairline",
+            "content_divider": "alpha-hairline",
+            "chapter_opener": "numeral-large"
+        }
+    },
+    "patterned": {
+        "treatment_prefs": null,
+        "dominant_move_prefs": null,
+        "layout_lean": null,
+        "density_lead": "dense"
+    },
+    "tooling": {
+        "shadcn_subset": ["Card", "Badge", "Progress", "Separator", "Tabs"],
+        "motion_apis": ["motion", "useInView", "AnimateNumber"],
+        "paper_shaders": {
+            "primary": "GrainGradient",
+            "secondary": null,
+            "banned": ["MeshGradient", "GodRays", "Dithering"]
+        }
+    }
+}

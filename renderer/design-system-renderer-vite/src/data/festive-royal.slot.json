@@ -1,0 +1,175 @@
+{
+    "_comment": "Festive Royal · Crimson Gold v0.1 (2026-05-24 Phase C R-90 #24). Chromatic deep red + muted gold serif.",
+    "style_meta": {
+        "style_name": "Festive Royal · Crimson Gold",
+        "style_handle": "festive-royal-crimson",
+        "version": "v0.1",
+        "mode": "chromatic",
+        "brand_hue": 80,
+        "chromatic_background": [0.42, 0.18, 25],
+        "display_typeface_class": "serif",
+        "long_scroll": true,
+        "ground_truth_images": null,
+        "ground_truth_signature": "整页深红朝代尊贵 / 金色衬线 / 大气庆典",
+        "evidence_chain": "chromatic deep red bg + muted gold ivory foreground + pure gold primary + serif display (Cormorant Garamond / Noto Serif SC) + GrainGradient deep red grain shader → festive-royal decorative pack",
+        "mood_adjectives": ["Festive", "Royal", "Crimson-Gold", "Ceremonial", "Grand"],
+        "proposition": "A deep crimson campaign report where pure gold serif numerals carry every focal claim, gold-tinted ivory prose drapes across deep red chromatic ground, and chapter rhythm flows through gold seal stamps and hairline gold rules.",
+        "decorative_pack": "festive-royal",
+        "focal_numeral_strategy": "primary_on_neutral"
+    },
+    "atomic": {
+        "color": {
+            "neutral_hue": 25,
+            "foreground_hue": 80,
+            "background": [0.42, 0.18, 25],
+            "surface_l1": [0.42, 0.18, 25],
+            "surface_l2": [0.38, 0.17, 25],
+            "surface_l3": [0.34, 0.15, 25],
+            "foreground": [0.92, 0.04, 80],
+            "foreground_2": [0.82, 0.06, 80],
+            "foreground_3": [0.70, 0.08, 80],
+            "border": [0.92, 0.04, 80, 0.18],
+            "border_strong": [0.92, 0.04, 80, 0.32],
+            "primary": {"L": 0.82, "C": 0.14},
+            "primary_hl": {"L": 0.88, "C": 0.10},
+            "primary_soft": null,
+            "primary_glow_alpha": 0.18,
+            "chart_ramp": [
+                {"L": 0.80, "C": 0.14, "H": 75},
+                {"L": 0.74, "C": 0.16, "H": 55},
+                {"L": 0.68, "C": 0.18, "H": 40},
+                {"L": 0.62, "C": 0.20, "H": 25}
+            ],
+            "chart_hover": [0.92, 0.04, 80, 0.08],
+            "primary_wash": [0.82, 0.14, 80, 0.14],
+            "ambient_ink": null
+        },
+        "typography": {
+            "sans_stack": ["Cormorant Garamond", "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "serif"],
+            "display_stack": ["Cormorant Garamond", "Playfair Display", "Noto Serif SC", "Source Han Serif SC", "serif"],
+            "mono_stack": ["IBM Plex Mono", "ui-monospace", "monospace"],
+            "font_loading": "import-cdn",
+            "weight_ceiling": "700",
+            "emphasis_tier": "bold",
+            "display_number_lg": 180,
+            "display_number_mobile": 80,
+            "display_lh": 0.88,
+            "display_ls_em": -0.02,
+            "hero_title_lg": 96,
+            "hero_title_mobile": 48,
+            "page_title_lg": null,
+            "page_title_mobile": null,
+            "section_primary_lg": 72,
+            "section_secondary_lg": 48,
+            "section_tertiary_lg": 28,
+            "quote_lg": 36,
+            "body": 16,
+            "caption": 13,
+            "lead_paragraph_lg": 19,
+            "unit_suffix_lg": 44,
+            "meta_tracking_em": 0.14,
+            "eyebrow_tracking_em": 0.22,
+            "eyebrow_px": 12,
+            "font_feature_settings": "\"kern\", \"liga\", \"tnum\", \"lnum\", \"onum\" 0",
+            "cjk_body_max_ch": 44,
+            "cjk_hero_max_ch": 18
+        },
+        "spacing": {
+            "base_px": 8,
+            "scale_extra": [32],
+            "section_py_mobile": 32,
+            "section_py_lg": 56,
+            "section_px_lg": 20,
+            "container_max_w": "max-w-4xl"
+        },
+        "radius": {
+            "pill": "none",
+            "sharp_panel_max_px": 2,
+            "card_chrome": 2
+        },
+        "material": {
+            "depth_mechanism": "hairline-only",
+            "shadow": "none",
+            "double_bezel_spec": null,
+            "noise_overlay": "none"
+        },
+        "motion_timing": {
+            "ease_out": [0.2, 0.85, 0.25, 1],
+            "ease_inout": [0.7, 0.05, 0.2, 1],
+            "ease_snap": [0.18, 0, 0.05, 1],
+            "ease_spring": [0.42, 0, 0.3, 1],
+            "hover_ms": 200,
+            "button_press_ms": 120,
+            "entrance_ms_range": [700, 1100],
+            "number_rolling_s_range": [1.6, 2.4],
+            "curve_path_s_range": [2.4, 3.2],
+            "spotlight_drift_s": null,
+            "signature_stroke_s": 2.2,
+            "stagger_children_s": 0.1,
+            "inview_margin": "0px 0px -12% 0px"
+        },
+        "iconography": {
+            "stroke_width_px": 1,
+            "allowed_unicode": ["▲", "▼", "·", "—", "•", "※"],
+            "custom_svg_scope": "structural-plus-motion-paths"
+        }
+    },
+    "molecular": {
+        "hero_shader": {
+            "component": "GrainGradient",
+            "props": {
+                "shape": "wave",
+                "softness": 0.85,
+                "intensity": 0.45,
+                "noise": 0.08,
+                "scale": 1.6,
+                "rotation": 0,
+                "offsetX": 0,
+                "offsetY": 0.18,
+                "fit": "cover",
+                "colors": ["#7A1818", "#A23030", "#C04848", "#D9A55C"],
+                "colorBack": "#5E1414",
+                "speed": 1.4,
+                "speed_off_viewport": 0
+            }
+        },
+        "hero_geometry": {
+            "default_treatment": "full-bleed-monolith",
+            "radial_wash_css": "radial-gradient(ellipse 700px 500px at 50% 38%, oklch(0.82 0.14 80 / 0.16), transparent 70%)",
+            "extra_svg_layer": "none",
+            "stamp_constraint": "bounded-3x"
+        },
+        "overlay_stack": ["shader", "radial_wash", "stamp"],
+        "chart": {
+            "area_fill_opacity": "gradient",
+            "area_type": "natural",
+            "grid_dasharray": "2 4",
+            "grid_vertical": false,
+            "grid_density_descriptor": "gold hairline whisper, recessive on crimson ground",
+            "last_point_treatment": "halo+dot",
+            "cursor_style": "dashed-stroke",
+            "tooltip_card": "custom-component"
+        },
+        "dividers": {
+            "accent_divider": "gradient-hairline",
+            "content_divider": "alpha-hairline",
+            "chapter_opener": "seal-stamp",
+            "golden_hairline": "festive-royal-golden-hairline"
+        }
+    },
+    "patterned": {
+        "treatment_prefs": null,
+        "dominant_move_prefs": null,
+        "layout_lean": null,
+        "density_lead": "spacious"
+    },
+    "tooling": {
+        "shadcn_subset": ["Card", "Badge", "Progress", "Separator"],
+        "motion_apis": ["motion", "useInView", "AnimateNumber"],
+        "paper_shaders": {
+            "primary": "GrainGradient",
+            "secondary": null,
+            "banned": ["MeshGradient", "GodRays", "Dithering"]
+        }
+    }
+}

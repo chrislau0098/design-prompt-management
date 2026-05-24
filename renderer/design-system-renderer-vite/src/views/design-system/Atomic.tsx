@@ -1,0 +1,254 @@
+import { fmtOKLCH, type OklchObj } from './oklch'
+
+interface AtomicProps {
+  slot: Record<string, any>
+}
+
+/* ─── Swatch group ─── */
+function SwatchGroup({ items }: { items: Array<{ name: string; value: any; h: number; css: string }> }) {
+  return (
+    <div className="swatch-grid">
+      {items.map(({ name, value, h, css }) => {
+        const isAlpha = Array.isArray(value) && value.length === 4 && value[3] < 0.5
+        return (
+          <div className="swatch" key={name}>
+            <div
+              className={`swatch-color${isAlpha ? ' checkered' : ''}`}
+              style={{ background: css }}
+            />
+            <div className="swatch-meta">
+              <div className="swatch-name">{name}</div>
+              <div className="swatch-value">{fmtOKLCH(value, h)}</div>
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+export function Atomic({ slot }: AtomicProps) {
+  const c = slot.atomic?.color
+  const t = slot.atomic?.typography
+  const r = slot.atomic?.radius
+  const m = slot.atomic?.material
+  const sp = slot.atomic?.spacing
+
+  if (!c || !t || !r) return null
+
+  const nh: number = c.neutral_hue
+  const fh: number = c.foreground_hue ?? nh
+  const bh: number = slot.style_meta?.brand_hue ?? nh
+  const d = slot
+
+  // Color swatch groups
+  const surfaces = [
+    { name: 'background', value: c.background, h: nh, css: 'var(--bg)' },
+    { name: 'surface_l1', value: c.surface_l1, h: nh, css: 'var(--surface-l1)' },
+    { name: 'surface_l2', value: c.surface_l2, h: nh, css: 'var(--surface-l2)' },
+    { name: 'surface_l3', value: c.surface_l3, h: nh, css: 'var(--surface-l3)' },
+    { name: 'foreground', value: c.foreground, h: fh, css: 'var(--fg)' },
+    { name: 'foreground_2', value: c.foreground_2, h: fh, css: 'var(--fg-2)' },
+    { name: 'foreground_3', value: c.foreground_3, h: fh, css: 'var(--fg-3)' },
+  ]
+
+  const primary = [
+    { name: 'primary', value: c.primary, h: bh, css: 'var(--primary)' },
+    { name: 'primary_hl', value: c.primary_hl, h: bh, css: 'var(--primary-hl)' },
+    ...(c.primary_soft ? [{ name: 'primary_soft', value: c.primary_soft, h: bh, css: 'var(--primary-soft)' }] : []),
+  ]
+
+  const chart = [
+    { name: 'chart-1 (=primary)', value: c.primary, h: bh, css: 'var(--chart-1)' },
+    ...c.chart_ramp.map((v: OklchObj & { H?: number }, i: number) => ({
+      name: `chart-${i + 2}`,
+      value: v,
+      h: v.H ?? bh,
+      css: `var(--chart-${i + 2})`,
+    })),
+    { name: 'chart_hover', value: c.chart_hover, h: c.chart_hover[2], css: 'var(--chart-hover)' },
+  ]
+
+  const overlay = [
+    { name: 'border', value: c.border, h: c.border[2], css: 'var(--border)' },
+    { name: 'border_strong', value: c.border_strong, h: c.border_strong[2], css: 'var(--border-strong)' },
+    ...(c.primary_wash ? [{ name: 'primary_wash', value: c.primary_wash, h: c.primary_wash[2], css: 'var(--primary-wash)' }] : []),
+    ...(c.ambient_ink ? [{ name: 'ambient_ink', value: c.ambient_ink, h: c.ambient_ink[2], css: 'var(--ambient-ink)' }] : []),
+  ]
+
+  // Typography samples
+  const isEditorial = d.style_meta?.decorative_pack === 'editorial'
+  const typeSamples = [
+    {
+      label: 'Display Number',
+      meta: `${t.display_number_lg}px · lh ${t.display_lh} · ls ${t.display_ls_em}em · ${t.display_stack[0]}`,
+      el: (
+        <div className="type-display type-display-number" style={{
+          fontSize: Math.min(t.display_number_lg, 160),
+          lineHeight: t.display_lh,
+          letterSpacing: `${t.display_ls_em}em`,
+          fontFamily: 'var(--display-stack)',
+          color: 'var(--primary)',
+          fontWeight: 500,
+          fontFeatureSettings: '"tnum","lnum"',
+        }}>
+          ¥36.5<span style={{ fontSize: Math.min(t.unit_suffix_lg || 40, 56), color: 'var(--primary-hl)', letterSpacing: '-0.02em' }}>亿</span>
+        </div>
+      ),
+    },
+    t.hero_title_lg ? {
+      label: 'Hero Title',
+      meta: `${t.hero_title_lg}px · ${t.sans_stack[0]}`,
+      el: <div style={{ fontSize: Math.min(t.hero_title_lg, 80), fontFamily: 'var(--sans-stack)', fontWeight: 500, letterSpacing: '-0.035em', color: 'var(--fg)' }}>Confident Warmth · 暖光叙事</div>,
+    } : null,
+    t.page_title_lg ? {
+      label: 'Page Title',
+      meta: `${t.page_title_lg}px · ${t.display_stack[0]}`,
+      el: <div style={{ fontSize: Math.min(t.page_title_lg, 56), fontFamily: 'var(--display-stack)', fontWeight: 500, color: 'var(--fg)' }}>Page Title · 章节标题</div>,
+    } : null,
+    {
+      label: 'Section Primary',
+      meta: `${t.section_primary_lg}px · ${t.display_stack[0]}`,
+      el: <div style={{ fontSize: Math.min(t.section_primary_lg, 96), fontFamily: 'var(--display-stack)', fontWeight: 500, color: 'var(--fg)' }}>Section Primary</div>,
+    },
+    {
+      label: 'Section Secondary',
+      meta: `${t.section_secondary_lg}px`,
+      el: <div style={{ fontSize: Math.min(t.section_secondary_lg, 64), fontFamily: 'var(--display-stack)', fontWeight: 500, color: 'var(--fg)' }}>Section Secondary · 子标题</div>,
+    },
+    {
+      label: 'Section Tertiary',
+      meta: `${t.section_tertiary_lg}px`,
+      el: <div style={{ fontSize: t.section_tertiary_lg, fontFamily: 'var(--display-stack)', color: 'var(--fg)' }}>Section Tertiary · 内容标题</div>,
+    },
+    {
+      label: 'Quote',
+      meta: `${t.quote_lg}px · ${isEditorial ? 'italic' : 'normal'}`,
+      el: <div style={{ fontSize: t.quote_lg, fontFamily: 'var(--display-stack)', fontStyle: isEditorial ? 'italic' : 'normal', color: 'var(--fg)' }}>
+        "Drama comes from the warm light field, the chapter hairline cadence, and confident sans typography held at medium weight."
+      </div>,
+    },
+    {
+      label: 'Body',
+      meta: `${t.body}px · cjk_body_max_ch ${t.cjk_body_max_ch} · feat: ${t.font_feature_settings.replace(/"/g, '')}`,
+      el: <div style={{ fontSize: t.body, maxWidth: `${t.cjk_body_max_ch}ch`, fontFamily: 'var(--sans-stack)', color: 'var(--fg)' }}>
+        这是一段中文正文示例，用来检验字号、行高、字重与中英文混排在该风格下的视觉节奏。Body copy at {t.body}px sets the rhythm for long-form reading inside reports.
+      </div>,
+    },
+    {
+      label: 'Caption / Mono',
+      meta: `${t.caption}px · ${t.mono_stack[0]} · tracking ${t.meta_tracking_em}em`,
+      el: <div style={{ fontSize: t.caption, letterSpacing: `${t.meta_tracking_em}em`, textTransform: 'uppercase', fontFamily: 'var(--mono-stack)', color: 'var(--fg-2)' }}>
+        META · CAPTION · 12.34% · {new Date().toISOString().slice(0, 10)}
+      </div>,
+    },
+    {
+      label: 'Eyebrow',
+      meta: `${t.eyebrow_px}px · tracking ${t.eyebrow_tracking_em}em`,
+      el: <div style={{ fontSize: t.eyebrow_px, letterSpacing: `${t.eyebrow_tracking_em}em`, textTransform: 'uppercase', fontFamily: 'var(--mono-stack)', color: 'var(--primary)' }}>
+        CHAPTER 03 · NUMBERS PERFORM
+      </div>,
+    },
+  ].filter(Boolean) as Array<{ label: string; meta: string; el: React.ReactNode }>
+
+  const baseRem = 4
+
+  return (
+    <>
+      {/* M-01 Color */}
+      <section className="section" id="m-color">
+        <div className="section-header">
+          <span className="section-num">M-01</span>
+          <h2 className="section-title">Color · OKLCH Swatch</h2>
+          <span className="section-desc">brand H {bh} · neutral H {nh} · fg H {fh}</span>
+        </div>
+        <div className="subsection-title">Surfaces &amp; Foreground</div>
+        <SwatchGroup items={surfaces} />
+        <div className="subsection-title">Primary Ramp</div>
+        <SwatchGroup items={primary} />
+        <div className="subsection-title">Chart Ramp</div>
+        <SwatchGroup items={chart} />
+        <div className="subsection-title">Overlays &amp; Borders</div>
+        <SwatchGroup items={overlay} />
+      </section>
+
+      {/* M-02 Typography */}
+      <section className="section" id="m-type">
+        <div className="section-header">
+          <span className="section-num">M-02</span>
+          <h2 className="section-title">Typography · 字号节奏</h2>
+          <span className="section-desc">weight ≤ {t.weight_ceiling} · {t.emphasis_tier} · {t.font_loading}</span>
+        </div>
+        <div>
+          {typeSamples.map((s) => (
+            <div className="type-sample" key={s.label}>
+              <div className="type-label">
+                <span>{s.label}</span>
+                {s.meta}
+              </div>
+              {s.el}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* M-05 Radius / Shadow / Spacing */}
+      <section className="section" id="m-rss">
+        <div className="section-header">
+          <span className="section-num">M-05</span>
+          <h2 className="section-title">Radius · Shadow · Spacing</h2>
+          <span className="section-desc">圆角 / 阴影 / 间距 / 容器</span>
+        </div>
+        <div className="rss-grid">
+          <div className="rss-card">
+            <div className="subsection-title" style={{ margin: 0 }}>Radius</div>
+            <div className="rss-sample-row">
+              <div className="rss-sample pill">Pill</div>
+              <div className="rss-sample sharp">Sharp Panel</div>
+              <div className="rss-sample card">Card Chrome</div>
+            </div>
+            <div className="spacing-label">
+              pill: {r.pill} · sharp: {r.sharp_panel_max_px}px · card: {r.card_chrome === 'double-bezel' ? 'double-bezel (outer ring + inner card)' : `${r.card_chrome}px`}
+            </div>
+          </div>
+
+          <div className="rss-card">
+            <div className="subsection-title" style={{ margin: 0 }}>Shadow / Depth</div>
+            <div className="rss-sample-row">
+              <div className="rss-sample shadow-none">none</div>
+              <div className="rss-sample shadow-inset-glow">inset-glow</div>
+              <div className="rss-sample shadow-inset-light">inset-light</div>
+            </div>
+            <div className="spacing-label">
+              {m?.depth_mechanism} · shadow: {m?.shadow} · noise: {m?.noise_overlay}
+            </div>
+          </div>
+
+          <div className="rss-card">
+            <div className="subsection-title" style={{ margin: 0 }}>Spacing &amp; Container</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div className="spacing-label">section_py_mobile</div>
+              <div
+                className="spacing-bar"
+                style={{ height: Math.min(sp?.section_py_mobile * 2, 80) }}
+              >
+                py-{sp?.section_py_mobile} · {sp?.section_py_mobile * baseRem}px
+              </div>
+              <div className="spacing-label">section_py_lg</div>
+              <div
+                className="spacing-bar"
+                style={{ height: Math.min(sp?.section_py_lg * 2, 120) }}
+              >
+                py-{sp?.section_py_lg} · {sp?.section_py_lg * baseRem}px
+              </div>
+              <div className="spacing-label">container_max_w</div>
+              <div className="spacing-bar">
+                {sp?.container_max_w} · base {sp?.base_px}px · extra [{sp?.scale_extra?.join(',')}]
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  )
+}

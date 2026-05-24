@@ -1,0 +1,224 @@
+{
+    "_comment": "Generated 2026-05-21 by Cowork sub-agent, based on T1 + Slot Schema v0.2 (Round-81)",
+    "style_meta": {
+        "style_name": "Confident Warmth · Ivory Ember",
+        "style_handle": "warm-restraint-tech",
+        "version": "v1.0.1",
+        "mode": "light",
+        "brand_hue": 50,
+        "chromatic_background": null,
+        "long_scroll": true,
+        "ground_truth_images": [],
+        "ground_truth_signature": "象牙暖光杂志风,暖橙呼吸 ember",
+        "evidence_chain": "ground-truth (杂志风暖光) → ivory bg + ember primary + hairline chapter rhythm + GrainGradient breath → Hero asymmetric split + ChapterBanner + OutroSignature → editorial decorative pack",
+        "mood_adjectives": ["Warm", "Confident", "Brand-Forward", "Bright"],
+        "proposition": "An ivory campaign report where warm-orange ember light radiates from the Hero, chapter openers carry a hairline rule with mono ember kicker and claim-line title, large humanist sans figures in ember carry every claim, and warm-neutral units and delta arrows mark direction. Drama comes from the warm light field, a warm-grain shader breathing under the Hero, the chapter hairline cadence, and confident sans typography held at medium weight.",
+        "decorative_pack": "editorial",
+        "focal_numeral_strategy": "primary_on_neutral"
+    },
+    "atomic": {
+        "color": {
+            "neutral_hue": 80,
+            "foreground_hue": null,
+            "background": [0.962, 0.003, 80],
+            "surface_l1": [0.962, 0.003, 80],
+            "surface_l2": [0.938, 0.004, 80],
+            "surface_l3": [0.912, 0.005, 80],
+            "foreground": [0.180, 0.005, 80],
+            "foreground_2": [0.450, 0.005, 80],
+            "foreground_3": [0.620, 0.005, 80],
+            "border": [0.220, 0.005, 80, 0.09],
+            "border_strong": [0.220, 0.005, 80, 0.18],
+            "primary": {"L": 0.72, "C": 0.16},
+            "primary_hl": {"L": 0.78, "C": 0.14},
+            "primary_soft": {"L": 0.86, "C": 0.10},
+            "primary_glow_alpha": 0.18,
+            "chart_ramp": [
+                {"L": 0.620, "C": 0.130},
+                {"L": 0.520, "C": 0.105},
+                {"L": 0.420, "C": 0.080},
+                {"L": 0.320, "C": 0.060}
+            ],
+            "chart_hover": [0.220, 0.005, 80, 0.05],
+            "primary_wash": [0.72, 0.16, 50, 0.12],
+            "ambient_ink": null
+        },
+        "typography": {
+            "sans_stack": ["Noto Sans SC Variable", "Noto Sans SC", "PingFang SC", "Helvetica Neue", "sans-serif"],
+            "display_stack": ["Geist Variable", "Geist", "Noto Sans SC", "sans-serif"],
+            "mono_stack": ["Geist Mono", "ui-monospace", "monospace"],
+            "font_loading": "npm",
+            "weight_ceiling": "500",
+            "emphasis_tier": "none",
+            "display_number_lg": 140,
+            "display_number_mobile": 64,
+            "display_lh": 0.92,
+            "display_ls_em": -0.05,
+            "hero_title_lg": 88,
+            "hero_title_mobile": 44,
+            "page_title_lg": null,
+            "page_title_mobile": null,
+            "section_primary_lg": 56,
+            "section_secondary_lg": 40,
+            "section_tertiary_lg": 24,
+            "quote_lg": 32,
+            "body": 15,
+            "caption": 13,
+            "lead_paragraph_lg": 18,
+            "unit_suffix_lg": 40,
+            "meta_tracking_em": 0.12,
+            "eyebrow_tracking_em": 0.16,
+            "eyebrow_px": 11,
+            "font_feature_settings": "\"kern\", \"tnum\", \"lnum\", \"ss01\"",
+            "cjk_body_max_ch": 52,
+            "cjk_hero_max_ch": 20
+        },
+        "spacing": {
+            "base_px": 8,
+            "scale_extra": [32],
+            "section_py_mobile": 32,
+            "section_py_lg": 56,
+            "section_px_lg": 20,
+            "container_max_w": "max-w-3xl"
+        },
+        "radius": {
+            "pill": "rounded-full",
+            "sharp_panel_max_px": 4,
+            "card_chrome": 16
+        },
+        "material": {
+            "depth_mechanism": "hairline-only",
+            "shadow": "none",
+            "double_bezel_spec": null,
+            "noise_overlay": "none"
+        },
+        "motion_timing": {
+            "ease_out": [0.18, 0.85, 0.22, 1],
+            "ease_inout": [0.7, 0.05, 0.2, 1],
+            "ease_snap": [0.15, 0, 0.05, 1],
+            "ease_spring": [0.42, 0, 0.3, 1],
+            "hover_ms": 200,
+            "button_press_ms": 120,
+            "entrance_ms_range": [600, 1000],
+            "number_rolling_s_range": [1.6, 2.2],
+            "curve_path_s_range": [2.4, 3.0],
+            "spotlight_drift_s": null,
+            "signature_stroke_s": 1.8,
+            "stagger_children_s": 0.08,
+            "inview_margin": "0px 0px -10% 0px"
+        },
+        "iconography": {
+            "stroke_width_px": 1,
+            "allowed_unicode": ["▲", "▼", "·", "—", "•"],
+            "custom_svg_scope": "structural-only"
+        }
+    },
+    "molecular": {
+        "hero_shader": {
+            "component": "GrainGradient",
+            "props": {
+                "shape": "wave",
+                "softness": 0.9,
+                "intensity": 0.5,
+                "noise": 0.04,
+                "scale": 1.8,
+                "rotation": 0,
+                "offsetX": 0,
+                "offsetY": 0.24,
+                "fit": "cover",
+                "colors": ["#F7F6F3", "#F5E7DB", "#EDD5BA", "#EBB37F"],
+                "colorBack": "#F7F6F3",
+                "speed": 1.72,
+                "speed_off_viewport": 0
+            }
+        },
+        "hero_geometry": {
+            "default_treatment": "asymmetric-split",
+            "radial_wash_css": "radial-gradient(ellipse 800px 600px at 50% 38%, var(--ember-wash), transparent 70%)",
+            "extra_svg_layer": "none",
+            "stamp_constraint": "bounded-3x"
+        },
+        "overlay_stack": ["shader", "stamp"],
+        "chart": {
+            "area_fill_opacity": "gradient",
+            "area_type": "natural",
+            "grid_dasharray": "2 4",
+            "grid_vertical": false,
+            "grid_density_descriptor": "whisper-thin, recessive",
+            "last_point_treatment": "halo+dot",
+            "cursor_style": "dashed-stroke",
+            "tooltip_card": "custom-component"
+        },
+        "dividers": {
+            "accent_divider": "hairline-dotdotdot",
+            "content_divider": "hairline-dotdotdot",
+            "chapter_opener": "hairline-banner"
+        }
+    },
+    "patterned": {
+        "treatment_prefs": null,
+        "dominant_move_prefs": null,
+        "layout_lean": null,
+        "density_lead": "spacious"
+    },
+    "tooling": {
+        "shadcn_subset": ["Card", "Badge", "Progress", "Separator"],
+        "motion_apis": ["motion", "useInView", "AnimateNumber"],
+        "paper_shaders": {
+            "primary": "GrainGradient",
+            "secondary": null,
+            "banned": ["MeshGradient", "GodRays"]
+        }
+    },
+    "differentiation": [
+        {
+            "dimension": "主 shader",
+            "this_style": "GrainGradient (wave shape, soft pastel ember palette)",
+            "vs_warm": "—",
+            "vs_theatre": "Theatre 用 MeshGradient (distortion+swirl 戏剧光)",
+            "vs_cool": "Cool 用 GodRays (radial 射线+bloom)"
+        },
+        {
+            "dimension": "Focal numeral 色彩策略",
+            "this_style": "primary_on_neutral — focal = primary ember, unit = primary-hl",
+            "vs_warm": "—",
+            "vs_theatre": "Theatre focal = primary (orange),unit 混合",
+            "vs_cool": "Cool focal = foreground (white),primary 仅作 signal accent"
+        },
+        {
+            "dimension": "Decorative pack",
+            "this_style": "editorial — ChapterBanner / ChapterDivider / QuoteBracket / OutroSignature 杂志风装饰套件",
+            "vs_warm": "—",
+            "vs_theatre": "Theatre 无装饰组件,用 ChapterStamp SVG badge + SpotlightGradient",
+            "vs_cool": "Cool 无装饰组件,用 ChapterStamp + 全页 feTurbulence noise"
+        },
+        {
+            "dimension": "Hero 锚形态",
+            "this_style": "Asymmetric Split (editorial masthead)",
+            "vs_warm": "—",
+            "vs_theatre": "Theatre Full-bleed Monolith",
+            "vs_cool": "Cool Full-bleed Monolith + drawn-horizon SVG line"
+        },
+        {
+            "dimension": "Depth 机制",
+            "this_style": "hairline-only,无 shadow,1-step L diff",
+            "vs_warm": "—",
+            "vs_theatre": "Theatre Double-Bezel + inset-glow shadow",
+            "vs_cool": "Cool thin-border-inset + inset-light shadow"
+        },
+        {
+            "dimension": "Weight 上限",
+            "this_style": "500 (medium),无 600 emphasis tier",
+            "vs_warm": "—",
+            "vs_theatre": "Theatre 600 emphasis (delta / chapter marker)",
+            "vs_cool": "Cool 600 emphasis (delta / chapter marker)"
+        },
+        {
+            "dimension": "Section padding 节奏",
+            "this_style": "py-56 lg / py-32 mobile (最宽松杂志节奏)",
+            "vs_warm": "—",
+            "vs_theatre": "Theatre py-40 lg / py-24 mobile (中等)",
+            "vs_cool": "Cool py-40 lg / py-24 mobile (中等)"
+        }
+    ]
+}

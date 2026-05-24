@@ -1,0 +1,217 @@
+{
+    "_comment": "Generated 2026-05-21 by Cowork sub-agent, based on T1 + Slot Schema v0.2 (Round-81)",
+    "style_meta": {
+        "style_name": "Instrument Dark · Electric Blue",
+        "style_handle": "cool-precision-tech",
+        "version": "v0.5.1",
+        "mode": "dark",
+        "brand_hue": 262,
+        "chromatic_background": null,
+        "long_scroll": true,
+        "ground_truth_images": [],
+        "ground_truth_signature": "暗调仪表盘,白数字+电蓝信号",
+        "evidence_chain": "ground-truth (仪表盘暗调) → 深 bg + 白 foreground 主导 + electric blue 仅作 signal + GodRays radial → Full-bleed Monolith + drawn-horizon SVG line → instrumental decorative pack",
+        "mood_adjectives": ["Cool", "Precise", "Instrumental", "Restrained"],
+        "proposition": "A dark instrument panel where white display figures dominate, electric blue signals direction and state, and drama comes from structural light, deep negative space, engineered type, and fintech restraint.",
+        "decorative_pack": "instrumental",
+        "focal_numeral_strategy": "foreground_with_primary_signal"
+    },
+    "atomic": {
+        "color": {
+            "neutral_hue": 262,
+            "foreground_hue": 255,
+            "background": [0.12, 0.015, 262],
+            "surface_l1": [0.12, 0.015, 262],
+            "surface_l2": [0.165, 0.018, 262],
+            "surface_l3": [0.23, 0.022, 262],
+            "foreground": [0.96, 0.008, 255],
+            "foreground_2": [0.78, 0.010, 255],
+            "foreground_3": [0.58, 0.012, 255],
+            "border": [1, 0, 0, 0.06],
+            "border_strong": [1, 0, 0, 0.12],
+            "primary": {"L": 0.62, "C": 0.18},
+            "primary_hl": {"L": 0.70, "C": 0.16},
+            "primary_soft": null,
+            "primary_glow_alpha": 0.18,
+            "chart_ramp": [
+                {"L": 0.500, "C": 0.150},
+                {"L": 0.400, "C": 0.120},
+                {"L": 0.310, "C": 0.090},
+                {"L": 0.240, "C": 0.060}
+            ],
+            "chart_hover": [0.165, 0.018, 262, 0.86],
+            "primary_wash": null,
+            "ambient_ink": [0.20, 0.020, 262, 0.18]
+        },
+        "typography": {
+            "sans_stack": ["MiSans", "Noto Sans SC", "PingFang SC", "Source Han Sans SC", "sans-serif"],
+            "display_stack": ["Satoshi", "Geist Mono", "sans-serif"],
+            "mono_stack": ["IBM Plex Mono", "ui-monospace", "monospace"],
+            "font_loading": "import-cdn",
+            "weight_ceiling": "600",
+            "emphasis_tier": "semibold",
+            "display_number_lg": 200,
+            "display_number_mobile": 88,
+            "display_lh": 0.84,
+            "display_ls_em": -0.06,
+            "hero_title_lg": null,
+            "hero_title_mobile": null,
+            "page_title_lg": 56,
+            "page_title_mobile": 36,
+            "section_primary_lg": 140,
+            "section_secondary_lg": 80,
+            "section_tertiary_lg": 48,
+            "quote_lg": 36,
+            "body": 16,
+            "caption": 13,
+            "lead_paragraph_lg": null,
+            "unit_suffix_lg": null,
+            "meta_tracking_em": 0.14,
+            "eyebrow_tracking_em": 0.14,
+            "eyebrow_px": 10,
+            "font_feature_settings": "\"cv01\", \"ss03\", \"tnum\"",
+            "cjk_body_max_ch": 42,
+            "cjk_hero_max_ch": 28
+        },
+        "spacing": {
+            "base_px": 8,
+            "scale_extra": [],
+            "section_py_mobile": 24,
+            "section_py_lg": 40,
+            "section_px_lg": 16,
+            "container_max_w": "max-w-5xl"
+        },
+        "radius": {
+            "pill": "rounded-full",
+            "sharp_panel_max_px": 4,
+            "card_chrome": 4
+        },
+        "material": {
+            "depth_mechanism": "thin-border-inset",
+            "shadow": "inset-light",
+            "double_bezel_spec": null,
+            "noise_overlay": "svg-feturbulence"
+        },
+        "motion_timing": {
+            "ease_out": [0.08, 0.95, 0.15, 1],
+            "ease_inout": [0.86, 0, 0.10, 1],
+            "ease_snap": [0.12, 0, 0, 1],
+            "ease_spring": [0.38, 0, 0.58, 1],
+            "hover_ms": 150,
+            "button_press_ms": 100,
+            "entrance_ms_range": [500, 900],
+            "number_rolling_s_range": [0.8, 2.0],
+            "curve_path_s_range": [2.0, 2.8],
+            "spotlight_drift_s": 6,
+            "signature_stroke_s": null,
+            "stagger_children_s": 0.12,
+            "inview_margin": "-20%"
+        },
+        "iconography": {
+            "stroke_width_px": 1.25,
+            "allowed_unicode": ["↑", "↓", "·", "—", "•"],
+            "custom_svg_scope": "+chart-internals"
+        }
+    },
+    "molecular": {
+        "hero_shader": {
+            "component": "GodRays",
+            "props": {
+                "density": 0.12,
+                "spotty": 0.08,
+                "midIntensity": 0.25,
+                "midSize": 0.15,
+                "intensity": 0.45,
+                "bloom": 0.3,
+                "offsetX": 1,
+                "fit": "cover",
+                "colors": ["#4654f050", "#2a38c0d0", "#ffffff10", "#14122000"],
+                "colorBack": "#0c0a14",
+                "colorBloom": "#4654f0",
+                "speed": 0.8,
+                "speed_off_viewport": 0
+            }
+        },
+        "hero_geometry": {
+            "default_treatment": "full-bleed-monolith",
+            "radial_wash_css": "radial-gradient(ellipse at 80% 15%, oklch(var(--primary) / 0.28), transparent 55%), radial-gradient(ellipse at 20% 85%, oklch(var(--primary) / 0.15), transparent 50%)",
+            "extra_svg_layer": "drawn-horizon",
+            "stamp_constraint": "optional"
+        },
+        "overlay_stack": ["shader", "radial_wash", "drawn-horizon", "feturbulence-noise"],
+        "chart": {
+            "area_fill_opacity": 0.2,
+            "area_type": "monotone",
+            "grid_dasharray": "2 4",
+            "grid_vertical": false,
+            "grid_density_descriptor": "present but recessive, never competing",
+            "last_point_treatment": "none",
+            "cursor_style": "fill-hover",
+            "tooltip_card": "content-style"
+        },
+        "dividers": {
+            "accent_divider": "gradient-hairline",
+            "content_divider": "alpha-hairline",
+            "chapter_opener": "chapter-stamp-circular"
+        }
+    },
+    "patterned": {
+        "treatment_prefs": null,
+        "dominant_move_prefs": null,
+        "layout_lean": null,
+        "density_lead": "dense"
+    },
+    "tooling": {
+        "shadcn_subset": ["Card", "Badge", "Progress", "Separator"],
+        "motion_apis": ["motion", "useInView", "AnimateNumber"],
+        "paper_shaders": {
+            "primary": "GodRays",
+            "secondary": null,
+            "banned": ["GrainGradient", "MeshGradient"]
+        }
+    },
+    "differentiation": [
+        {
+            "dimension": "主 shader",
+            "this_style": "GodRays (radial 射线 + bloom + spotty)",
+            "vs_warm": "Warm 用 GrainGradient (wave shape 暖光呼吸)",
+            "vs_theatre": "Theatre 用 MeshGradient (distortion+swirl 戏剧光雾)",
+            "vs_cool": "—"
+        },
+        {
+            "dimension": "Focal numeral 色彩策略",
+            "this_style": "foreground_with_primary_signal — focal = white foreground, primary 仅 unit/方向/signal accent",
+            "vs_warm": "Warm focal = primary ember,unit = primary-hl",
+            "vs_theatre": "Theatre focal = primary orange,unit 混合",
+            "vs_cool": "—"
+        },
+        {
+            "dimension": "Decorative pack",
+            "this_style": "instrumental — ChapterStamp SVG badge + OutlinedPill Tags + 全页 feTurbulence noise + drawn-horizon SVG",
+            "vs_warm": "Warm editorial 装饰套件",
+            "vs_theatre": "Theatre theatrical (Double-Bezel + SpotlightGradient)",
+            "vs_cool": "—"
+        },
+        {
+            "dimension": "Depth 机制 / Material",
+            "this_style": "thin-border-inset + inset-light shadow + 全页 SVG feTurbulence noise",
+            "vs_warm": "Warm hairline-only 无 shadow 无 noise",
+            "vs_theatre": "Theatre Double-Bezel + inset-glow,无 noise",
+            "vs_cool": "—"
+        },
+        {
+            "dimension": "Custom SVG 范围",
+            "this_style": "+chart-internals(允许 motion-paths / chart 内部 / noise filter)",
+            "vs_warm": "Warm structural-only (ChapterStamp / QuoteBracket)",
+            "vs_theatre": "Theatre structural-only (ChapterStamp)",
+            "vs_cool": "—"
+        },
+        {
+            "dimension": "Foreground hue 错位",
+            "this_style": "foreground hue 255,bg/brand 同走 262 (微错位 7 度,蓝白结构感)",
+            "vs_warm": "Warm hue 80 全统一",
+            "vs_theatre": "Theatre foreground hue 138-139 (绿偏) vs bg 248 vs brand 42(三轴错位)",
+            "vs_cool": "—"
+        }
+    ]
+}
