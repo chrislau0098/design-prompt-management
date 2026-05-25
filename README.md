@@ -1,49 +1,105 @@
 # design-prompt-management
 
-> AI-powered Design Prompt management toolkit for designers — Claude Code Skill + Vite-based Design System Renderer.
+> Vite renderer + full library of Design Prompts produced by the [`design-prompt-creator`](https://github.com/chrislau0098/design-prompt-creator) Skill.
 
-把 "参考配图 → Design System → Report Example → 多轮迭代输出 Design Prompt" 完整流程打包成可复用工具,适合设计师 / 设计工程师团队接入自己 Claude Code 环境。
+This repo serves two purposes:
 
-## 仓库结构
+1. **Preview tool** — a Vite + React app that renders a Design System view, a Report Example, and a Design Prompt viewer (with side-by-side diff between versions) for any Slot JSON in `prompts/`.
+2. **Design Prompt library** — every Design Prompt produced by the Skill, organized by scenario × style × version. New prompts are added by PR.
 
-```
-design-prompt-management/
-├── skill/                                    # Claude Code Skill
-│   └── vibe-page-design-prompt-management/
-│       ├── SKILL.md                          # Skill 主入口
-│       ├── reference/                        # Progressive Disclosure 模块
-│       ├── templates/                        # 复用 templates
-│       ├── scripts/                          # 执行脚本
-│       ├── scenarios/                        # 开箱即用场景(战报 / 商品 / Waitlist 等)
-│       └── examples/                         # 完整工作示例(Vibe view 战报项目)
-├── renderer/                                 # 独立 Vite Design System Renderer
-│   └── design-system-renderer-vite/
-└── docs/                                     # 文档
-```
+---
 
-## 安装
-
-### Skill(Claude Code Agent 环境)
+## Quick start
 
 ```bash
 git clone https://github.com/chrislau0098/design-prompt-management.git
-cp -r design-prompt-management/skill/vibe-page-design-prompt-management ~/.claude/skills/
-```
-
-启动 Claude Code 即可用 `/vibe-page-design-prompt-management` 调起,或自然语言 prompt(Claude 会自动 match)。
-
-### Renderer(独立 Vite 项目)
-
-```bash
-cd design-prompt-management/renderer/design-system-renderer-vite
+cd design-prompt-management
 bun install
 bun run dev
-# 访问 http://localhost:5173
+# Open http://localhost:5173
 ```
 
-## 快速上手
+Three views in the top nav:
 
-详见 [`skill/.../docs/quickstart.md`](skill/vibe-page-design-prompt-management/docs/quickstart.md)。
+- **Design System** — atomic tokens (color / typography / spacing) and molecules (Hero / charts / ornaments) for the selected style
+- **Report Example** — a fully rendered sample report using the selected style; Web / Mobile toggle in the top-right
+- **Design Prompt** — the actual `.md` brief, with Copy and Diff vs Previous Version
+
+Switch styles from the left sidebar.
+
+---
+
+## Repo structure
+
+```
+design-prompt-management/
+├── package.json, vite.config.ts, src/  # Vite app
+├── prompts/                            # Full Design Prompt library
+│   └── vibe-view-campaign-report/      # scenario
+│       ├── warm-restraint-tech/
+│       │   ├── slot.json               # latest style declaration
+│       │   ├── v0.1.md, v0.2.md, ...   # every version ever shipped
+│       │   └── v1.0.2.md               # latest
+│       ├── theatre-dark/
+│       ├── cool-precision-tech/
+│       ├── swiss-systematic-blue/
+│       ├── festive-royal-crimson/
+│       └── festive-editorial-crimson/
+└── history/                            # Source docs from the bootstrapping project
+    ├── Round-Log-vibe-view-campaign-report.md
+    ├── slot-schema-v0.md
+    ├── PATTERN-block-enriched-v1.md
+    └── ...
+```
+
+Currently 6 styles × 58 historical Design Prompt md files, plus the full R-76~R-97 iteration log.
+
+---
+
+## Adding a new Design Prompt (PR flow)
+
+You'll typically generate new prompts using the [`design-prompt-creator`](https://github.com/chrislau0098/design-prompt-creator) Skill, then sync them here for the team:
+
+```bash
+# In your design project (after generating a new prompt with the Skill)
+cd ~/Documents/my-report
+./scripts/sync-to-management.sh --scenario campaign-report --style my-new-style
+# This copies slot.json + every Design-Prompt-vX.md into ./design-prompt-management/prompts/...
+
+# PR them upstream
+cd design-prompt-management
+git checkout -b add-my-new-style
+git add prompts/
+git commit -m "add my-new-style (campaign-report) v0.1"
+gh repo fork
+git push fork add-my-new-style
+gh pr create
+```
+
+Once merged, the renderer's sidebar picks up the new style automatically (Vite's `import.meta.glob` reads everything under `prompts/`).
+
+---
+
+## Editing an existing Design Prompt
+
+Edit `prompts/<scenario>/<style>/<vX>.md` directly, or bump the version (`v1.0.2.md` → `v1.0.3.md`). Slot changes go in `slot.json`. The Diff view shows what changed against the previous version.
+
+If a Slot change introduces a Three-Way Sync violation (Prompt ↔ Design System ↔ Report Example disagree), the Skill's `verify-three-way-sync.py` will catch it before the PR lands.
+
+---
+
+## Tech stack
+
+- Vite 6 + React 18 + TypeScript
+- Tailwind CSS v3 + shadcn/ui (dark theme by default)
+- `@pierre/diffs` for the side-by-side Design Prompt diff
+- `@paper-design/shaders-react` for Hero shader previews
+- `motion` (formerly Framer Motion) for entry animations
+- `recharts` for chart previews
+
+Bundle is intentionally heavy (~2 MB) because Shiki ships every language pack for the diff view. Code-splitting is a future polish.
+
+---
 
 ## License
 
