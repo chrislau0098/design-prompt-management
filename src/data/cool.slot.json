@@ -2,6 +2,8 @@
     "_comment": "Generated 2026-05-21 by Cowork sub-agent, based on T1 + Slot Schema v0.2 (Round-81)",
     "style_meta": {
         "style_name": "Instrument Dark · Electric Blue",
+        "style_name_zh": "精密暗夜 · 电光蓝",
+        "description_zh": "深蓝幽暗仪表盘 · 白色显示数字 · 电光蓝信号 · 刻线网格与像素噪点",
         "style_handle": "cool-precision-tech",
         "version": "v0.5.1",
         "mode": "dark",
@@ -11,7 +13,12 @@
         "ground_truth_images": [],
         "ground_truth_signature": "暗调仪表盘,白数字+电蓝信号",
         "evidence_chain": "ground-truth (仪表盘暗调) → 深 bg + 白 foreground 主导 + electric blue 仅作 signal + GodRays radial → Full-bleed Monolith + drawn-horizon SVG line → instrumental decorative pack",
-        "mood_adjectives": ["Cool", "Precise", "Instrumental", "Restrained"],
+        "mood_adjectives": [
+            "Cool",
+            "Precise",
+            "Instrumental",
+            "Restrained"
+        ],
         "proposition": "A dark instrument panel where white display figures dominate, electric blue signals direction and state, and drama comes from structural light, deep negative space, engineered type, and fintech restraint.",
         "decorative_pack": "instrumental",
         "focal_numeral_strategy": "foreground_with_primary_signal"
@@ -20,33 +27,113 @@
         "color": {
             "neutral_hue": 262,
             "foreground_hue": 255,
-            "background": [0.12, 0.015, 262],
-            "surface_l1": [0.12, 0.015, 262],
-            "surface_l2": [0.165, 0.018, 262],
-            "surface_l3": [0.23, 0.022, 262],
-            "foreground": [0.96, 0.008, 255],
-            "foreground_2": [0.78, 0.010, 255],
-            "foreground_3": [0.58, 0.012, 255],
-            "border": [1, 0, 0, 0.06],
-            "border_strong": [1, 0, 0, 0.12],
-            "primary": {"L": 0.62, "C": 0.18},
-            "primary_hl": {"L": 0.70, "C": 0.16},
+            "background": [
+                0.12,
+                0.015,
+                262
+            ],
+            "surface_l1": [
+                0.12,
+                0.015,
+                262
+            ],
+            "surface_l2": [
+                0.165,
+                0.018,
+                262
+            ],
+            "surface_l3": [
+                0.23,
+                0.022,
+                262
+            ],
+            "foreground": [
+                0.96,
+                0.008,
+                255
+            ],
+            "foreground_2": [
+                0.78,
+                0.01,
+                255
+            ],
+            "foreground_3": [
+                0.58,
+                0.012,
+                255
+            ],
+            "border": [
+                1,
+                0,
+                0,
+                0.06
+            ],
+            "border_strong": [
+                1,
+                0,
+                0,
+                0.12
+            ],
+            "primary": {
+                "L": 0.62,
+                "C": 0.18
+            },
+            "primary_hl": {
+                "L": 0.7,
+                "C": 0.16
+            },
             "primary_soft": null,
             "primary_glow_alpha": 0.18,
             "chart_ramp": [
-                {"L": 0.500, "C": 0.150},
-                {"L": 0.400, "C": 0.120},
-                {"L": 0.310, "C": 0.090},
-                {"L": 0.240, "C": 0.060}
+                {
+                    "L": 0.5,
+                    "C": 0.15
+                },
+                {
+                    "L": 0.4,
+                    "C": 0.12
+                },
+                {
+                    "L": 0.31,
+                    "C": 0.09
+                },
+                {
+                    "L": 0.24,
+                    "C": 0.06
+                }
             ],
-            "chart_hover": [0.165, 0.018, 262, 0.86],
+            "chart_hover": [
+                0.165,
+                0.018,
+                262,
+                0.86
+            ],
             "primary_wash": null,
-            "ambient_ink": [0.20, 0.020, 262, 0.18]
+            "ambient_ink": [
+                0.2,
+                0.02,
+                262,
+                0.18
+            ]
         },
         "typography": {
-            "sans_stack": ["MiSans", "Noto Sans SC", "PingFang SC", "Source Han Sans SC", "sans-serif"],
-            "display_stack": ["Satoshi", "Geist Mono", "sans-serif"],
-            "mono_stack": ["IBM Plex Mono", "ui-monospace", "monospace"],
+            "sans_stack": [
+                "MiSans",
+                "Noto Sans SC",
+                "PingFang SC",
+                "Source Han Sans SC",
+                "sans-serif"
+            ],
+            "display_stack": [
+                "Satoshi",
+                "Geist Mono",
+                "sans-serif"
+            ],
+            "mono_stack": [
+                "IBM Plex Mono",
+                "ui-monospace",
+                "monospace"
+            ],
             "font_loading": "import-cdn",
             "weight_ceiling": "600",
             "emphasis_tier": "semibold",
@@ -93,15 +180,44 @@
             "noise_overlay": "svg-feturbulence"
         },
         "motion_timing": {
-            "ease_out": [0.08, 0.95, 0.15, 1],
-            "ease_inout": [0.86, 0, 0.10, 1],
-            "ease_snap": [0.12, 0, 0, 1],
-            "ease_spring": [0.38, 0, 0.58, 1],
+            "ease_out": [
+                0.08,
+                0.95,
+                0.15,
+                1
+            ],
+            "ease_inout": [
+                0.86,
+                0,
+                0.1,
+                1
+            ],
+            "ease_snap": [
+                0.12,
+                0,
+                0,
+                1
+            ],
+            "ease_spring": [
+                0.38,
+                0,
+                0.58,
+                1
+            ],
             "hover_ms": 150,
             "button_press_ms": 100,
-            "entrance_ms_range": [500, 900],
-            "number_rolling_s_range": [0.8, 2.0],
-            "curve_path_s_range": [2.0, 2.8],
+            "entrance_ms_range": [
+                500,
+                900
+            ],
+            "number_rolling_s_range": [
+                0.8,
+                2.0
+            ],
+            "curve_path_s_range": [
+                2.0,
+                2.8
+            ],
             "spotlight_drift_s": 6,
             "signature_stroke_s": null,
             "stagger_children_s": 0.12,
@@ -109,7 +225,13 @@
         },
         "iconography": {
             "stroke_width_px": 1.25,
-            "allowed_unicode": ["↑", "↓", "·", "—", "•"],
+            "allowed_unicode": [
+                "↑",
+                "↓",
+                "·",
+                "—",
+                "•"
+            ],
             "custom_svg_scope": "+chart-internals"
         }
     },
@@ -125,7 +247,12 @@
                 "bloom": 0.3,
                 "offsetX": 1,
                 "fit": "cover",
-                "colors": ["#4654f050", "#2a38c0d0", "#ffffff10", "#14122000"],
+                "colors": [
+                    "#4654f050",
+                    "#2a38c0d0",
+                    "#ffffff10",
+                    "#14122000"
+                ],
                 "colorBack": "#0c0a14",
                 "colorBloom": "#4654f0",
                 "speed": 0.8,
@@ -138,7 +265,12 @@
             "extra_svg_layer": "drawn-horizon",
             "stamp_constraint": "optional"
         },
-        "overlay_stack": ["shader", "radial_wash", "drawn-horizon", "feturbulence-noise"],
+        "overlay_stack": [
+            "shader",
+            "radial_wash",
+            "drawn-horizon",
+            "feturbulence-noise"
+        ],
         "chart": {
             "area_fill_opacity": 0.2,
             "area_type": "monotone",
@@ -162,12 +294,24 @@
         "density_lead": "dense"
     },
     "tooling": {
-        "shadcn_subset": ["Card", "Badge", "Progress", "Separator"],
-        "motion_apis": ["motion", "useInView", "AnimateNumber"],
+        "shadcn_subset": [
+            "Card",
+            "Badge",
+            "Progress",
+            "Separator"
+        ],
+        "motion_apis": [
+            "motion",
+            "useInView",
+            "AnimateNumber"
+        ],
         "paper_shaders": {
             "primary": "GodRays",
             "secondary": null,
-            "banned": ["GrainGradient", "MeshGradient"]
+            "banned": [
+                "GrainGradient",
+                "MeshGradient"
+            ]
         }
     },
     "differentiation": [

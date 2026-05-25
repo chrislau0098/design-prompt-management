@@ -2,6 +2,8 @@
     "_comment": "Generated 2026-05-21 by Cowork sub-agent, based on T1 + Slot Schema v0.2 (Round-81)",
     "style_meta": {
         "style_name": "Confident Warmth · Ivory Ember",
+        "style_name_zh": "克制暖意 · 象牙余烬",
+        "description_zh": "暖灰象牙底色 · 橙色余烬焦点 · 章节细线节奏 · 中等字重克制",
         "style_handle": "warm-restraint-tech",
         "version": "v1.0.1",
         "mode": "light",
@@ -11,7 +13,12 @@
         "ground_truth_images": [],
         "ground_truth_signature": "象牙暖光杂志风,暖橙呼吸 ember",
         "evidence_chain": "ground-truth (杂志风暖光) → ivory bg + ember primary + hairline chapter rhythm + GrainGradient breath → Hero asymmetric split + ChapterBanner + OutroSignature → editorial decorative pack",
-        "mood_adjectives": ["Warm", "Confident", "Brand-Forward", "Bright"],
+        "mood_adjectives": [
+            "Warm",
+            "Confident",
+            "Brand-Forward",
+            "Bright"
+        ],
         "proposition": "An ivory campaign report where warm-orange ember light radiates from the Hero, chapter openers carry a hairline rule with mono ember kicker and claim-line title, large humanist sans figures in ember carry every claim, and warm-neutral units and delta arrows mark direction. Drama comes from the warm light field, a warm-grain shader breathing under the Hero, the chapter hairline cadence, and confident sans typography held at medium weight.",
         "decorative_pack": "editorial",
         "focal_numeral_strategy": "primary_on_neutral"
@@ -20,33 +27,117 @@
         "color": {
             "neutral_hue": 80,
             "foreground_hue": null,
-            "background": [0.962, 0.003, 80],
-            "surface_l1": [0.962, 0.003, 80],
-            "surface_l2": [0.938, 0.004, 80],
-            "surface_l3": [0.912, 0.005, 80],
-            "foreground": [0.180, 0.005, 80],
-            "foreground_2": [0.450, 0.005, 80],
-            "foreground_3": [0.620, 0.005, 80],
-            "border": [0.220, 0.005, 80, 0.09],
-            "border_strong": [0.220, 0.005, 80, 0.18],
-            "primary": {"L": 0.72, "C": 0.16},
-            "primary_hl": {"L": 0.78, "C": 0.14},
-            "primary_soft": {"L": 0.86, "C": 0.10},
+            "background": [
+                0.962,
+                0.003,
+                80
+            ],
+            "surface_l1": [
+                0.962,
+                0.003,
+                80
+            ],
+            "surface_l2": [
+                0.938,
+                0.004,
+                80
+            ],
+            "surface_l3": [
+                0.912,
+                0.005,
+                80
+            ],
+            "foreground": [
+                0.18,
+                0.005,
+                80
+            ],
+            "foreground_2": [
+                0.45,
+                0.005,
+                80
+            ],
+            "foreground_3": [
+                0.62,
+                0.005,
+                80
+            ],
+            "border": [
+                0.22,
+                0.005,
+                80,
+                0.09
+            ],
+            "border_strong": [
+                0.22,
+                0.005,
+                80,
+                0.18
+            ],
+            "primary": {
+                "L": 0.72,
+                "C": 0.16
+            },
+            "primary_hl": {
+                "L": 0.78,
+                "C": 0.14
+            },
+            "primary_soft": {
+                "L": 0.86,
+                "C": 0.1
+            },
             "primary_glow_alpha": 0.18,
             "chart_ramp": [
-                {"L": 0.620, "C": 0.130},
-                {"L": 0.520, "C": 0.105},
-                {"L": 0.420, "C": 0.080},
-                {"L": 0.320, "C": 0.060}
+                {
+                    "L": 0.62,
+                    "C": 0.13
+                },
+                {
+                    "L": 0.52,
+                    "C": 0.105
+                },
+                {
+                    "L": 0.42,
+                    "C": 0.08
+                },
+                {
+                    "L": 0.32,
+                    "C": 0.06
+                }
             ],
-            "chart_hover": [0.220, 0.005, 80, 0.05],
-            "primary_wash": [0.72, 0.16, 50, 0.12],
+            "chart_hover": [
+                0.22,
+                0.005,
+                80,
+                0.05
+            ],
+            "primary_wash": [
+                0.72,
+                0.16,
+                50,
+                0.12
+            ],
             "ambient_ink": null
         },
         "typography": {
-            "sans_stack": ["Noto Sans SC Variable", "Noto Sans SC", "PingFang SC", "Helvetica Neue", "sans-serif"],
-            "display_stack": ["Geist Variable", "Geist", "Noto Sans SC", "sans-serif"],
-            "mono_stack": ["Geist Mono", "ui-monospace", "monospace"],
+            "sans_stack": [
+                "Noto Sans SC Variable",
+                "Noto Sans SC",
+                "PingFang SC",
+                "Helvetica Neue",
+                "sans-serif"
+            ],
+            "display_stack": [
+                "Geist Variable",
+                "Geist",
+                "Noto Sans SC",
+                "sans-serif"
+            ],
+            "mono_stack": [
+                "Geist Mono",
+                "ui-monospace",
+                "monospace"
+            ],
             "font_loading": "npm",
             "weight_ceiling": "500",
             "emphasis_tier": "none",
@@ -75,7 +166,9 @@
         },
         "spacing": {
             "base_px": 8,
-            "scale_extra": [32],
+            "scale_extra": [
+                32
+            ],
             "section_py_mobile": 32,
             "section_py_lg": 56,
             "section_px_lg": 20,
@@ -93,15 +186,44 @@
             "noise_overlay": "none"
         },
         "motion_timing": {
-            "ease_out": [0.18, 0.85, 0.22, 1],
-            "ease_inout": [0.7, 0.05, 0.2, 1],
-            "ease_snap": [0.15, 0, 0.05, 1],
-            "ease_spring": [0.42, 0, 0.3, 1],
+            "ease_out": [
+                0.18,
+                0.85,
+                0.22,
+                1
+            ],
+            "ease_inout": [
+                0.7,
+                0.05,
+                0.2,
+                1
+            ],
+            "ease_snap": [
+                0.15,
+                0,
+                0.05,
+                1
+            ],
+            "ease_spring": [
+                0.42,
+                0,
+                0.3,
+                1
+            ],
             "hover_ms": 200,
             "button_press_ms": 120,
-            "entrance_ms_range": [600, 1000],
-            "number_rolling_s_range": [1.6, 2.2],
-            "curve_path_s_range": [2.4, 3.0],
+            "entrance_ms_range": [
+                600,
+                1000
+            ],
+            "number_rolling_s_range": [
+                1.6,
+                2.2
+            ],
+            "curve_path_s_range": [
+                2.4,
+                3.0
+            ],
             "spotlight_drift_s": null,
             "signature_stroke_s": 1.8,
             "stagger_children_s": 0.08,
@@ -109,7 +231,13 @@
         },
         "iconography": {
             "stroke_width_px": 1,
-            "allowed_unicode": ["▲", "▼", "·", "—", "•"],
+            "allowed_unicode": [
+                "▲",
+                "▼",
+                "·",
+                "—",
+                "•"
+            ],
             "custom_svg_scope": "structural-only"
         }
     },
@@ -126,7 +254,12 @@
                 "offsetX": 0,
                 "offsetY": 0.24,
                 "fit": "cover",
-                "colors": ["#F7F6F3", "#F5E7DB", "#EDD5BA", "#EBB37F"],
+                "colors": [
+                    "#F7F6F3",
+                    "#F5E7DB",
+                    "#EDD5BA",
+                    "#EBB37F"
+                ],
                 "colorBack": "#F7F6F3",
                 "speed": 1.72,
                 "speed_off_viewport": 0
@@ -138,7 +271,10 @@
             "extra_svg_layer": "none",
             "stamp_constraint": "bounded-3x"
         },
-        "overlay_stack": ["shader", "stamp"],
+        "overlay_stack": [
+            "shader",
+            "stamp"
+        ],
         "chart": {
             "area_fill_opacity": "gradient",
             "area_type": "natural",
@@ -162,12 +298,24 @@
         "density_lead": "spacious"
     },
     "tooling": {
-        "shadcn_subset": ["Card", "Badge", "Progress", "Separator"],
-        "motion_apis": ["motion", "useInView", "AnimateNumber"],
+        "shadcn_subset": [
+            "Card",
+            "Badge",
+            "Progress",
+            "Separator"
+        ],
+        "motion_apis": [
+            "motion",
+            "useInView",
+            "AnimateNumber"
+        ],
         "paper_shaders": {
             "primary": "GrainGradient",
             "secondary": null,
-            "banned": ["MeshGradient", "GodRays"]
+            "banned": [
+                "MeshGradient",
+                "GodRays"
+            ]
         }
     },
     "differentiation": [

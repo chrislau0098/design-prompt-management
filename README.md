@@ -52,7 +52,13 @@ design-prompt-management/
     └── ...
 ```
 
-Currently 6 styles × 58 historical Design Prompt md files, plus the full R-76~R-97 iteration log.
+Currently 6 styles × 58 historical Design Prompt md files, plus the full R-76~R-99 iteration log.
+
+### About `history/Round-Log-...md`
+
+This file is the **project-specific journal**: each iteration (a "round") gets a short entry — what changed, why, what broke and how it got fixed. Designers don't usually read this; Cowork (the Claude Code agent driving the workflow) reads it before each round to avoid repeating mistakes.
+
+Periodically (every 5–10 rounds, or after a phase wraps), the **generalisable** lessons from these entries get abstracted into the [`design-prompt-creator`](https://github.com/chrislau0098/design-prompt-creator) Skill's `reference/case-studies.md` and `reference/99-principles.md` — so new projects spinning up with the Skill inherit hard-won knowledge without needing to read this repo's full history.
 
 ---
 

@@ -42,31 +42,6 @@ interface StyleGroup {
   items: StyleItem[]
 }
 
-// R-98 Phase 5 · version fields derived from glob latestVersion (no more hard-code)
-const STYLE_GROUPS: StyleGroup[] = [
-  {
-    label: '明亮',
-    items: [
-      { key: 'warm', label: 'Confident Warmth', sublabel: 'Ivory Ember', version: getLatestVersionForStyle('warm') },
-      { key: 'swiss', label: 'Swiss Systematic', sublabel: 'Editorial Blue', version: getLatestVersionForStyle('swiss') },
-      { key: 'festive-editorial', label: 'Festive Editorial', sublabel: 'Crimson Wash', version: getLatestVersionForStyle('festive-editorial') },
-    ],
-  },
-  {
-    label: '暗黑',
-    items: [
-      { key: 'theatre', label: 'Theatre Dark', sublabel: 'Hermès Orange', version: getLatestVersionForStyle('theatre') },
-      { key: 'cool', label: 'Instrument Dark', sublabel: 'Electric Blue', version: getLatestVersionForStyle('cool') },
-    ],
-  },
-  {
-    label: '彩色',
-    items: [
-      { key: 'festive-royal', label: 'Festive Royal', sublabel: 'Crimson Gold', version: getLatestVersionForStyle('festive-royal') },
-    ],
-  },
-]
-
 const SLOT_MAP: Record<StyleKey, unknown> = {
   warm: warmData,
   theatre: theatreData,
@@ -75,6 +50,36 @@ const SLOT_MAP: Record<StyleKey, unknown> = {
   'festive-royal': festiveRoyalData,
   'festive-editorial': festiveEditorialData,
 }
+
+// R-99 · label/sublabel 改 dynamic 从 slot.style_meta.style_name_zh 读(中文)
+// 拆分规则:用 "·" 分隔主标 / 副标;无分隔则全用主标
+function deriveLabel(key: StyleKey): { label: string; sublabel: string } {
+  const meta = (SLOT_MAP[key] as { style_meta?: { style_name_zh?: string; style_name?: string } } | undefined)?.style_meta
+  const zh = meta?.style_name_zh ?? meta?.style_name ?? key
+  const parts = zh.split(/\s*·\s*/).map((s) => s.trim())
+  return { label: parts[0] ?? key, sublabel: parts[1] ?? '' }
+}
+
+const STYLE_GROUPS: StyleGroup[] = [
+  {
+    label: '明亮',
+    items: (['warm', 'swiss', 'festive-editorial'] as StyleKey[]).map((k) => ({
+      key: k, ...deriveLabel(k), version: getLatestVersionForStyle(k),
+    })),
+  },
+  {
+    label: '暗黑',
+    items: (['theatre', 'cool'] as StyleKey[]).map((k) => ({
+      key: k, ...deriveLabel(k), version: getLatestVersionForStyle(k),
+    })),
+  },
+  {
+    label: '彩色',
+    items: (['festive-royal'] as StyleKey[]).map((k) => ({
+      key: k, ...deriveLabel(k), version: getLatestVersionForStyle(k),
+    })),
+  },
+]
 
 export default function App() {
   const [activeView, setActiveView] = useState<ViewKey>('design-system')

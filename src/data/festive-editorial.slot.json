@@ -1,7 +1,9 @@
 {
-    "_comment": "Festive Editorial · Crimson Wash v0.1 (2026-05-24 Phase C R-91 #25). Light mode + sans + brutalist editorial + red GrainGradient shader.",
+    "_comment": "Festive Editorial · Crimson Wash v0.1 (2026-05-24 Phase C R-91 #25). 中国风红色喜庆第二风格 · light mode + sans + 大字 brutalist editorial · 西式编辑设计语言混合红色情绪。Mood: 当代编辑 / 红色 dramatic blur / 黑色无衬线大字 / 平铺无装饰。白底/米白底 + 大块红色 GrainGradient blur shapes(类似 PMC 海报 0d6695 / 元旦灯笼 02195825)+ 黑色 Helvetica Neue / IBM Plex Sans 800 weight + 负字距紧密排版(类似 refero Valiente Crimson brutalist exhibition)+ festive-editorial decorative pack: ChapterNumeralLarge(超大 sans chapter index 红色 800 weight)/ HairlineRule(全宽细黑线)/ NoSealStamp / Hero 用 typographic-field. Reference: ground-truth 02195825 元旦灯笼 / 06250d 山水 / 0d6695 PMC + refero.design Valiente Brands (https://styles.refero.design/style/f63bf016-...). Chris R-90 brief: 红色、喜庆、热烈、庆贺、中国风、大气 (本风格走西式编辑路线呼应当代设计师常用的红色喜庆排版).",
     "style_meta": {
         "style_name": "Festive Editorial · Crimson Wash",
+        "style_name_zh": "庆典编辑 · 朱砂洗",
+        "description_zh": "象牙底 · 朱砂红 GrainGradient blur · 黑色无衬线大字 · brutalist 编辑感",
         "style_handle": "festive-editorial-crimson",
         "version": "v0.1",
         "mode": "light",
@@ -9,11 +11,22 @@
         "chromatic_background": null,
         "display_typeface_class": "sans",
         "long_scroll": true,
-        "ground_truth_images": null,
+        "ground_truth_images": [
+            "_resources/style-mood-references/红色喜庆/02195825ea904ca1fb209161ffda5f93.jpg",
+            "_resources/style-mood-references/红色喜庆/06250d259439e6328d426a7963db0da4.jpg",
+            "_resources/style-mood-references/红色喜庆/0d6695970db7a033de11f7b7105db886.jpg",
+            "https://styles.refero.design/style/f63bf016-5b53-4ddf-9f8c-da43f75a9e2b"
+        ],
         "ground_truth_signature": "白底大块红 blur + 黑色无衬线大字 / 编辑大气",
-        "evidence_chain": "ivory bg + crimson primary + GrainGradient red corners blur + 黑色 Helvetica 800 weight + negative letter-spacing → festive-editorial decorative pack",
-        "mood_adjectives": ["Festive", "Editorial", "Crimson-Wash", "Brutalist-Bold", "Declarative"],
-        "proposition": "An ivory editorial campaign report where massive black sans-serif headlines stamp the page with conviction, large crimson numerals carry every focal claim, and red GrainGradient blur washes drift across the page like brushstrokes.",
+        "evidence_chain": "ground-truth (西式当代编辑红 + brutalist + refero Valiente Crimson) → ivory bg + crimson primary + GrainGradient red corners blur + 黑色 Helvetica 800 weight + negative letter-spacing → Typographic Field Hero + ChapterNumeralLarge 大数字 chapter index + HairlineRule → festive-editorial decorative pack",
+        "mood_adjectives": [
+            "Festive",
+            "Editorial",
+            "Crimson-Wash",
+            "Brutalist-Bold",
+            "Declarative"
+        ],
+        "proposition": "An ivory editorial campaign report where massive black sans-serif headlines stamp the page with conviction, large crimson numerals carry every focal claim, and red GrainGradient blur washes drift across the page like brushstrokes. Drama comes from typographic scale, the rigorous negative letter-spacing, the crimson grain breathing beneath Hero, and the editorial cadence of full-width hairlines marking each chapter — a modern Western editorial register translated into a Chinese ceremonial color story.",
         "decorative_pack": "festive-editorial",
         "focal_numeral_strategy": "primary_on_neutral"
     },
@@ -21,33 +34,117 @@
         "color": {
             "neutral_hue": 28,
             "foreground_hue": null,
-            "background": [0.985, 0.003, 28],
-            "surface_l1": [0.985, 0.003, 28],
-            "surface_l2": [0.965, 0.004, 28],
-            "surface_l3": [0.935, 0.005, 28],
-            "foreground": [0.14, 0.008, 28],
-            "foreground_2": [0.4, 0.008, 28],
-            "foreground_3": [0.6, 0.008, 28],
-            "border": [0.14, 0.008, 28, 0.1],
-            "border_strong": [0.14, 0.008, 28, 0.24],
-            "primary": {"L": 0.58, "C": 0.22},
-            "primary_hl": {"L": 0.66, "C": 0.2},
+            "background": [
+                0.985,
+                0.003,
+                28
+            ],
+            "surface_l1": [
+                0.985,
+                0.003,
+                28
+            ],
+            "surface_l2": [
+                0.965,
+                0.004,
+                28
+            ],
+            "surface_l3": [
+                0.935,
+                0.005,
+                28
+            ],
+            "foreground": [
+                0.14,
+                0.008,
+                28
+            ],
+            "foreground_2": [
+                0.4,
+                0.008,
+                28
+            ],
+            "foreground_3": [
+                0.6,
+                0.008,
+                28
+            ],
+            "border": [
+                0.14,
+                0.008,
+                28,
+                0.1
+            ],
+            "border_strong": [
+                0.14,
+                0.008,
+                28,
+                0.24
+            ],
+            "primary": {
+                "L": 0.58,
+                "C": 0.22
+            },
+            "primary_hl": {
+                "L": 0.66,
+                "C": 0.2
+            },
             "primary_soft": null,
             "primary_glow_alpha": 0.16,
             "chart_ramp": [
-                {"L": 0.55, "C": 0.2},
-                {"L": 0.45, "C": 0.16},
-                {"L": 0.35, "C": 0.12},
-                {"L": 0.25, "C": 0.08}
+                {
+                    "L": 0.55,
+                    "C": 0.2
+                },
+                {
+                    "L": 0.45,
+                    "C": 0.16
+                },
+                {
+                    "L": 0.35,
+                    "C": 0.12
+                },
+                {
+                    "L": 0.25,
+                    "C": 0.08
+                }
             ],
-            "chart_hover": [0.14, 0.008, 28, 0.05],
-            "primary_wash": [0.58, 0.22, 28, 0.1],
+            "chart_hover": [
+                0.14,
+                0.008,
+                28,
+                0.05
+            ],
+            "primary_wash": [
+                0.58,
+                0.22,
+                28,
+                0.1
+            ],
             "ambient_ink": null
         },
         "typography": {
-            "sans_stack": ["Helvetica Neue", "IBM Plex Sans", "Inter", "Noto Sans SC", "PingFang SC", "sans-serif"],
-            "display_stack": ["Helvetica Neue", "IBM Plex Sans", "Inter", "Noto Sans SC", "PingFang SC", "sans-serif"],
-            "mono_stack": ["IBM Plex Mono", "ui-monospace", "monospace"],
+            "sans_stack": [
+                "Helvetica Neue",
+                "IBM Plex Sans",
+                "Inter",
+                "Noto Sans SC",
+                "PingFang SC",
+                "sans-serif"
+            ],
+            "display_stack": [
+                "Helvetica Neue",
+                "IBM Plex Sans",
+                "Inter",
+                "Noto Sans SC",
+                "PingFang SC",
+                "sans-serif"
+            ],
+            "mono_stack": [
+                "IBM Plex Mono",
+                "ui-monospace",
+                "monospace"
+            ],
             "font_loading": "import-cdn",
             "weight_ceiling": "500",
             "emphasis_tier": "regular",
@@ -94,15 +191,44 @@
             "noise_overlay": "none"
         },
         "motion_timing": {
-            "ease_out": [0.16, 0.84, 0.24, 1],
-            "ease_inout": [0.7, 0, 0.3, 1],
-            "ease_snap": [0.18, 0, 0.05, 1],
-            "ease_spring": [0.4, 0, 0.3, 1],
+            "ease_out": [
+                0.16,
+                0.84,
+                0.24,
+                1
+            ],
+            "ease_inout": [
+                0.7,
+                0,
+                0.3,
+                1
+            ],
+            "ease_snap": [
+                0.18,
+                0,
+                0.05,
+                1
+            ],
+            "ease_spring": [
+                0.4,
+                0,
+                0.3,
+                1
+            ],
             "hover_ms": 150,
             "button_press_ms": 100,
-            "entrance_ms_range": [500, 900],
-            "number_rolling_s_range": [1.0, 1.8],
-            "curve_path_s_range": [2.0, 2.6],
+            "entrance_ms_range": [
+                500,
+                900
+            ],
+            "number_rolling_s_range": [
+                1.0,
+                1.8
+            ],
+            "curve_path_s_range": [
+                2.0,
+                2.6
+            ],
             "spotlight_drift_s": null,
             "signature_stroke_s": null,
             "stagger_children_s": 0.08,
@@ -110,7 +236,14 @@
         },
         "iconography": {
             "stroke_width_px": 1.5,
-            "allowed_unicode": ["▲", "▼", "→", "·", "—", "•"],
+            "allowed_unicode": [
+                "▲",
+                "▼",
+                "→",
+                "·",
+                "—",
+                "•"
+            ],
             "custom_svg_scope": "structural-plus-motion-paths"
         }
     },
@@ -127,7 +260,12 @@
                 "offsetX": 0,
                 "offsetY": 0,
                 "fit": "cover",
-                "colors": ["#FFFAF7", "#FFC4B0", "#FF5E40", "#E81F00"],
+                "colors": [
+                    "#FFFAF7",
+                    "#FFC4B0",
+                    "#FF5E40",
+                    "#E81F00"
+                ],
                 "colorBack": "#FFFAF7",
                 "speed": 1.3,
                 "speed_off_viewport": 0
@@ -139,7 +277,9 @@
             "extra_svg_layer": "none",
             "stamp_constraint": "optional"
         },
-        "overlay_stack": ["shader"],
+        "overlay_stack": [
+            "shader"
+        ],
         "chart": {
             "area_fill_opacity": 0.22,
             "area_type": "monotone",
@@ -163,12 +303,26 @@
         "density_lead": "dense"
     },
     "tooling": {
-        "shadcn_subset": ["Card", "Badge", "Progress", "Separator", "Tabs"],
-        "motion_apis": ["motion", "useInView", "AnimateNumber"],
+        "shadcn_subset": [
+            "Card",
+            "Badge",
+            "Progress",
+            "Separator",
+            "Tabs"
+        ],
+        "motion_apis": [
+            "motion",
+            "useInView",
+            "AnimateNumber"
+        ],
         "paper_shaders": {
             "primary": "GrainGradient",
             "secondary": null,
-            "banned": ["MeshGradient", "GodRays", "Dithering"]
+            "banned": [
+                "MeshGradient",
+                "GodRays",
+                "Dithering"
+            ]
         }
     }
 }

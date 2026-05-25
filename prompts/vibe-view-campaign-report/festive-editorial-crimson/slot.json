@@ -2,6 +2,8 @@
     "_comment": "Festive Editorial · Crimson Wash v0.1 (2026-05-24 Phase C R-91 #25). 中国风红色喜庆第二风格 · light mode + sans + 大字 brutalist editorial · 西式编辑设计语言混合红色情绪。Mood: 当代编辑 / 红色 dramatic blur / 黑色无衬线大字 / 平铺无装饰。白底/米白底 + 大块红色 GrainGradient blur shapes(类似 PMC 海报 0d6695 / 元旦灯笼 02195825)+ 黑色 Helvetica Neue / IBM Plex Sans 800 weight + 负字距紧密排版(类似 refero Valiente Crimson brutalist exhibition)+ festive-editorial decorative pack: ChapterNumeralLarge(超大 sans chapter index 红色 800 weight)/ HairlineRule(全宽细黑线)/ NoSealStamp / Hero 用 typographic-field. Reference: ground-truth 02195825 元旦灯笼 / 06250d 山水 / 0d6695 PMC + refero.design Valiente Brands (https://styles.refero.design/style/f63bf016-...). Chris R-90 brief: 红色、喜庆、热烈、庆贺、中国风、大气 (本风格走西式编辑路线呼应当代设计师常用的红色喜庆排版).",
     "style_meta": {
         "style_name": "Festive Editorial · Crimson Wash",
+        "style_name_zh": "庆典编辑 · 朱砂洗",
+        "description_zh": "象牙底 · 朱砂红 GrainGradient blur · 黑色无衬线大字 · brutalist 编辑感",
         "style_handle": "festive-editorial-crimson",
         "version": "v0.1",
         "mode": "light",

@@ -2,6 +2,8 @@
     "_comment": "Festive Royal · Crimson Gold v0.3 (R-94 Stage 6 three-way sync · TasselDivider 引用删 / golden_hairline 字段加;R-93 chart_ramp per-step H 75/55/40/25 去绿偏橙;R-90 起初版). 中国风红色喜庆首风格 · chromatic mode 首次 · serif typography 首次。Mood: 朝代尊贵 / 金红 / 衬线 / 大气庆典。整页深红 chromatic ground + 金色 muted gold ivory foreground + 金色 primary focal numeral + serif Display+Page Title+Eyebrow (Cormorant Garamond / Noto Serif SC) + GrainGradient grain shader (deep red grain breath 微微金光) + festive-royal decorative pack: SealStamp (印章替代 ChapterStamp,金色方/圆 fill primary) / GoldenHairline (1px primary 0.4 alpha 全宽分割). Reference: ground-truth 005eed CCE Winner / 04eed97 中国结 / be5a661 影石 双11 / 84c99 CHINESE NEW YEAR'S 上半段. Chris R-90 brief: 红色、喜庆、热烈、庆贺、中国风、大气;非常考究对于设计细节的把控.",
     "style_meta": {
         "style_name": "Festive Royal · Crimson Gold",
+        "style_name_zh": "庆典皇室 · 朱砂金",
+        "description_zh": "深红 chromatic 背景 · 金色衬线 · 朱砂金印章 · 金色细线节奏",
         "style_handle": "festive-royal-crimson",
         "version": "v0.1",
         "mode": "chromatic",

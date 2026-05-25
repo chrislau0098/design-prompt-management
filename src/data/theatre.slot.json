@@ -2,6 +2,8 @@
     "_comment": "Generated 2026-05-21 by Cowork sub-agent, based on T1 + Slot Schema v0.2 (Round-81)",
     "style_meta": {
         "style_name": "Theatre Dark · Hermès Orange",
+        "style_name_zh": "剧场暗夜 · 爱马仕橙",
+        "description_zh": "银幕黑底 · 爱马仕橙焦点 · spotlight 与颗粒幕布 · 镜头感深度",
         "style_handle": "theatre-dark",
         "version": "v6.7.1",
         "mode": "dark",
@@ -11,7 +13,12 @@
         "ground_truth_images": [],
         "ground_truth_signature": "暗调戏剧舞台,Hermès 单橙强调",
         "evidence_chain": "ground-truth (剧院暗调舞台) → 深 bg + Hermès orange primary + Double-Bezel cards + MeshGradient 光雾 → Full-bleed Monolith Hero + SpotlightGradient → theatrical decorative pack",
-        "mood_adjectives": ["Solemn", "Restrained", "Textured", "Uplifting"],
+        "mood_adjectives": [
+            "Solemn",
+            "Restrained",
+            "Textured",
+            "Uplifting"
+        ],
         "proposition": "A dark theatrical stage where numbers perform — quiet luxury via single accent, depth via linework, light, and motion.",
         "decorative_pack": "theatrical",
         "focal_numeral_strategy": "primary_on_primary"
@@ -20,33 +27,113 @@
         "color": {
             "neutral_hue": 248,
             "foreground_hue": 139,
-            "background": [0.095, 0.004, 248],
-            "surface_l1": [0.095, 0.004, 248],
-            "surface_l2": [0.115, 0.004, 248],
-            "surface_l3": [0.180, 0.006, 248],
-            "foreground": [0.939, 0.019, 138],
-            "foreground_2": [0.803, 0.015, 139],
-            "foreground_3": [0.620, 0.012, 139],
-            "border": [1, 0, 0, 0.06],
-            "border_strong": [1, 0, 0, 0.12],
-            "primary": {"L": 0.650, "C": 0.175},
-            "primary_hl": {"L": 0.720, "C": 0.160},
+            "background": [
+                0.095,
+                0.004,
+                248
+            ],
+            "surface_l1": [
+                0.095,
+                0.004,
+                248
+            ],
+            "surface_l2": [
+                0.115,
+                0.004,
+                248
+            ],
+            "surface_l3": [
+                0.18,
+                0.006,
+                248
+            ],
+            "foreground": [
+                0.939,
+                0.019,
+                138
+            ],
+            "foreground_2": [
+                0.803,
+                0.015,
+                139
+            ],
+            "foreground_3": [
+                0.62,
+                0.012,
+                139
+            ],
+            "border": [
+                1,
+                0,
+                0,
+                0.06
+            ],
+            "border_strong": [
+                1,
+                0,
+                0,
+                0.12
+            ],
+            "primary": {
+                "L": 0.65,
+                "C": 0.175
+            },
+            "primary_hl": {
+                "L": 0.72,
+                "C": 0.16
+            },
             "primary_soft": null,
             "primary_glow_alpha": 0.18,
             "chart_ramp": [
-                {"L": 0.530, "C": 0.150},
-                {"L": 0.430, "C": 0.125},
-                {"L": 0.340, "C": 0.100},
-                {"L": 0.270, "C": 0.075}
+                {
+                    "L": 0.53,
+                    "C": 0.15
+                },
+                {
+                    "L": 0.43,
+                    "C": 0.125
+                },
+                {
+                    "L": 0.34,
+                    "C": 0.1
+                },
+                {
+                    "L": 0.27,
+                    "C": 0.075
+                }
             ],
-            "chart_hover": [0.115, 0.004, 248, 0.86],
+            "chart_hover": [
+                0.115,
+                0.004,
+                248,
+                0.86
+            ],
             "primary_wash": null,
-            "ambient_ink": [0.180, 0.016, 248, 0.18]
+            "ambient_ink": [
+                0.18,
+                0.016,
+                248,
+                0.18
+            ]
         },
         "typography": {
-            "sans_stack": ["Noto Sans SC Variable", "PingFang SC", "Source Han Sans SC", "sans-serif"],
-            "display_stack": ["Geist Variable", "-apple-system", "system-ui", "sans-serif"],
-            "mono_stack": ["Geist Mono", "ui-monospace", "monospace"],
+            "sans_stack": [
+                "Noto Sans SC Variable",
+                "PingFang SC",
+                "Source Han Sans SC",
+                "sans-serif"
+            ],
+            "display_stack": [
+                "Geist Variable",
+                "-apple-system",
+                "system-ui",
+                "sans-serif"
+            ],
+            "mono_stack": [
+                "Geist Mono",
+                "ui-monospace",
+                "monospace"
+            ],
             "font_loading": "system-fallback",
             "weight_ceiling": "600",
             "emphasis_tier": "semibold",
@@ -96,15 +183,44 @@
             "noise_overlay": "none"
         },
         "motion_timing": {
-            "ease_out": [0.16, 1, 0.3, 1],
-            "ease_inout": [0.83, 0, 0.17, 1],
-            "ease_snap": [0.2, 0, 0, 1],
-            "ease_spring": [0.45, 0, 0.55, 1],
+            "ease_out": [
+                0.16,
+                1,
+                0.3,
+                1
+            ],
+            "ease_inout": [
+                0.83,
+                0,
+                0.17,
+                1
+            ],
+            "ease_snap": [
+                0.2,
+                0,
+                0,
+                1
+            ],
+            "ease_spring": [
+                0.45,
+                0,
+                0.55,
+                1
+            ],
             "hover_ms": 180,
             "button_press_ms": 120,
-            "entrance_ms_range": [600, 1000],
-            "number_rolling_s_range": [1.0, 2.4],
-            "curve_path_s_range": [2.4, 3.2],
+            "entrance_ms_range": [
+                600,
+                1000
+            ],
+            "number_rolling_s_range": [
+                1.0,
+                2.4
+            ],
+            "curve_path_s_range": [
+                2.4,
+                3.2
+            ],
             "spotlight_drift_s": 7,
             "signature_stroke_s": null,
             "stagger_children_s": 0.12,
@@ -112,7 +228,13 @@
         },
         "iconography": {
             "stroke_width_px": 1.5,
-            "allowed_unicode": ["▲", "▼", "·", "—", "•"],
+            "allowed_unicode": [
+                "▲",
+                "▼",
+                "·",
+                "—",
+                "•"
+            ],
             "custom_svg_scope": "structural-only"
         }
     },
@@ -124,7 +246,13 @@
                 "swirl": 0.3,
                 "grainOverlay": 0.12,
                 "opacity": 0.52,
-                "colors": ["#0A0B0D", "#1A0E08", "#D75F28", "#3D1A0A", "#0A0B0D"],
+                "colors": [
+                    "#0A0B0D",
+                    "#1A0E08",
+                    "#D75F28",
+                    "#3D1A0A",
+                    "#0A0B0D"
+                ],
                 "speed": 0.5,
                 "speed_off_viewport": 0
             }
@@ -135,7 +263,10 @@
             "extra_svg_layer": "none",
             "stamp_constraint": "optional"
         },
-        "overlay_stack": ["shader", "spotlight-gradient"],
+        "overlay_stack": [
+            "shader",
+            "spotlight-gradient"
+        ],
         "chart": {
             "area_fill_opacity": 0.2,
             "area_type": "monotone",
@@ -159,12 +290,24 @@
         "density_lead": "medium"
     },
     "tooling": {
-        "shadcn_subset": ["Card", "Badge", "Progress", "Separator"],
-        "motion_apis": ["motion", "useInView", "AnimateNumber"],
+        "shadcn_subset": [
+            "Card",
+            "Badge",
+            "Progress",
+            "Separator"
+        ],
+        "motion_apis": [
+            "motion",
+            "useInView",
+            "AnimateNumber"
+        ],
         "paper_shaders": {
             "primary": "MeshGradient",
             "secondary": null,
-            "banned": ["GrainGradient", "GodRays"]
+            "banned": [
+                "GrainGradient",
+                "GodRays"
+            ]
         }
     },
     "differentiation": [
