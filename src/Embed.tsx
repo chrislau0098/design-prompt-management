@@ -45,6 +45,8 @@ export function Embed() {
     document.body.style.background = 'var(--bg)'
     document.body.style.margin = '0'
     document.body.style.minHeight = '100vh'
+    // R-101 Chris feedback · 隐藏 iframe 内滚动条(纯净浏览,scroll 仍可用)
+    document.body.classList.add('embed-no-scrollbar')
   }, [])
 
   return (

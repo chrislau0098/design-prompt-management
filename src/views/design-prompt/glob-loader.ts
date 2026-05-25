@@ -130,3 +130,45 @@ export function getStyleVersions(
 ): PromptMeta[] {
   return grouped[styleHandle] ?? []
 }
+
+// ── R-101 Phase 3 · short style key (App.tsx) → style handle (prompts folder name) ─
+const SHORT_TO_HANDLE: Record<string, string> = {
+  warm: 'warm-restraint-tech',
+  theatre: 'theatre-dark',
+  cool: 'cool-precision-tech',
+  swiss: 'swiss-systematic-blue',
+  'festive-royal': 'festive-royal-crimson',
+  'festive-editorial': 'festive-editorial-crimson',
+}
+
+// ── Module-level glob (Vite build-time — second glob call in this file is fine,
+//    Vite dedup'd at build) for DS view → ornament-list parser ───────────────
+const _moduleGlob = import.meta.glob<{ default: string }>(
+  '/prompts/**/*.md',
+  { query: '?raw' }
+)
+const _moduleMetas = parsePromptMeta(_moduleGlob)
+const _moduleGrouped = groupByStyle(_moduleMetas)
+
+/**
+ * Load the latest prompt md for a style (short key like 'warm') as raw text.
+ * Returns '' on failure. Used by DesignSystemView to parse for ornament filter.
+ */
+export async function loadLatestPromptMd(styleKey: string): Promise<string> {
+  const handle = SHORT_TO_HANDLE[styleKey] ?? styleKey
+  const versions = _moduleGrouped[handle] ?? []
+  if (!versions.length) return ''
+  const latest = latestVersion(versions)
+  try {
+    const result = await latest.load() as unknown
+    // Vite glob with ?raw returns { default: string } in module mode; some setups return string directly
+    if (typeof result === 'string') return result
+    if (result && typeof result === 'object' && 'default' in result) {
+      return (result as { default: string }).default
+    }
+    return ''
+  } catch (err) {
+    console.error('[loadLatestPromptMd]', err)
+    return ''
+  }
+}

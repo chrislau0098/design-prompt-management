@@ -4,6 +4,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* R-101 Chris feedback · iframe embed 模式隐藏滚动条(scroll 功能仍在,只是看不见 bar)*/
+body.embed-no-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+body.embed-no-scrollbar::-webkit-scrollbar {
+  display: none; /* Safari/Chrome */
+  width: 0;
+  height: 0;
+}
+
 /* R-101 Phase 2 · ResizableIframe stage styles (Design Example iframe wrapper) */
 .resizable-iframe-stage {
   position: relative;

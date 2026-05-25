@@ -41,6 +41,22 @@
   color: var(--fg);
 }
 
+/* R-101 Phase 3 · Prompt-driven ornament chip(meta-panel 内显示 Prompt 实际描述的装饰元素)*/
+.ornament-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 4px;
+  background: color-mix(in oklab, var(--primary) 14%, transparent);
+  border: 1px solid color-mix(in oklab, var(--primary) 30%, var(--border));
+  color: var(--fg);
+  font-family: var(--mono-stack);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
 .section-desc {
   color: var(--fg-2);
   font-size: 13px;
