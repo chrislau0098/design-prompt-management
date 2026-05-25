@@ -11,11 +11,12 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from '@/components/ui/sidebar'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { TooltipProvider } from '@/components/ui/tooltip'
+import { SegmentToggle } from '@/components/segment-toggle'
+import { ResizableIframe } from '@/components/resizable-iframe'
+import { Embed } from '@/Embed'
 import { cn } from '@/lib/utils'
 import { DesignSystemView } from '@/views/design-system/DesignSystemView'
-import { ReportExampleView } from '@/views/report-example/ReportExampleView'
 import { DesignPromptView, getLatestVersionForStyle } from '@/views/design-prompt/DesignPromptView'
 
 // Slot JSON imports (Stage 1 — data verification)
@@ -27,8 +28,20 @@ import festiveRoyalData from '@/data/festive-royal.slot.json'
 import festiveEditorialData from '@/data/festive-editorial.slot.json'
 
 type StyleKey = 'warm' | 'theatre' | 'cool' | 'swiss' | 'festive-royal' | 'festive-editorial'
-type ViewKey = 'design-system' | 'report-example' | 'design-prompt'
+// R-101 · view 顺序改:Example → System → Prompt(对齐新工作流:先看效果再派生)
+type ViewKey = 'design-example' | 'design-system' | 'design-prompt'
 type DeviceKey = 'web' | 'mobile'
+
+const VIEW_OPTIONS = [
+  { value: 'design-example' as const, label: 'Design Example' },
+  { value: 'design-system'  as const, label: 'Design System'  },
+  { value: 'design-prompt'  as const, label: 'Design Prompt'  },
+]
+
+const DEVICE_OPTIONS = [
+  { value: 'web'    as const, label: 'Web'    },
+  { value: 'mobile' as const, label: 'Mobile' },
+]
 
 interface StyleItem {
   key: StyleKey
@@ -82,7 +95,13 @@ const STYLE_GROUPS: StyleGroup[] = [
 ]
 
 export default function App() {
-  const [activeView, setActiveView] = useState<ViewKey>('design-system')
+  // R-101 Phase 2 · /?embed=1 → render Embed (pure ReportExampleView for iframe load)
+  if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('embed')) {
+    return <Embed />
+  }
+
+  // R-101 · default view = Design Example(新工作流:Chris 先看效果再确认)
+  const [activeView, setActiveView] = useState<ViewKey>('design-example')
   const [activeStyle, setActiveStyle] = useState<StyleKey>('warm')
   const [activeDevice, setActiveDevice] = useState<DeviceKey>('web')
 
@@ -185,54 +204,23 @@ export default function App() {
             }}
           >
             <div className="flex items-center gap-3">
-              <Tabs
+              {/* R-101 · view tabs 改用 SegmentToggle(与 Web/Mobile 同组件,active 态可靠) */}
+              <SegmentToggle
                 value={activeView}
-                onValueChange={(v) => setActiveView((v ?? 'design-system') as ViewKey)}
-              >
-                <TabsList className="h-8 bg-[var(--surface-2)] border border-[var(--border)] gap-0.5 p-0.5">
-                  <TabsTrigger
-                    value="design-system"
-                    className="text-[12px] px-3 h-7 data-[state=active]:bg-[var(--surface-3)] data-[state=active]:text-[var(--foreground)] text-[var(--muted-foreground)]"
-                  >
-                    Design System
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="report-example"
-                    className="text-[12px] px-3 h-7 data-[state=active]:bg-[var(--surface-3)] data-[state=active]:text-[var(--foreground)] text-[var(--muted-foreground)]"
-                  >
-                    Report Example
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="design-prompt"
-                    className="text-[12px] px-3 h-7 data-[state=active]:bg-[var(--surface-3)] data-[state=active]:text-[var(--foreground)] text-[var(--muted-foreground)]"
-                  >
-                    Design Prompt
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
+                onChange={setActiveView}
+                options={VIEW_OPTIONS}
+                ariaLabel="View"
+              />
 
-              {/* Web/Mobile — 紧贴 view tabs 右侧,只在 Report Example active 时 show */}
-              {activeView === 'report-example' && (
-                <div
-                  className="flex h-7 items-center rounded-md bg-[var(--surface-2)] p-0.5 gap-0.5 border border-[var(--border)]"
-                  role="group"
-                  aria-label="Device frame"
-                >
-                  {(['web', 'mobile'] as DeviceKey[]).map((d) => (
-                    <button
-                      key={d}
-                      onClick={() => setActiveDevice(d)}
-                      className={cn(
-                        'h-6 px-3 text-[11px] rounded-sm capitalize transition-all font-medium',
-                        activeDevice === d
-                          ? 'bg-[var(--surface-3)] text-[var(--foreground)] shadow-[0_1px_0_rgba(255,255,255,0.04)]'
-                          : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)]'
-                      )}
-                    >
-                      {d}
-                    </button>
-                  ))}
-                </div>
+              {/* Web/Mobile — 紧贴 view tabs 右侧,只在 Design Example active 时 show */}
+              {activeView === 'design-example' && (
+                <SegmentToggle
+                  value={activeDevice}
+                  onChange={setActiveDevice}
+                  options={DEVICE_OPTIONS}
+                  size="sm"
+                  ariaLabel="Device frame"
+                />
               )}
             </div>
 
@@ -249,19 +237,19 @@ export default function App() {
             )}
           </header>
 
-          {/* Content area */}
+          {/* Content area · R-101 顺序:Example → System → Prompt(对齐新工作流)*/}
           <main className="flex-1 overflow-y-auto">
+            {/* R-101 Phase 2 · Design Example 用 iframe 嵌入(scroll 触发动效 + 可拖宽)*/}
+            {activeView === 'design-example' && (
+              <ResizableIframe
+                src={`?embed=1&style=${activeStyle}&device=${activeDevice}&t=${activeStyle}`}
+                preset={activeDevice}
+              />
+            )}
             {activeView === 'design-system' && (
               <DesignSystemView
                 styleKey={activeStyle}
                 slot={slot as Record<string, any>}
-              />
-            )}
-            {activeView === 'report-example' && (
-              <ReportExampleView
-                styleKey={activeStyle}
-                slot={slot as Record<string, any>}
-                device={activeDevice}
               />
             )}
             {activeView === 'design-prompt' && (

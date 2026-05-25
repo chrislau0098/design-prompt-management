@@ -4,6 +4,72 @@
 @tailwind components;
 @tailwind utilities;
 
+/* R-101 Phase 2 · ResizableIframe stage styles (Design Example iframe wrapper) */
+.resizable-iframe-stage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  height: 100%;
+  padding: 24px 16px 16px;
+  background: var(--background);
+  overflow: hidden;
+}
+.resizable-iframe-frame {
+  position: relative;
+  height: calc(100% - 8px);
+  max-height: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: width 220ms cubic-bezier(0.25, 0, 0, 1);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+}
+.resizable-iframe-iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+.resizable-iframe-badge {
+  position: absolute;
+  top: -22px;
+  right: 0;
+  font: 10.5px/1 "Geist Mono", ui-monospace, monospace;
+  color: var(--muted-foreground);
+  letter-spacing: 0.04em;
+  user-select: none;
+  pointer-events: none;
+}
+.resizable-iframe-handle {
+  position: absolute;
+  top: 0;
+  right: -6px;
+  bottom: 0;
+  width: 12px;
+  cursor: col-resize;
+  z-index: 2;
+}
+.resizable-iframe-handle::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  width: 2px;
+  height: 32px;
+  background: color-mix(in oklab, var(--accent) 60%, var(--muted-foreground));
+  border-radius: 1px;
+  transform: translateY(-50%);
+  opacity: 0.4;
+  transition: opacity 120ms;
+}
+.resizable-iframe-handle:hover::before,
+.resizable-iframe-handle:active::before {
+  opacity: 1;
+}
+
 /* ─────────────────────────────────────────────────────────────
    Vibe view · Design System Renderer · Dark Theme
    Reference: designprompts.dev / Linear / Vercel / shadcn dark
