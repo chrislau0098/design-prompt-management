@@ -3,7 +3,7 @@
     "style_meta": {
         "style_name": "Instrument Dark · Electric Blue",
         "style_name_zh": "精密暗夜 · 电光蓝",
-        "description_zh": "【仅限数据战报场景】当用户明确要求精密/仪表盘/工程/数据驱动/fintech/工业/信号/电光蓝/暗黑科技/刻线/像素感/instrument 时匹配。视觉:深蓝幽暗仪表盘——白色 display 数字主导+电光蓝信号强调,GodRays 着色器+feTurbulence 像素噪点 overlay,Geist Mono+Inter,drawn-horizon 刻线 Hero(Design Tokens preview only)。气质:精密·工程·信号感。",
+        "description_zh": "【仅限数据战报场景】当用户明确要求精密/仪表盘/工程/数据驱动/fintech/工业/信号/电光蓝/暗黑科技/instrument 时匹配。视觉风格:深蓝幽暗仪表盘——白色 display 数字主导+电光蓝信号强调,精密刻线噪点质感。气质:精密·工程·信号感。",
         "style_handle": "cool-precision-tech",
         "version": "v0.5.1",
         "mode": "dark",

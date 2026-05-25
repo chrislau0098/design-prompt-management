@@ -3,7 +3,7 @@
     "style_meta": {
         "style_name": "Swiss Systematic · Editorial Blue",
         "style_name_zh": "瑞士系统 · 编辑蓝",
-        "description_zh": "【仅限数据战报场景】当用户明确要求系统/网格/严谨/编辑/Helvetica/瑞士/国际主义/全大写/minimal/极简/黑粗线/排版主导/无装饰时匹配。视觉:浅灰底+ALL CAPS Helvetica/Inter Display 排版主导+钴蓝单一焦点+黑粗线分隔+Dithering 中性灰着色器,章节用 ShadBadge outline+ShadSeparator(无 SealStamp/ChapterStamp SVG)。气质:系统·严谨·克制。",
+        "description_zh": "【仅限数据战报场景】当用户明确要求系统/网格/严谨/编辑/瑞士/国际主义/全大写/minimal/极简/无装饰/排版主导时匹配。视觉风格:浅灰底+全大写排版主导+钴蓝单一焦点,黑色粗线分隔。气质:系统·严谨·克制。",
         "style_handle": "swiss-systematic-blue",
         "version": "v0.6",
         "mode": "light",
