@@ -11,20 +11,12 @@ import {
 } from 'recharts'
 import { ChapterOpener } from './ChapterOpener'
 import { REPORT_MOCK } from './data'
+// R-100 fix #5 · Shared ChartTooltipCard (was local stub, drifted from DS Molecular)
+import { buildTooltipProps } from '@/lib/chart-tooltip'
 
 interface TrendChapterProps {
   pack: string
   slot: Record<string, any>
-}
-
-function buildTooltipProps(pack: string) {
-  return {
-    cursor:
-      pack === 'systematic'
-        ? { stroke: 'var(--border-strong)', strokeDasharray: '2 2', fill: 'transparent' }
-        : { fill: 'var(--chart-hover)' },
-    wrapperStyle: { outline: 'none' },
-  }
 }
 
 export function TrendChapter({ pack, slot }: TrendChapterProps) {

@@ -1,5 +1,9 @@
 import { motion } from 'motion/react'
 import { useRef } from 'react'
+// R-100 fix #4 · Use shared ChapterOpener (Report Example is SoT; DS Ornaments 之前 hard-code legacy editorial-chapter-banner div drifted)
+import { ChapterOpener } from '@/views/report-example/ChapterOpener'
+// Inject report-example chapter CSS so .rep-chapter-opener / .rep-chapter-title also work inside DS Ornaments preview
+import '@/views/report-example/styles.css'
 
 interface OrnamentsProps {
   slot: Record<string, any>
@@ -124,25 +128,19 @@ function EditorialPack({ baseDuration, stagger, inviewMargin }: {
 
   return (
     <div className="dec-pack-grid">
-      {/* ChapterBanner */}
+      {/* ChapterBanner — R-100 fix #4 · 用 Report Example 的 ChapterOpener(ShadBadge + h2)替代 legacy editorial-chapter-banner div */}
       <FadeUp delay={0} duration={baseDuration} margin={inviewMargin} className="dec-section">
         <div className="dec-section-tag">ChapterBanner</div>
         <DecSplit
           isolated={
-            <div className="editorial-chapter-banner" style={{ width: '100%' }}>
-              <div className="kicker">CHAPTER · 03</div>
-              <div className="label-zh">章节 · 数字承载</div>
-              <div className="title" style={{ fontSize: 36 }}>Numbers carry every claim.</div>
+            <div style={{ width: '100%' }}>
+              <ChapterOpener pack="editorial" num="03" title="Numbers carry every claim." />
             </div>
           }
           embedded={
             <div className="mini-ctx-hero" style={{ padding: '20px 24px' }}>
-              <div className="editorial-chapter-banner" style={{ paddingBottom: 14, marginBottom: 18 }}>
-                <div className="kicker">CHAPTER · 03</div>
-                <div className="label-zh">数字承载</div>
-                <div className="title" style={{ fontSize: 28 }}>Numbers carry every claim.</div>
-              </div>
-              <div className="mini-ctx-prose">一份杂志感的章节封页:大字标题承接 kicker,hairline 收尾。</div>
+              <ChapterOpener pack="editorial" num="03" title="Numbers carry every claim." />
+              <div className="mini-ctx-prose">一份杂志感的章节封页:ShadBadge `CHAPTER · NN` + 大字标题 + hairline 收尾(per-pack 由 .rep-chapter-opener 控制)。</div>
             </div>
           }
         />

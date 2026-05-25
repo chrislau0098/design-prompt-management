@@ -37,6 +37,8 @@
   font-weight: 500;
   margin: 0;
   letter-spacing: -0.01em;
+  /* R-100 fix #2 · 用 slot --fg 而非继承全局暗黑 --foreground,light slot bg 上才看得清 */
+  color: var(--fg);
 }
 
 .section-desc {

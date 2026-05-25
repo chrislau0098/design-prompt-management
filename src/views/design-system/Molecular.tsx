@@ -17,76 +17,8 @@ interface MolecularProps {
   slot: Record<string, any>
 }
 
-/* ─── ChartTooltipCard (per-pack styles) ─── */
-function ChartTooltipCard({ active, payload, label, pack }: {
-  active?: boolean
-  payload?: any[]
-  label?: string
-  pack: string
-}) {
-  if (!active || !payload || !payload.length) return null
-
-  const stylesByPack: Record<string, React.CSSProperties> = {
-    editorial: {
-      background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 12,
-      boxShadow: '0 4px 16px color-mix(in oklch, var(--fg) 6%, transparent)',
-      padding: '12px 16px', minWidth: 140, fontFamily: 'var(--sans-stack)',
-    },
-    theatrical: {
-      background: 'var(--surface-l2)', border: '1px solid color-mix(in oklch, var(--fg) 10%, transparent)',
-      borderRadius: 6,
-      boxShadow: '0 0 0 1px color-mix(in oklch, var(--primary) 14%, transparent), 0 8px 24px color-mix(in oklch, var(--primary) 12%, transparent)',
-      padding: '10px 14px', minWidth: 140, fontFamily: 'var(--sans-stack)',
-    },
-    instrumental: {
-      background: 'var(--surface-l2)', border: '1px solid var(--border-strong)',
-      borderRadius: 4,
-      boxShadow: 'inset 0 1px 0 0 oklch(1 0 0 / 0.06), 0 2px 8px oklch(0 0 0 / 0.20)',
-      padding: '10px 12px', minWidth: 130, fontFamily: 'var(--mono-stack)',
-    },
-    systematic: {
-      background: 'var(--bg)', border: '1px solid var(--border-strong)',
-      borderRadius: 0, boxShadow: 'none', padding: '10px 14px', minWidth: 130,
-      fontFamily: 'var(--sans-stack)',
-    },
-  }
-
-  const labelStyles: Record<string, React.CSSProperties> = {
-    editorial: { color: 'var(--fg-3)', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--mono-stack)' },
-    theatrical: { color: 'var(--fg-3)', fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: 6, fontFamily: 'var(--mono-stack)' },
-    instrumental: { color: 'var(--fg-3)', fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: 6 },
-    systematic: { color: 'var(--fg)', fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: 6, fontWeight: 700 },
-  }
-
-  const valueStyles: Record<string, React.CSSProperties> = {
-    editorial: { color: 'var(--fg)', fontSize: 15, fontWeight: 500, fontFamily: 'var(--display-stack)', letterSpacing: '-0.01em' },
-    theatrical: { color: 'var(--primary)', fontSize: 16, fontWeight: 600, fontFamily: 'var(--display-stack)' },
-    instrumental: { color: 'var(--fg)', fontSize: 13, fontWeight: 500, fontFeatureSettings: '"tnum","lnum"' },
-    systematic: { color: 'var(--fg)', fontSize: 16, fontWeight: 700, fontFamily: 'var(--sans-stack)', letterSpacing: '-0.005em' },
-  }
-
-  const s = stylesByPack[pack] ?? stylesByPack.editorial
-  const ls = labelStyles[pack] ?? labelStyles.editorial
-  const vs = valueStyles[pack] ?? valueStyles.editorial
-
-  return (
-    <div style={s}>
-      {label != null && <div style={ls}>{String(label)}</div>}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-        {payload.map((p, i) => (
-          <div key={i} style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 16 }}>
-            <span style={{ color: 'var(--fg-3)', fontSize: 11, fontFamily: 'var(--mono-stack)', letterSpacing: '0.04em' }}>
-              {p.name ?? p.dataKey}
-            </span>
-            <span style={vs}>
-              {typeof p.value === 'number' ? p.value.toLocaleString() : p.value}
-            </span>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
+// R-100 fix #5 · Shared ChartTooltipCard + buildTooltipProps (was local, now lives in src/lib/chart-tooltip.tsx)
+import { buildTooltipProps } from '@/lib/chart-tooltip'
 
 function commonAxisProps() {
   return {
@@ -94,16 +26,6 @@ function commonAxisProps() {
     tick: { fill: 'var(--fg-3)', fontSize: 10, fontFamily: 'var(--mono-stack)' } as any,
     tickLine: false,
     axisLine: { stroke: 'var(--border-strong)' },
-  }
-}
-
-function buildTooltipProps(pack: string) {
-  return {
-    cursor: pack === 'systematic'
-      ? { stroke: 'var(--border-strong)', strokeDasharray: '2 2', fill: 'transparent' }
-      : { fill: 'var(--chart-hover)' },
-    content: (props: any) => <ChartTooltipCard {...props} pack={pack} />,
-    wrapperStyle: { outline: 'none' },
   }
 }
 

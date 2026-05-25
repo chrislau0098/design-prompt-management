@@ -41,7 +41,7 @@ export function DesignSystemView({ slot }: DesignSystemViewProps) {
             {slot.molecular?.hero_shader?.component} · {slot.molecular?.hero_geometry?.default_treatment}
           </div>
         </div>
-        <div className="meta-proposition">"{meta?.proposition}"</div>
+        <div className="meta-proposition">{meta?.description_zh || meta?.proposition}</div>
       </section>
 
       {/* M-01 Color + M-02 Typography + M-05 RSS */}

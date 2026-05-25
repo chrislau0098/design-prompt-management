@@ -33,7 +33,8 @@ function KPICell({ k, pack }: { k: typeof REPORT_MOCK.kpis[0]; pack: string }) {
   if (isTheatrical) {
     return (
       <div className={`rep-kpi ${pack}`}>
-        <Card className="rep-kpi-inner rounded-[4px]" style={{ background: 'var(--surface-l2)', border: 'none' }}>
+        {/* R-100 fix #3 · ring-0 撤掉 shadcn Card 默认 ring-1 ring-foreground/10(在 light slot 上漏出蓝/紫色 — 违反 principle 5 filled cards never carry visible borders)*/}
+        <Card className="rep-kpi-inner rounded-[4px] ring-0 shadow-none" style={{ background: 'var(--surface-l2)', border: 'none' }}>
           {inner}
         </Card>
       </div>
@@ -56,8 +57,9 @@ function KPICell({ k, pack }: { k: typeof REPORT_MOCK.kpis[0]; pack: string }) {
   }
 
   // Editorial + Instrumental: ShadCard with no border (CSS handles it)
+  // R-100 fix #3 · ring-0 撤 shadcn Card 默认 ring(同上)
   return (
-    <Card className={cn(`rep-kpi ${pack}`)} style={{ border: 'none' }}>
+    <Card className={cn(`rep-kpi ${pack}`, 'ring-0 shadow-none')} style={{ border: 'none' }}>
       {inner}
     </Card>
   )
