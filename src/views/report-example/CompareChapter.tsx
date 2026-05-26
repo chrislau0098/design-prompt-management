@@ -1,11 +1,12 @@
-// Chapter 4 · YoY Comparison — A 方案 (R-103 Phase 2 rebuild)
+// Chapter 4 · YoY Comparison — Editorial inline headline (R-104 Phase 2 rebuild)
 //
-// Composition: Asymmetric Split (per default v0.1.md §11). Three columns —
-// previous (muted, right-aligned), inline delta arrow + percentage,
-// current (--primary, left-aligned). Single-axis baseline alignment.
+// Composition: a single declarative headline that reads as one phrase.
+//   From ¥30.9亿 (2025)   →   ¥36.5亿 (2026)   ▲ 18.2%
 //
-// Removed Phase 4.10 paired-bar breakdown (Chris feedback round-2: too busy).
-// Removed boxed delta col. Numbers carry the entire contrast.
+// Removed R-103 three-column asymmetric split (Chris feedback round-3:
+// left/center/right alignment created visual fragmentation). Now everything
+// rides one baseline; the numbers carry the contrast through weight + color,
+// the delta is inline at the tail.
 
 import { ChapterOpener } from './ChapterOpener'
 import { REPORT_MOCK } from './data'
@@ -29,35 +30,28 @@ export function CompareChapter({ pack, num = '04' }: CompareChapterProps) {
       />
 
       <div className="rep-comp-split">
-        {/* Previous — text-align right, muted */}
-        <div className="rep-comp-side prev">
-          <div className="rep-comp-side-year">{compare.previous.year}</div>
-          <div className="rep-comp-side-num">
-            <span className="prefix">¥</span>
-            <span>{compare.previous.num}</span>
-            <span className="unit">{compare.previous.unit}</span>
-          </div>
-          <div className="rep-comp-side-detail">{compare.previous.detail}</div>
-        </div>
-
-        {/* Delta — inline arrow + percentage. No box. */}
-        <div className="rep-comp-delta" aria-label={`Year-over-year ▲ ${deltaPct}%`}>
-          <span className="rep-comp-delta-arrow" aria-hidden="true">▲</span>
-          <span className="rep-comp-delta-val">{deltaPct}</span>
-          <span className="rep-comp-delta-pct">%</span>
-        </div>
-
-        {/* Current — text-align left, primary */}
-        <div className="rep-comp-side curr">
-          <div className="rep-comp-side-year">{compare.current.year}</div>
-          <div className="rep-comp-side-num">
-            <span className="prefix">¥</span>
-            <span>{compare.current.num}</span>
-            <span className="unit">{compare.current.unit}</span>
-          </div>
-          <div className="rep-comp-side-detail">{compare.current.detail}</div>
-        </div>
+        <span className="rep-comp-lead">从</span>
+        <span className="rep-comp-num prev">
+          <span className="prefix">¥</span>
+          <span>{compare.previous.num}</span>
+          <span className="unit">{compare.previous.unit}</span>
+          <span className="year">{compare.previous.year}</span>
+        </span>
+        <span className="rep-comp-lead">至</span>
+        <span className="rep-comp-num curr">
+          <span className="prefix">¥</span>
+          <span>{compare.current.num}</span>
+          <span className="unit">{compare.current.unit}</span>
+          <span className="year">{compare.current.year}</span>
+        </span>
+        <span className="rep-comp-delta" aria-label={`Year-over-year ▲ ${deltaPct}%`}>
+          <span className="arrow" aria-hidden="true">▲</span>
+          <span className="val">{deltaPct}</span>
+          <span className="pct">%</span>
+        </span>
       </div>
+
+      <p className="rep-comp-caption">{compare.current.detail}</p>
     </section>
   )
 }
