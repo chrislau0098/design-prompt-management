@@ -136,7 +136,7 @@
   display: inline-flex;
   align-items: baseline;
   gap: 6px;
-  font-family: var(--display-stack);
+  font-family: var(--number-stack, var(--display-stack));
   font-size: 22px;
   font-weight: 500;
   color: var(--primary);
@@ -431,7 +431,7 @@
 .report-frame.instrumental .rep-kpi-num .unit { color: var(--primary); }
 
 .rep-kpi-delta {
-  font-family: var(--display-stack);
+  font-family: var(--number-stack, var(--display-stack));
   font-size: 14px;
   font-weight: 500;
   color: var(--primary);
@@ -611,7 +611,7 @@
   gap: 12px;
 }
 .rep-chart-meta .num {
-  font-family: var(--display-stack);
+  font-family: var(--number-stack, var(--display-stack));
   font-size: 28px;
   font-weight: 500;
   color: var(--primary);
@@ -633,7 +633,7 @@
 }
 
 .rep-comp-lead {
-  font-family: var(--display-stack);
+  font-family: var(--title-stack, var(--display-stack));
   font-size: clamp(22px, 2.6vw, 32px);
   font-weight: 400;
   color: var(--fg-3);
@@ -649,7 +649,7 @@
 .report-frame.festive-editorial .rep-comp-lead { font-weight: 300; }
 
 .rep-comp-num {
-  font-family: var(--display-stack);
+  font-family: var(--number-stack, var(--display-stack));
   font-weight: 500;
   line-height: 0.92;
   letter-spacing: -0.04em;
@@ -698,7 +698,7 @@
   display: inline-flex;
   align-items: baseline;
   gap: 4px;
-  font-family: var(--display-stack);
+  font-family: var(--number-stack, var(--display-stack));
   color: var(--primary);
   white-space: nowrap;
 }
@@ -781,7 +781,7 @@
 }
 
 .rep-comp-inline-prev-num {
-  font-family: var(--display-stack);
+  font-family: var(--number-stack, var(--display-stack));
   font-size: clamp(28px, 3.6vw, 48px);
   font-weight: 500;
   line-height: 0.95;
@@ -799,7 +799,7 @@
 .report-frame.systematic .rep-comp-inline-prev-num { font-weight: 700; }
 
 .rep-comp-inline-curr-num {
-  font-family: var(--display-stack);
+  font-family: var(--number-stack, var(--display-stack));
   font-size: clamp(56px, 8vw, 104px);
   font-weight: 500;
   line-height: 0.92;
@@ -823,7 +823,7 @@
   display: inline-flex;
   align-items: baseline;
   gap: 8px;
-  font-family: var(--display-stack);
+  font-family: var(--number-stack, var(--display-stack));
   color: var(--primary);
   white-space: nowrap;
   padding: 0 4px;
@@ -1037,7 +1037,7 @@
 }
 .report-frame.systematic .rep-comp-year { font-family: var(--sans-stack); font-weight: 700; }
 .rep-comp-num {
-  font-family: var(--display-stack);
+  font-family: var(--number-stack, var(--display-stack));
   font-size: clamp(48px, 6vw, 80px);
   font-weight: 500;
   line-height: 0.92;
@@ -1070,7 +1070,7 @@
 .rep-quote-mark { display: inline-flex; margin-bottom: 16px; color: var(--primary); opacity: 0.7; }
 .rep-quote-mark svg { display: block; }
 .rep-quote-text {
-  font-family: var(--display-stack);
+  font-family: var(--title-stack, var(--display-stack));
   font-size: clamp(22px, 3vw, 36px);
   font-weight: 400;
   line-height: 1.35;
@@ -1109,8 +1109,26 @@
   padding: 88px 56px 80px;
   background: var(--surface-l1);
   text-align: center;
+  position: relative;
+  isolation: isolate;
 }
 @container report (max-width: 800px) { .rep-outro { padding: 56px 24px 48px; } }
+
+/* R-105 P2 · default-only SpotlightGradient — borrowed from Theatre OutroSignature.
+   Radial glow behind closing claim, single brand hue, low intensity.
+   Restrained: only renders on default pack so the 6 fixed styles stay intact. */
+.rep-outro.default::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 75%, var(--primary-glow), transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rep-outro.default::before { opacity: 0.6; }
+}
+
 .rep-outro.editorial { display: flex; flex-direction: column; align-items: center; gap: 16px; }
 .rep-outro .ember-rule { display: block; height: 1px; width: 88px; background: var(--primary); }
 .rep-outro .ember-diamond { width: 10px; height: 10px; background: var(--primary); transform: rotate(45deg); }
@@ -1118,7 +1136,7 @@
 
 /* Round-85 #15 fix: margin: 0 auto to center block within parent */
 .rep-outro-claim {
-  font-family: var(--display-stack);
+  font-family: var(--title-stack, var(--display-stack));
   font-size: clamp(20px, 2.4vw, 28px);
   font-weight: 500;
   letter-spacing: -0.02em;
@@ -1224,7 +1242,7 @@
 }
 .report-frame.systematic .rep-tl-period { font-family: var(--sans-stack); font-weight: 700; }
 .rep-tl-title {
-  font-family: var(--display-stack);
+  font-family: var(--title-stack, var(--display-stack));
   font-size: 16px;
   font-weight: 500;
   line-height: 1.3;
@@ -1290,7 +1308,7 @@
 .report-frame.systematic .rep-rank-no { font-family: var(--sans-stack); font-weight: 700; font-size: 12px; }
 .rep-rank-row.lead .rep-rank-no { color: var(--primary); }
 .rep-rank-name {
-  font-family: var(--display-stack);
+  font-family: var(--title-stack, var(--display-stack));
   font-size: 17px;
   font-weight: 500;
   color: var(--fg);
@@ -1311,7 +1329,7 @@
   margin-top: 2px;
 }
 .rep-rank-value {
-  font-family: var(--display-stack);
+  font-family: var(--number-stack, var(--display-stack));
   font-size: 22px;
   font-weight: 500;
   color: var(--fg);
@@ -1373,7 +1391,7 @@
 }
 
 .rep-prop-headline {
-  font-family: var(--display-stack);
+  font-family: var(--number-stack, var(--display-stack));
   font-size: clamp(36px, 5vw, 56px);
   font-weight: 500;
   color: var(--primary);
@@ -1425,7 +1443,7 @@
 }
 
 .rep-prop-row .value {
-  font-family: var(--display-stack);
+  font-family: var(--number-stack, var(--display-stack));
   font-size: 18px;
   font-weight: 500;
   color: var(--fg);
@@ -1651,7 +1669,7 @@
 .rep-ann-stat .unit { font-size: 0.4em; color: var(--primary-hl); margin-left: 6px; letter-spacing: -0.02em; }
 .report-frame.instrumental .rep-ann-stat .unit { color: var(--primary); }
 .rep-ann-claim {
-  font-family: var(--display-stack);
+  font-family: var(--title-stack, var(--display-stack));
   font-size: 18px;
   font-weight: 400;
   line-height: 1.45;
@@ -1815,7 +1833,7 @@
 }
 
 .rep-insight-hero-statement {
-  font-family: var(--display-stack);
+  font-family: var(--title-stack, var(--display-stack));
   font-size: clamp(26px, 3.6vw, 44px);
   font-weight: 500;
   line-height: 1.1;
@@ -1925,7 +1943,7 @@
 }
 
 .rep-insight-row-statement {
-  font-family: var(--display-stack);
+  font-family: var(--title-stack, var(--display-stack));
   font-size: 18px;
   font-weight: 500;
   line-height: 1.35;
@@ -1948,7 +1966,7 @@
 }
 
 .rep-insight-row-figure {
-  font-family: var(--display-stack);
+  font-family: var(--number-stack, var(--display-stack));
   font-size: 16px;
   font-weight: 500;
   line-height: 1.3;

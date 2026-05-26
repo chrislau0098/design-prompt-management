@@ -91,7 +91,7 @@ export function Atomic({ slot }: AtomicProps) {
           fontSize: Math.min(t.display_number_lg, 160),
           lineHeight: t.display_lh,
           letterSpacing: `${t.display_ls_em}em`,
-          fontFamily: 'var(--display-stack)',
+          fontFamily: 'var(--number-stack, var(--display-stack))',
           color: 'var(--primary)',
           fontWeight: 500,
           fontFeatureSettings: '"tnum","lnum"',
@@ -154,7 +154,7 @@ export function Atomic({ slot }: AtomicProps) {
     {
       label: 'Section Tertiary',
       meta: `${t.section_tertiary_lg}px`,
-      el: <div style={{ fontSize: t.section_tertiary_lg, fontFamily: 'var(--display-stack)', color: 'var(--fg)' }}>Section Tertiary · 内容标题</div>,
+      el: <div style={{ fontSize: t.section_tertiary_lg, fontFamily: 'var(--title-stack, var(--display-stack))', color: 'var(--fg)' }}>Section Tertiary · 内容标题</div>,
     },
     {
       label: 'Quote',
