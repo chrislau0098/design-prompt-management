@@ -2,6 +2,7 @@
 // Used by every chapter component to render the chapter head
 
 import { Badge } from '@/components/ui/badge'
+import { Separator } from '@/components/ui/separator'
 
 interface ChapterOpenerProps {
   pack: string
@@ -65,7 +66,7 @@ export function DefaultChapterOpener({ pack, num, title }: ChapterOpenerProps) {
       <h2 className="rep-chapter-title">
         {isSystematic ? title : title}
       </h2>
-      <div className="rep-chapter-hairline" aria-hidden="true" />
+      <Separator className="rep-chapter-hairline" />
     </div>
   )
 }

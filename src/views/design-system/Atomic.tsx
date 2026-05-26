@@ -100,30 +100,30 @@ export function Atomic({ slot }: AtomicProps) {
         </div>
       ),
     },
-    // R-102 G7.2 · CJK Display sample — exercises the 中文 Display stack actually
+    // R-105 · Title 中英混排 (merged, uses --title-stack)
     {
-      label: 'Display · 中文',
-      meta: `${Math.min(t.page_title_lg || t.section_primary_lg, 88)}px · sans-stack (中文 first when family ≠ Latin-only)`,
+      label: 'Title · 中英',
+      meta: `${Math.min(t.page_title_lg || t.section_primary_lg, 88)}px · title-stack (中英合并)`,
       el: (
         <div style={{
           fontSize: Math.min(t.page_title_lg || t.section_primary_lg, 88),
-          fontFamily: 'var(--sans-stack)',
+          fontFamily: 'var(--title-stack, var(--display-stack))',
           fontWeight: 700,
           letterSpacing: '-0.03em',
           lineHeight: 1.05,
           color: 'var(--fg)',
         }}>
-          {cjkDisplaySample}
+          {cjkDisplaySample} · Annual Report 2026
         </div>
       ),
     },
     t.hero_title_lg ? {
-      label: 'Hero Title · 中英混排',
-      meta: `${t.hero_title_lg}px · ${t.sans_stack[0]}`,
+      label: 'Hero Title · 中英',
+      meta: `${t.hero_title_lg}px · title-stack`,
       el: (
         <div style={{
           fontSize: Math.min(t.hero_title_lg, 80),
-          fontFamily: 'var(--sans-stack)',
+          fontFamily: 'var(--title-stack, var(--display-stack))',
           fontWeight: 500,
           letterSpacing: '-0.035em',
           color: 'var(--fg)',
@@ -134,13 +134,13 @@ export function Atomic({ slot }: AtomicProps) {
     } : null,
     t.page_title_lg ? {
       label: 'Page Title · Latin',
-      meta: `${t.page_title_lg}px · ${t.display_stack[0]}`,
-      el: <div style={{ fontSize: Math.min(t.page_title_lg, 56), fontFamily: 'var(--display-stack)', fontWeight: 500, color: 'var(--fg)' }}>Annual Report 2026</div>,
+      meta: `${t.page_title_lg}px · title-stack`,
+      el: <div style={{ fontSize: Math.min(t.page_title_lg, 56), fontFamily: 'var(--title-stack, var(--display-stack))', fontWeight: 500, color: 'var(--fg)' }}>Annual Report 2026</div>,
     } : null,
     {
       label: 'Section Primary',
-      meta: `${t.section_primary_lg}px · ${t.display_stack[0]}`,
-      el: <div style={{ fontSize: Math.min(t.section_primary_lg, 96), fontFamily: 'var(--display-stack)', fontWeight: 500, color: 'var(--fg)' }}>Section Primary</div>,
+      meta: `${t.section_primary_lg}px · title-stack`,
+      el: <div style={{ fontSize: Math.min(t.section_primary_lg, 96), fontFamily: 'var(--title-stack, var(--display-stack))', fontWeight: 500, color: 'var(--fg)' }}>Section Primary</div>,
     },
     {
       label: 'Section Secondary · 中英',

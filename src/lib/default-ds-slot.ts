@@ -80,11 +80,11 @@ export function dialsToDsSlot(dials: DefaultDialSet): Record<string, unknown> {
     'Accent-Guided',
   ]
 
-  // Font stacks
+  // Font stacks — R-105: 4-role architecture (title/number/body/mono)
   const stacks = FONT_STACKS[font_family]
-  const displayStackArr = stacks.display.split(',').map((s) => s.trim().replace(/^"|"$/g, ''))
-  const sansStackArr = stacks.sans.split(',').map((s) => s.trim().replace(/^"|"$/g, ''))
-  const monoStackArr = stacks.mono.split(',').map((s) => s.trim().replace(/^"|"$/g, ''))
+  const displayStackArr = stacks.title.split(',').map((s: string) => s.trim().replace(/^"|"$/g, ''))
+  const sansStackArr = stacks.body.split(',').map((s: string) => s.trim().replace(/^"|"$/g, ''))
+  const monoStackArr = stacks.mono.split(',').map((s: string) => s.trim().replace(/^"|"$/g, ''))
 
   // R-102 G7.2 · CJK family identification — first stack entry that isn't a
   // Latin-only face. Surfaced via typography.cjk_display_family / cjk_body_family.

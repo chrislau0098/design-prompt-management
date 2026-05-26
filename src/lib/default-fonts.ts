@@ -1,5 +1,7 @@
-// default-fonts.ts · R-102 Phase 3
+// default-fonts.ts · R-105
 // Dynamic font loading for default dial's font_family. Memo'd — each family loaded once.
+// Font stack architecture: 4 roles (title / number / body / mono).
+// --display-stack and --sans-stack retained as backward-compat aliases for fixed styles.
 
 import type { DialFontFamily } from './default-dials'
 
@@ -7,6 +9,7 @@ const FONT_LINK_URLS: Record<DialFontFamily, string[]> = {
   geometric: [
     'https://fonts.googleapis.com/css2?family=Geist:wght@400;500;700&display=swap',
     'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap',
+    'https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&display=swap',
   ],
   editorial: [
     'https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;1,400&family=Spectral:ital,wght@0,400;1,400&display=swap',
@@ -19,6 +22,7 @@ const FONT_LINK_URLS: Record<DialFontFamily, string[]> = {
   warmth: [
     'https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=Outfit:wght@400;500&display=swap',
     'https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&display=swap',
+    'https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap',
   ],
   impact: [
     'https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Anton&display=swap',
@@ -34,46 +38,43 @@ const FONT_LINK_URLS: Record<DialFontFamily, string[]> = {
   ],
 }
 
-// CSS font-family stacks per family (for injecting into --display-stack / --sans-stack / --mono-stack / --body-stack)
-export const FONT_STACKS: Record<DialFontFamily, { display: string; sans: string; mono: string; body: string }> = {
+// CSS font-family stacks per family — 4 roles: title / number / body / mono
+export const FONT_STACKS: Record<DialFontFamily, { title: string; number: string; body: string; mono: string }> = {
   geometric: {
-    display: '"Geist", "Helvetica Neue", sans-serif',
-    sans: '"Noto Sans SC", "PingFang SC", sans-serif',
-    mono: '"Geist Mono", "JetBrains Mono", monospace',
-    body: '"Noto Sans SC", "PingFang SC", sans-serif',
+    title:  '"Geist", "Noto Sans SC", "PingFang SC", sans-serif',
+    number: '"Geist", "Noto Sans SC", sans-serif',
+    body:   '"Noto Sans SC", "PingFang SC", sans-serif',
+    mono:   '"Geist Mono", "JetBrains Mono", monospace',
   },
   editorial: {
-    display: '"Fraunces", "Spectral", Georgia, serif',
-    sans: '"Noto Serif SC", "Songti SC", serif',
-    mono: '"IBM Plex Mono", monospace',
-    body: '"Noto Serif SC", "Source Han Serif SC", serif',
+    title:  '"Fraunces", "Noto Serif SC", "Spectral", "Songti SC", serif',
+    number: '"Fraunces", "Spectral", serif',
+    body:   '"Noto Serif SC", "Source Han Serif SC", serif',
+    mono:   '"IBM Plex Mono", monospace',
   },
   technical: {
-    display: '"JetBrains Mono", "IBM Plex Mono", monospace',
-    sans: '"Noto Sans SC", "PingFang SC", sans-serif',
-    mono: '"JetBrains Mono", monospace',
-    body: '"Noto Sans SC", "PingFang SC", sans-serif',
+    title:  '"JetBrains Mono", "Noto Sans SC", "IBM Plex Mono", monospace',
+    number: '"JetBrains Mono", "IBM Plex Mono", monospace',
+    body:   '"Noto Sans SC", "PingFang SC", sans-serif',
+    mono:   '"JetBrains Mono", monospace',
   },
   warmth: {
-    display: '"DM Sans", "Outfit", "Plus Jakarta Sans", sans-serif',
-    sans: '"LXGW WenKai TC", "LXGW WenKai", "霞鹜文楷", serif',
-    mono: '"DM Mono", monospace',
-    body: '"Noto Sans SC", "PingFang SC", sans-serif',
+    title:  '"DM Sans", "LXGW WenKai TC", "Outfit", "霞鹜文楷", sans-serif',
+    number: '"DM Sans", "Outfit", sans-serif',
+    body:   '"Noto Sans SC", "PingFang SC", sans-serif',
+    mono:   '"DM Mono", "JetBrains Mono", monospace',
   },
   impact: {
-    display: '"Bebas Neue", "Anton", sans-serif',
-    sans: '"Smiley Sans Oblique", "得意黑", "Noto Sans SC", sans-serif',
-    mono: '"JetBrains Mono", monospace',
-    body: '"Noto Sans SC", "PingFang SC", sans-serif',
+    title:  '"Bebas Neue", "Anton", "Smiley Sans Oblique", "得意黑", "Noto Sans SC", sans-serif',
+    number: '"Bebas Neue", "Anton", sans-serif',
+    body:   '"Noto Sans SC", "PingFang SC", sans-serif',
+    mono:   '"JetBrains Mono", monospace',
   },
   ceremonial: {
-    // CJK display: Ma Shan Zheng (calligraphic) → Zhuque Fangsong → Noto Serif SC → system serif
-    // Latin display: Playfair Display → Cinzel → Cardo → serif
-    // Both merged so hero title CJK + Latin are covered by one --display-stack
-    display: '"Playfair Display", "Cinzel", "Cardo", "Ma Shan Zheng", "Zhuque Fangsong", "Noto Serif SC", serif',
-    sans: '"Ma Shan Zheng", "马善政毛笔楷书", "Zhuque Fangsong", "朱雀仿宋", serif',
-    mono: '"IBM Plex Mono", monospace',
-    body: '"Zhuque Fangsong", "朱雀仿宋", "FZShuSong-Z01", "方正书宋", "Noto Serif SC", serif',
+    title:  '"Playfair Display", "Ma Shan Zheng", "Cinzel", "马善政毛笔楷书", serif',
+    number: '"Playfair Display", "Cinzel", serif',
+    body:   '"Zhuque Fangsong", "朱雀仿宋", "Noto Serif SC", "FZShuSong-Z01", serif',
+    mono:   '"IBM Plex Mono", monospace',
   },
 }
 
@@ -94,8 +95,12 @@ export function loadFontFamily(family: DialFontFamily): void {
 
 export function applyFontStack(family: DialFontFamily, scopeEl: HTMLElement): void {
   const stacks = FONT_STACKS[family]
-  scopeEl.style.setProperty('--display-stack', stacks.display)
-  scopeEl.style.setProperty('--sans-stack', stacks.sans)
-  scopeEl.style.setProperty('--mono-stack', stacks.mono)
+  // New 4-role vars
+  scopeEl.style.setProperty('--title-stack', stacks.title)
+  scopeEl.style.setProperty('--number-stack', stacks.number)
   scopeEl.style.setProperty('--body-stack', stacks.body)
+  scopeEl.style.setProperty('--mono-stack', stacks.mono)
+  // Backward compat aliases for fixed-style CSS (they read --display-stack / --sans-stack)
+  scopeEl.style.setProperty('--display-stack', stacks.title)
+  scopeEl.style.setProperty('--sans-stack', stacks.body)
 }

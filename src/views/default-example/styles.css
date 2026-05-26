@@ -537,6 +537,57 @@
   border: 1.5px solid rgba(0,0,0,0.3);
 }
 
+/* Advanced toggle row */
+.dk-advanced-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0 0;
+}
+
+.dk-advanced-toggle-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.14);
+  color: rgba(255,255,255,0.50);
+  font-family: inherit;
+  font-size: 8.5px;
+  letter-spacing: 0.08em;
+  padding: 3px 9px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color 100ms, border-color 100ms;
+  white-space: nowrap;
+}
+.dk-advanced-toggle-btn:hover {
+  color: rgba(255,255,255,0.80);
+  border-color: rgba(255,255,255,0.28);
+}
+
+.dk-advanced-hint {
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.25);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dk-advanced-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 4px;
+  padding-bottom: 2px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  margin-top: 4px;
+}
+
+/* Override highlight: when advanced value differs from preset */
+.dk-select-override {
+  border-color: rgba(255,255,255,0.32) !important;
+  color: rgba(255,255,255,1) !important;
+}
+
 /* Select control */
 .dk-select {
   flex: 1;

@@ -8,6 +8,7 @@ import { useEffect, useState, useCallback } from 'react'
 
 import { parseDialsFromQuery, dialsToQueryString, DEFAULT_DIALS } from '@/lib/default-dials'
 import type { DefaultDialSet } from '@/lib/default-dials'
+import { STYLE_PRESETS } from '@/lib/default-style-presets'
 import { DialPanel } from './DialPanel'
 import { ResizableIframe } from '@/components/resizable-iframe'
 import './styles.css'
@@ -29,6 +30,14 @@ export function DefaultExampleView({ device }: DefaultExampleViewProps) {
 
   function updateDial<K extends keyof DefaultDialSet>(key: K, value: DefaultDialSet[K]) {
     setDials((prev) => {
+      // When font_family changes, auto-apply STYLE_PRESETS for advanced dials
+      if (key === 'font_family') {
+        const family = value as DefaultDialSet['font_family']
+        const preset = STYLE_PRESETS[family]
+        const next = { ...prev, font_family: family, ...preset }
+        pushUrl(next)
+        return next
+      }
       const next = { ...prev, [key]: value }
       pushUrl(next)
       return next

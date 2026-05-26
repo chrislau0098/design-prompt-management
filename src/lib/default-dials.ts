@@ -1,8 +1,10 @@
-// default-dials.ts · R-102 Phase 4.9
+// default-dials.ts · R-105
 // URL query → DefaultDialSet parser. SoT: 09-default-prompt-spec.md rules translated to code.
 // neutral_temperature removed — internal tokens always use branded (C 0.008 / 0.012).
+// R-105: radius/density/hero_shader now derive from STYLE_PRESETS[font_family] when not in URL.
 
 import { NAMED_COLOR_PRESETS, isValidHex } from './color-utils'
+import { STYLE_PRESETS } from './default-style-presets'
 
 export type DialMode = 'light' | 'dark'
 export type DialFontFamily = 'geometric' | 'editorial' | 'technical' | 'warmth' | 'impact' | 'ceremonial'
@@ -94,6 +96,9 @@ function enforceForbidden(dials: DefaultDialSet): DefaultDialSet {
 }
 
 export function parseDialsFromQuery(searchParams: URLSearchParams): DefaultDialSet {
+  const font_family = pickEnum(searchParams.get('font'), VALID_FONTS, DEFAULT_DIALS.font_family)
+  // Advanced dials: use STYLE_PRESETS as defaults when not explicitly set in URL
+  const preset = STYLE_PRESETS[font_family]
   const raw: DefaultDialSet = {
     mode: pickEnum(searchParams.get('mode'), VALID_MODES, DEFAULT_DIALS.mode),
     brand_color: resolveBrandColor(
@@ -101,10 +106,10 @@ export function parseDialsFromQuery(searchParams: URLSearchParams): DefaultDialS
       searchParams.get('named'),
     ),
     lightness_shift: resolveLightnessShift(searchParams.get('lightness')),
-    font_family: pickEnum(searchParams.get('font'), VALID_FONTS, DEFAULT_DIALS.font_family),
-    hero_shader: pickEnum(searchParams.get('hero'), VALID_SHADERS, DEFAULT_DIALS.hero_shader),
-    radius: pickEnum(searchParams.get('radius'), VALID_RADII, DEFAULT_DIALS.radius),
-    density: pickEnum(searchParams.get('density'), VALID_DENSITIES, DEFAULT_DIALS.density),
+    font_family,
+    hero_shader: pickEnum(searchParams.get('hero'), VALID_SHADERS, preset.hero_shader),
+    radius: pickEnum(searchParams.get('radius'), VALID_RADII, preset.radius),
+    density: pickEnum(searchParams.get('density'), VALID_DENSITIES, preset.density),
   }
   return enforceForbidden(raw)
 }

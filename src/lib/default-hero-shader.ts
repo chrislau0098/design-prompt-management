@@ -79,21 +79,20 @@ function grainBackDark(pH: number): string {
 }
 
 // ── Dithering palette ─────────────────────────────────────────────────────────
-// Swiss v0.6: colorFront L 0.78 (#C8CACE) on colorBack L 0.94 (#EEEFF1).
-// Dark inverted: colorFront slightly above mid, colorBack one step above base.
+// R-105: brand_color hue anchored — no longer writes dead neutral gray.
+// Light: colorFront L 0.78 C 0.04 (brand-tinted pale), colorBack L 0.94 C 0.012 (near-white tint).
+// Dark:  colorFront L 0.32 C 0.08 (mid-tone brand), colorBack L 0.18 C 0.012 (deep brand tint).
 
 function buildDitheringColors(pH: number, isLight: boolean): { colorFront: string; colorBack: string } {
   if (isLight) {
     return {
-      // L 0.62 — mid-neutral with brand tint, like swiss's #C8CACE
-      colorFront: oklchToHex(0.620, 0.014, pH),
-      colorBack:  oklchToHex(0.945, 0.006, pH),
+      colorFront: oklchToHex(0.780, 0.040, pH),
+      colorBack:  oklchToHex(0.940, 0.012, pH),
     }
   }
   return {
-    // L 0.42 — clearly above the dark surface (Chris: dark mode less muddy)
-    colorFront: oklchToHex(0.420, 0.030, pH),
-    colorBack:  oklchToHex(0.140, 0.012, pH),
+    colorFront: oklchToHex(0.320, 0.080, pH),
+    colorBack:  oklchToHex(0.180, 0.012, pH),
   }
 }
 

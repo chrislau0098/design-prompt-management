@@ -1,7 +1,8 @@
-// DialPanel.tsx · R-102 Phase 4.9
+// DialPanel.tsx · R-105
 // Fixed right-side sidebar pane with resizable drag handle.
-// Replaces dialkit ColorControl with native input[type=color] + text + preset swatches.
-// neutral_temperature removed per spec.
+// Default 4 dials visible: mode / brand_color / lightness_shift / font_family
+// Advanced toggle reveals 3 more: radius / density / hero_shader
+// font_family change auto-applies STYLE_PRESETS — advanced dials show preset as default.
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
@@ -15,6 +16,7 @@ import type {
   DialMode as AppDialMode,
 } from '@/lib/default-dials'
 import { DEFAULT_DIALS } from '@/lib/default-dials'
+import { STYLE_PRESETS } from '@/lib/default-style-presets'
 import { NAMED_COLOR_PRESETS } from '@/lib/color-utils'
 import './styles.css'
 
@@ -30,6 +32,7 @@ export interface DialPanelProps {
 
 export function DialPanel({ dials, onChange, onReset }: DialPanelProps) {
   const [collapsed, setCollapsed] = useState(false)
+  const [advancedOpen, setAdvancedOpen] = useState(false)
   const [panelWidth, setPanelWidth] = useState(320)
   const [hexInput, setHexInput] = useState(dials.brand_color)
   const resizing = useRef(false)
@@ -77,6 +80,11 @@ export function DialPanel({ dials, onChange, onReset }: DialPanelProps) {
   function handleHexKeyDown(e: React.KeyboardEvent) {
     if (e.key === 'Enter') handleHexBlur()
   }
+
+  const preset = STYLE_PRESETS[dials.font_family]
+  const isRadiusOverride = dials.radius !== preset.radius
+  const isDensityOverride = dials.density !== preset.density
+  const isShaderOverride = dials.hero_shader !== preset.hero_shader
 
   return (
     <div
@@ -203,9 +211,9 @@ export function DialPanel({ dials, onChange, onReset }: DialPanelProps) {
                 </span>
               </div>
 
-              {/* 字体 */}
+              {/* 风格 / 字体 */}
               <div className="dk-dial-row">
-                <span className="dk-dial-label">字体</span>
+                <span className="dk-dial-label">风格</span>
                 <select
                   className="dk-select"
                   value={dials.font_family}
@@ -217,51 +225,81 @@ export function DialPanel({ dials, onChange, onReset }: DialPanelProps) {
                 </select>
               </div>
 
-              {/* 背景效果 */}
-              <div className="dk-dial-row">
-                <span className="dk-dial-label">背景效果</span>
-                <select
-                  className="dk-select"
-                  value={dials.hero_shader}
-                  onChange={(e) => onChange('hero_shader', e.target.value as DialHeroShader)}
+              {/* Advanced toggle */}
+              <div className="dk-advanced-toggle-row">
+                <button
+                  className="dk-advanced-toggle-btn"
+                  onClick={() => setAdvancedOpen(v => !v)}
                 >
-                  {(['mesh', 'grain', 'dithering', 'none'] as DialHeroShader[]).map(v => (
-                    <option key={v} value={v}>{v}</option>
-                  ))}
-                </select>
+                  {advancedOpen ? '▾ 收起高级' : '▸ 高级'}
+                </button>
+                <span className="dk-advanced-hint">
+                  继承自 {dials.font_family} 预设
+                </span>
               </div>
 
-              {/* 圆角 */}
-              <div className="dk-dial-row">
-                <span className="dk-dial-label">圆角</span>
-                <select
-                  className="dk-select"
-                  value={dials.radius}
-                  onChange={(e) => onChange('radius', e.target.value as DialRadius)}
-                >
-                  {(['sharp', 'crisp', 'soft', 'friendly', 'playful'] as DialRadius[]).map(v => (
-                    <option key={v} value={v}>{v}</option>
-                  ))}
-                </select>
-                <div className="dk-radius-demo" style={{
-                  borderRadius: { sharp: 0, crisp: 2, soft: 6, friendly: 12, playful: 16 }[dials.radius],
-                }} />
-              </div>
+              {/* Advanced dials: hero_shader / radius / density */}
+              <AnimatePresence initial={false}>
+                {advancedOpen && (
+                  <motion.div
+                    key="advanced"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.18, ease: [0.16, 0.84, 0.24, 1] }}
+                    style={{ overflow: 'hidden' }}
+                  >
+                    <div className="dk-advanced-body">
 
-              {/* 密度 */}
-              <div className="dk-dial-row">
-                <span className="dk-dial-label">密度</span>
-                <select
-                  className="dk-select"
-                  value={dials.density}
-                  onChange={(e) => onChange('density', e.target.value as DialDensity)}
-                >
-                  {(['sparse', 'balanced', 'dense'] as DialDensity[]).map(v => (
-                    <option key={v} value={v}>{v}</option>
-                  ))}
-                </select>
-              </div>
+                      {/* 背景效果 */}
+                      <div className="dk-dial-row">
+                        <span className="dk-dial-label">背景效果</span>
+                        <select
+                          className={`dk-select ${isShaderOverride ? 'dk-select-override' : ''}`}
+                          value={dials.hero_shader}
+                          onChange={(e) => onChange('hero_shader', e.target.value as DialHeroShader)}
+                        >
+                          {(['mesh', 'grain', 'dithering', 'none'] as DialHeroShader[]).map(v => (
+                            <option key={v} value={v}>{v}{v === preset.hero_shader ? ' ·预设' : ''}</option>
+                          ))}
+                        </select>
+                      </div>
 
+                      {/* 圆角 */}
+                      <div className="dk-dial-row">
+                        <span className="dk-dial-label">圆角</span>
+                        <select
+                          className={`dk-select ${isRadiusOverride ? 'dk-select-override' : ''}`}
+                          value={dials.radius}
+                          onChange={(e) => onChange('radius', e.target.value as DialRadius)}
+                        >
+                          {(['sharp', 'crisp', 'soft', 'friendly', 'playful'] as DialRadius[]).map(v => (
+                            <option key={v} value={v}>{v}{v === preset.radius ? ' ·预设' : ''}</option>
+                          ))}
+                        </select>
+                        <div className="dk-radius-demo" style={{
+                          borderRadius: { sharp: 0, crisp: 2, soft: 6, friendly: 12, playful: 16 }[dials.radius],
+                        }} />
+                      </div>
+
+                      {/* 密度 */}
+                      <div className="dk-dial-row">
+                        <span className="dk-dial-label">密度</span>
+                        <select
+                          className={`dk-select ${isDensityOverride ? 'dk-select-override' : ''}`}
+                          value={dials.density}
+                          onChange={(e) => onChange('density', e.target.value as DialDensity)}
+                        >
+                          {(['sparse', 'balanced', 'dense'] as DialDensity[]).map(v => (
+                            <option key={v} value={v}>{v}{v === preset.density ? ' ·预设' : ''}</option>
+                          ))}
+                        </select>
+                      </div>
+
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
             </div>
           </motion.div>

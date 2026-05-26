@@ -97,7 +97,7 @@
 }
 
 .rep-hero-title {
-  font-family: var(--display-stack);
+  font-family: var(--title-stack, var(--display-stack));
   font-size: clamp(36px, 6vw, 72px);
   font-weight: 500;
   line-height: 1.04;
@@ -117,7 +117,7 @@
 }
 
 .rep-hero-num {
-  font-family: var(--display-stack);
+  font-family: var(--number-stack, var(--display-stack));
   font-size: clamp(56px, 10vw, 120px);
   font-weight: 500;
   color: var(--primary);
@@ -232,7 +232,7 @@
 }
 
 .rep-chapter-title {
-  font-family: var(--display-stack);
+  font-family: var(--title-stack, var(--display-stack));
   font-size: clamp(24px, 3vw, 36px);
   font-weight: 500;
   line-height: 1.1;
@@ -392,7 +392,7 @@
 .report-frame.instrumental .rep-kpi-label { color: var(--fg-2); }
 
 .rep-kpi-num {
-  font-family: var(--display-stack);
+  font-family: var(--number-stack, var(--display-stack));
   font-size: 36px;
   font-weight: 500;
   line-height: 0.95;
@@ -1527,7 +1527,11 @@
   font-size: 13px;
   color: var(--fg-2);
 }
+.rep-prop-legend-row + .rep-prop-legend-row {
+  border-top: 1px solid var(--border);
+}
 .report-frame.systematic .rep-prop-legend-row {
+  border-top: none;
   border-bottom: 1px solid var(--border);
 }
 .report-frame.systematic .rep-prop-legend-row:last-child { border-bottom: none; }
@@ -1633,7 +1637,7 @@
 }
 .report-frame.systematic .rep-ann-eyebrow { font-family: var(--sans-stack); font-weight: 700; }
 .rep-ann-stat {
-  font-family: var(--display-stack);
+  font-family: var(--number-stack, var(--display-stack));
   font-size: clamp(48px, 7vw, 96px);
   font-weight: 500;
   color: var(--primary);
@@ -1788,33 +1792,16 @@
    Hero insight (large statement + figure) + hairline-separated rows. */
 
 .rep-insight-hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
-  grid-template-areas:
-    "eyebrow   figure"
-    "statement figure"
-    "detail    figure";
-  gap: 16px 40px;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   padding-bottom: 36px;
 }
 .report-frame.systematic .rep-insight-hero {
   border-bottom: 2px solid var(--fg);
 }
-@container report (max-width: 700px) {
-  .rep-insight-hero {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "eyebrow"
-      "figure"
-      "statement"
-      "detail";
-    gap: 8px;
-  }
-}
 
 .rep-insight-hero-eyebrow {
-  grid-area: eyebrow;
   font-family: var(--mono-stack);
   font-size: 11px;
   font-weight: 500;
@@ -1828,7 +1815,6 @@
 }
 
 .rep-insight-hero-statement {
-  grid-area: statement;
   font-family: var(--display-stack);
   font-size: clamp(26px, 3.6vw, 44px);
   font-weight: 500;
@@ -1846,26 +1832,21 @@
 .report-frame.theatrical .rep-insight-hero-statement { font-weight: 600; }
 
 .rep-insight-hero-figure {
-  grid-area: figure;
-  font-family: var(--display-stack);
-  font-size: clamp(18px, 2vw, 22px);
+  font-family: var(--number-stack, var(--display-stack));
+  font-size: clamp(20px, 2.2vw, 28px);
   font-weight: 500;
-  line-height: 1.25;
-  letter-spacing: -0.01em;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
   color: var(--primary);
-  text-align: right;
-  padding-left: 20px;
   font-feature-settings: "tnum", "lnum";
-  align-self: stretch;
-  display: flex;
-  align-items: flex-start;
+  order: 2;  /* renders after statement (order: 0 default) */
+  margin-top: 4px;
 }
-@container report (max-width: 700px) {
-  .rep-insight-hero-figure {
-    text-align: left;
-    padding-left: 0;
-    padding-top: 8px;
-  }
+.rep-insight-hero-statement {
+  order: 1;
+}
+.rep-insight-hero-detail {
+  order: 3;
 }
 .report-frame.systematic .rep-insight-hero-figure {
   font-weight: 700;
@@ -1879,7 +1860,6 @@
 }
 
 .rep-insight-hero-detail {
-  grid-area: detail;
   font-family: var(--body-stack, var(--sans-stack));
   font-size: 14px;
   line-height: 1.6;
