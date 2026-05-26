@@ -82,9 +82,14 @@ export function dialsToDsSlot(dials: DefaultDialSet): Record<string, unknown> {
 
   // Font stacks — R-105: 4-role architecture (title/number/body/mono)
   const stacks = FONT_STACKS[font_family]
-  const displayStackArr = stacks.title.split(',').map((s: string) => s.trim().replace(/^"|"$/g, ''))
-  const sansStackArr = stacks.body.split(',').map((s: string) => s.trim().replace(/^"|"$/g, ''))
-  const monoStackArr = stacks.mono.split(',').map((s: string) => s.trim().replace(/^"|"$/g, ''))
+  const splitStack = (s: string) => s.split(',').map((x) => x.trim().replace(/^"|"$/g, ''))
+  const titleStackArr = splitStack(stacks.title)
+  const numberStackArr = splitStack(stacks.number)
+  const bodyStackArr = splitStack(stacks.body)
+  const monoStackArr = splitStack(stacks.mono)
+  // Backward compat aliases for downstream slot consumers (DS Atomic etc.)
+  const displayStackArr = titleStackArr
+  const sansStackArr = bodyStackArr
 
   // R-102 G7.2 · CJK family identification — first stack entry that isn't a
   // Latin-only face. Surfaced via typography.cjk_display_family / cjk_body_family.
@@ -203,9 +208,14 @@ export function dialsToDsSlot(dials: DefaultDialSet): Record<string, unknown> {
 
   // Typography — derive from font stacks + dial-spec font size table
   const typography = {
+    // R-105 4-role stacks (canonical)
+    title_stack: titleStackArr,
+    number_stack: numberStackArr,
+    body_stack: bodyStackArr,
+    mono_stack: monoStackArr,
+    // Backward compat aliases
     sans_stack: sansStackArr,
     display_stack: displayStackArr,
-    mono_stack: monoStackArr,
     // R-102 G7.2 · CJK family identifiers for sample rendering
     cjk_display_family: cjkDisplayFamily,
     cjk_body_family: cjkBodyFamily,
