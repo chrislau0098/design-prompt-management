@@ -52,11 +52,10 @@
   isolation: isolate;
 }
 
-/* default pack shader wash — keep only brand radial glow,
-   drop the linear gradient to surface-l1 that was washing out the shader */
-.report-canvas-scope .rep-hero-shader-wash.default {
-  background: radial-gradient(ellipse 800px 500px at 50% 30%, color-mix(in oklch, var(--primary) 10%, transparent), transparent 70%);
-}
+/* default pack: no wash overlay — shader strength is controlled at the shader
+   parameter level (see default-hero-shader.ts), keeping the Design Prompt simple
+   (one layer, not two). The .rep-hero-shader-wash element still renders for DOM
+   parity with fixed styles but has no background. */
 
 .default-example-root {
   min-height: 100%;

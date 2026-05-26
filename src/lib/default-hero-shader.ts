@@ -22,25 +22,27 @@ interface ShaderFragment {
 // Light mirror: high-L base → brand breath → brand peak (mid-L) → neighbor.
 
 function buildMeshColorsLight(pH: number): string[] {
-  // light: 5-step ramp L 0.97 → 0.85, with a brand-peak step at C 0.060
+  // light softened (R-106 v2): brand peak L 0.89→0.925, C 0.060→0.040.
+  // Higher L pulls shader closer to bg; lower C reduces saturation.
+  // Single-layer (no wash overlay) — intensity controlled here only.
   return [
-    oklchToHex(0.970, 0.010, pH),                  // near-white tint
-    oklchToHex(0.940, 0.028, pH),                  // pale brand wash
-    oklchToHex(0.890, 0.060, pH),                  // brand peak
-    oklchToHex(0.910, 0.050, (pH + 22) % 360),     // neighboring hue accent
-    oklchToHex(0.955, 0.018, pH),                  // soft return
+    oklchToHex(0.975, 0.008, pH),                  // near-white tint
+    oklchToHex(0.955, 0.020, pH),                  // pale brand wash
+    oklchToHex(0.925, 0.040, pH),                  // brand peak (softened)
+    oklchToHex(0.940, 0.032, (pH + 22) % 360),     // neighboring hue accent
+    oklchToHex(0.965, 0.012, pH),                  // soft return
   ]
 }
 
 function buildMeshColorsDark(pH: number): string[] {
-  // dark: 5-step ramp L 0.10 → 0.55. Chris's "太暗" feedback fixed: peak L 0.55,
-  // C 0.10 → real chromatic life, not muddy near-black.
+  // dark softened (R-106 v2): brand peak L 0.55→0.48, C 0.10→0.075.
+  // Still visibly chromatic but less neon.
   return [
-    oklchToHex(0.105, 0.020, pH),                  // near-black tint (base)
-    oklchToHex(0.205, 0.050, pH),                  // brand wash mid
-    oklchToHex(0.550, 0.100, pH),                  // brand peak — bright life
-    oklchToHex(0.320, 0.080, (pH + 22) % 360),     // neighboring hue mid
-    oklchToHex(0.150, 0.030, pH),                  // soft return
+    oklchToHex(0.115, 0.012, pH),                  // near-black tint (base)
+    oklchToHex(0.190, 0.038, pH),                  // brand wash mid
+    oklchToHex(0.480, 0.075, pH),                  // brand peak (softened)
+    oklchToHex(0.290, 0.058, (pH + 22) % 360),     // neighboring hue mid
+    oklchToHex(0.155, 0.020, pH),                  // soft return
   ]
 }
 
@@ -49,33 +51,31 @@ function buildMeshColorsDark(pH: number): string[] {
 // neighbor accent. Dark inverted with similar contrast amplitude.
 
 function buildGrainColorsLight(pH: number): string[] {
-  // light: L 0.97 → 0.78 spread (warm reference ran 0.95 → 0.74 — close).
+  // light softened (R-106 v2): brand peak L 0.84→0.89, C 0.058→0.040.
   return [
-    oklchToHex(0.970, 0.010, pH),
-    oklchToHex(0.910, 0.038, pH),
-    oklchToHex(0.840, 0.058, pH),
-    oklchToHex(0.870, 0.050, (pH + 22) % 360),
+    oklchToHex(0.975, 0.008, pH),
+    oklchToHex(0.945, 0.025, pH),
+    oklchToHex(0.890, 0.040, pH),
+    oklchToHex(0.910, 0.032, (pH + 22) % 360),
   ]
 }
 
 function buildGrainColorsDark(pH: number): string[] {
-  // dark: L 0.10 → 0.42 spread. Brand peak L 0.42, C 0.090 — much warmer than
-  // the previous max-L 0.25 which felt nearly black.
+  // dark softened (R-106 v2): brand peak L 0.42→0.34, C 0.090→0.065.
   return [
-    oklchToHex(0.105, 0.020, pH),
-    oklchToHex(0.220, 0.060, pH),
-    oklchToHex(0.420, 0.090, pH),
-    oklchToHex(0.290, 0.075, (pH + 22) % 360),
+    oklchToHex(0.115, 0.012, pH),
+    oklchToHex(0.205, 0.045, pH),
+    oklchToHex(0.340, 0.065, pH),
+    oklchToHex(0.250, 0.052, (pH + 22) % 360),
   ]
 }
 
 function grainBackLight(pH: number): string {
-  return oklchToHex(0.975, 0.008, pH)
+  return oklchToHex(0.980, 0.006, pH)
 }
 
 function grainBackDark(pH: number): string {
-  // Sits one step above dark base, gives the wave a ground that's not pure black.
-  return oklchToHex(0.120, 0.014, pH)
+  return oklchToHex(0.125, 0.010, pH)
 }
 
 // ── Dithering palette ─────────────────────────────────────────────────────────
@@ -85,14 +85,16 @@ function grainBackDark(pH: number): string {
 
 function buildDitheringColors(pH: number, isLight: boolean): { colorFront: string; colorBack: string } {
   if (isLight) {
+    // softened (R-106 v2): front L 0.78→0.82, C 0.04→0.025 — closer to back, gentler pattern.
     return {
-      colorFront: oklchToHex(0.780, 0.040, pH),
-      colorBack:  oklchToHex(0.940, 0.012, pH),
+      colorFront: oklchToHex(0.820, 0.025, pH),
+      colorBack:  oklchToHex(0.955, 0.006, pH),
     }
   }
+  // softened (R-106 v2): front L 0.32→0.36, C 0.08→0.055 — still readable above dark base.
   return {
-    colorFront: oklchToHex(0.320, 0.080, pH),
-    colorBack:  oklchToHex(0.180, 0.012, pH),
+    colorFront: oklchToHex(0.360, 0.055, pH),
+    colorBack:  oklchToHex(0.145, 0.010, pH),
   }
 }
 
