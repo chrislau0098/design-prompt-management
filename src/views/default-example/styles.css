@@ -52,10 +52,10 @@
   isolation: isolate;
 }
 
-/* default pack shader wash — subtle radial glow matching default neutral palette */
+/* default pack shader wash — keep only brand radial glow,
+   drop the linear gradient to surface-l1 that was washing out the shader */
 .report-canvas-scope .rep-hero-shader-wash.default {
-  background: radial-gradient(ellipse 800px 500px at 50% 30%, color-mix(in oklch, var(--primary) 10%, transparent), transparent 70%),
-              linear-gradient(180deg, color-mix(in oklch, var(--bg) 30%, transparent) 0%, var(--surface-l1) 85%);
+  background: radial-gradient(ellipse 800px 500px at 50% 30%, color-mix(in oklch, var(--primary) 10%, transparent), transparent 70%);
 }
 
 .default-example-root {
