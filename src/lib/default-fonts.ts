@@ -21,8 +21,8 @@ const FONT_LINK_URLS: Record<DialFontFamily, string[]> = {
     'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap',
   ],
   warmth: [
-    // R-106 Fix 4 · Spectral + EB Garamond serif for English title/number (Chris feedback: warmth title/number should be serif).
-    'https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,700&family=EB+Garamond:ital,wght@0,400;0,500;0,700&display=swap',
+    // R-107 · all rounded — Nunito (rounded sans) + Comfortaa (very rounded display).
+    'https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,700;1,400&family=Comfortaa:wght@400;500;700&display=swap',
     'https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&display=swap',
     'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap',
     'https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap',
@@ -63,10 +63,11 @@ export const FONT_STACKS: Record<DialFontFamily, { title: string; number: string
     mono:   '"JetBrains Mono", monospace',
   },
   warmth: {
-    // R-106 Fix 4 · English title/number → serif (Spectral); Chinese keeps LXGW WenKai; body stays Noto Sans SC.
-    title:  '"Spectral", "LXGW WenKai TC", "EB Garamond", "霞鹜文楷", serif',
-    number: '"Spectral", "EB Garamond", serif',
-    body:   '"Noto Sans SC", "PingFang SC", sans-serif',
+    // R-107 · all rounded — title/number/body all use Nunito (rounded sans).
+    // Chinese: LXGW WenKai 圆润手写体 for title; Noto Sans SC for body readability.
+    title:  '"Nunito", "LXGW WenKai TC", "Comfortaa", "霞鹜文楷", sans-serif',
+    number: '"Nunito", "Comfortaa", sans-serif',
+    body:   '"Nunito", "Noto Sans SC", "PingFang SC", sans-serif',
     mono:   '"DM Mono", "JetBrains Mono", monospace',
   },
   impact: {

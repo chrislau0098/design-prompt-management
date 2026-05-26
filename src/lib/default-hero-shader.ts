@@ -85,16 +85,16 @@ function grainBackDark(pH: number): string {
 
 function buildDitheringColors(pH: number, isLight: boolean): { colorFront: string; colorBack: string } {
   if (isLight) {
-    // softened (R-106 v2): front L 0.78→0.82, C 0.04→0.025 — closer to back, gentler pattern.
+    // R-107 · technical hero too dark — front L 0.82→0.90, C 0.025→0.018.
     return {
-      colorFront: oklchToHex(0.820, 0.025, pH),
-      colorBack:  oklchToHex(0.955, 0.006, pH),
+      colorFront: oklchToHex(0.900, 0.018, pH),
+      colorBack:  oklchToHex(0.965, 0.006, pH),
     }
   }
-  // softened (R-106 v2): front L 0.32→0.36, C 0.08→0.055 — still readable above dark base.
+  // R-107 · dark front L 0.36→0.42, C 0.055→0.040 — also lighter, less heavy.
   return {
-    colorFront: oklchToHex(0.360, 0.055, pH),
-    colorBack:  oklchToHex(0.145, 0.010, pH),
+    colorFront: oklchToHex(0.420, 0.040, pH),
+    colorBack:  oklchToHex(0.155, 0.010, pH),
   }
 }
 
@@ -164,8 +164,9 @@ export function dialsToHeroShaderSlot(dials: DefaultDialSet): ShaderFragment | n
       props: {
         type:  '8x8',
         shape: 'simplex',
-        size:  3,
-        scale: 1.0,
+        // R-107 · size 3→4, scale 1.0→1.4 — pattern more sparse, hero feels lighter.
+        size:  4,
+        scale: 1.4,
         colorFront,
         colorBack,
         speed: DITHERING_SPEED,
