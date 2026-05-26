@@ -39,7 +39,8 @@ function objLCH(L: number, C: number): { L: number; C: number } {
 }
 
 export function dialsToDsSlot(dials: DefaultDialSet): Record<string, unknown> {
-  const { mode, brand_color, lightness_shift, font_family, radius, density, accent_strategy } = dials
+  const { mode, brand_color, lightness_shift, font_family, radius, density } = dials
+  // accent_strategy removed — always bordered/mono
   const isLight = mode === 'light'
 
   // Extract OKLCH from brand_color
@@ -69,14 +70,14 @@ export function dialsToDsSlot(dials: DefaultDialSet): Record<string, unknown> {
   // Ground truth signature — derived text summary
   const fontLabel = font_family.charAt(0).toUpperCase() + font_family.slice(1)
   const radiusLabel = radius.charAt(0).toUpperCase() + radius.slice(1)
-  const groundTruth = `${fontLabel} · ${radiusLabel} radius · ${DENSITY_ZH[density]} · ${accent_strategy} accent · H${pH.toFixed(0)} ${brandHex}`
+  const groundTruth = `${fontLabel} · ${radiusLabel} radius · ${DENSITY_ZH[density]} · mono accent · H${pH.toFixed(0)} ${brandHex}`
 
   // Mood adjectives derived from dials
   const moodAdjectives: string[] = [
     fontLabel,
     radiusLabel === 'Sharp' ? 'Structured' : radiusLabel === 'Playful' ? 'Friendly' : 'Balanced',
     density === 'dense' ? 'Information-Dense' : density === 'sparse' ? 'Spacious' : 'Measured',
-    accent_strategy === 'semantic' ? 'Semantic-Color' : accent_strategy === 'silent' ? 'Monochrome' : 'Accent-Guided',
+    'Accent-Guided',
   ]
 
   // Font stacks
@@ -277,7 +278,7 @@ export function dialsToDsSlot(dials: DefaultDialSet): Record<string, unknown> {
     : font_family === 'impact' ? 'bold impact'
     : 'modern clarity'
 
-  const proposition = `A ${isLight ? 'light' : 'dark'}-mode report styled around ${moodWord}. Brand color ${brandHex} (H ${pH.toFixed(0)}) anchors the primary ramp. ${radiusLabel} radius, ${DENSITY_ZH[density]} density, ${accent_strategy} accent strategy.`
+  const proposition = `A ${isLight ? 'light' : 'dark'}-mode report styled around ${moodWord}. Brand color ${brandHex} (H ${pH.toFixed(0)}) anchors the primary ramp. ${radiusLabel} radius, ${DENSITY_ZH[density]} density, mono accent.`
 
   return {
     style_meta: {
@@ -288,7 +289,7 @@ export function dialsToDsSlot(dials: DefaultDialSet): Record<string, unknown> {
       proposition,
       mood_adjectives: moodAdjectives,
       decorative_pack: 'default',
-      focal_numeral_strategy: accent_strategy === 'silent' ? 'neutral' : 'primary_on_neutral',
+      focal_numeral_strategy: 'primary_on_neutral',
       mode,
       brand_hue: pH,
       ground_truth_signature: groundTruth,

@@ -113,12 +113,7 @@ export function dialsToTokens(dials: DefaultDialSet): Record<string, string> {
   tokens['--fg-2'] = tokens['--foreground-2']
   tokens['--fg-3'] = tokens['--foreground-3']
 
-  // semantic accent extras (accent_strategy=semantic)
-  if (dials.accent_strategy === 'semantic') {
-    tokens['--success']     = isLight ? 'oklch(0.52 0.15 145)' : 'oklch(0.65 0.15 145)'
-    tokens['--warning']     = isLight ? 'oklch(0.58 0.16 78)'  : 'oklch(0.70 0.16 78)'
-    tokens['--destructive'] = isLight ? 'oklch(0.50 0.20 27)'  : 'oklch(0.65 0.20 27)'
-  }
+  // accent_strategy=semantic removed — fixed mono accent; no semantic color injection
 
   return tokens
 }

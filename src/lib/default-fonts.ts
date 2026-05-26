@@ -67,7 +67,10 @@ export const FONT_STACKS: Record<DialFontFamily, { display: string; sans: string
     body: '"Noto Sans SC", "PingFang SC", sans-serif',
   },
   ceremonial: {
-    display: '"Playfair Display", "Cinzel", "Cardo", serif',
+    // CJK display: Ma Shan Zheng (calligraphic) → Zhuque Fangsong → Noto Serif SC → system serif
+    // Latin display: Playfair Display → Cinzel → Cardo → serif
+    // Both merged so hero title CJK + Latin are covered by one --display-stack
+    display: '"Playfair Display", "Cinzel", "Cardo", "Ma Shan Zheng", "Zhuque Fangsong", "Noto Serif SC", serif',
     sans: '"Ma Shan Zheng", "马善政毛笔楷书", "Zhuque Fangsong", "朱雀仿宋", serif',
     mono: '"IBM Plex Mono", monospace',
     body: '"Zhuque Fangsong", "朱雀仿宋", "FZShuSong-Z01", "方正书宋", "Noto Serif SC", serif',

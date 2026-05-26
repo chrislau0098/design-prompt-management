@@ -74,7 +74,7 @@ function DefaultDesignSystemView() {
   const meta = slot.style_meta as Record<string, any>
 
   return (
-    <div className="default-example-root">
+    <div className="default-example-root" style={{ display: 'flex', alignItems: 'stretch', minHeight: '100%' }}>
       <div ref={canvasRef} className="ds-canvas-scope" style={{ flex: 1, minWidth: 0 }}>
         <div className="ds-container">
           {/* Meta panel */}
@@ -98,9 +98,9 @@ function DefaultDesignSystemView() {
               </div>
             </div>
             <div className="meta-row">
-              <div className="meta-row-label">Font Family · Radius · Accent</div>
+              <div className="meta-row-label">Font Family · Radius</div>
               <div className="meta-row-value">
-                {dials.font_family} · {dials.radius} · {dials.accent_strategy}
+                {dials.font_family} · {dials.radius}
               </div>
             </div>
             <div className="meta-proposition">{meta?.description_zh || meta?.proposition}</div>

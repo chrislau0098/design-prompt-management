@@ -9,7 +9,6 @@ export type DialFontFamily = 'geometric' | 'editorial' | 'technical' | 'warmth' 
 export type DialHeroShader = 'mesh' | 'grain' | 'dithering' | 'none'
 export type DialRadius = 'sharp' | 'crisp' | 'soft' | 'friendly' | 'playful'
 export type DialDensity = 'sparse' | 'balanced' | 'dense'
-export type DialAccentStrategy = 'silent' | 'mono' | 'semantic'
 
 export interface DefaultDialSet {
   mode: DialMode
@@ -19,7 +18,6 @@ export interface DefaultDialSet {
   hero_shader: DialHeroShader
   radius: DialRadius
   density: DialDensity
-  accent_strategy: DialAccentStrategy
 }
 
 export const DEFAULT_DIALS: DefaultDialSet = {
@@ -30,7 +28,6 @@ export const DEFAULT_DIALS: DefaultDialSet = {
   hero_shader: 'mesh',
   radius: 'sharp',
   density: 'balanced',
-  accent_strategy: 'mono',
 }
 
 const VALID_MODES: DialMode[] = ['light', 'dark']
@@ -38,7 +35,6 @@ const VALID_FONTS: DialFontFamily[] = ['geometric', 'editorial', 'technical', 'w
 const VALID_SHADERS: DialHeroShader[] = ['mesh', 'grain', 'dithering', 'none']
 const VALID_RADII: DialRadius[] = ['sharp', 'crisp', 'soft', 'friendly', 'playful']
 const VALID_DENSITIES: DialDensity[] = ['sparse', 'balanced', 'dense']
-const VALID_ACCENTS: DialAccentStrategy[] = ['silent', 'mono', 'semantic']
 
 function pickEnum<T extends string>(value: string | null, valid: T[], fallback: T): T {
   if (!value) return fallback
@@ -72,8 +68,9 @@ function resolveLightnessShift(raw: string | null): number {
 
 // Forbidden combinations per spec. Returns nearest legal adjusted dials.
 function enforceForbidden(dials: DefaultDialSet): DefaultDialSet {
-  let { font_family, hero_shader, density, accent_strategy, radius } = dials
+  let { font_family, hero_shader, density, radius } = dials
   // neutral_temperature removed — no longer a dial
+  // accent_strategy removed — default is always bordered (mono accent)
 
   // impact + playful → demote radius to crisp
   if (font_family === 'impact' && radius === 'playful') {
@@ -87,19 +84,13 @@ function enforceForbidden(dials: DefaultDialSet): DefaultDialSet {
     density = 'balanced'
   }
 
-  // ceremonial + semantic → demote accent to mono
-  if (font_family === 'ceremonial' && accent_strategy === 'semantic') {
-    console.warn('[default-dials] forbidden: ceremonial + semantic → fallback accent=mono')
-    accent_strategy = 'mono'
-  }
-
   // technical + mesh shader → demote hero to dithering
   if (font_family === 'technical' && hero_shader === 'mesh') {
     console.warn('[default-dials] forbidden: technical + mesh shader → fallback hero=dithering')
     hero_shader = 'dithering'
   }
 
-  return { ...dials, font_family, hero_shader, density, accent_strategy, radius }
+  return { ...dials, font_family, hero_shader, density, radius }
 }
 
 export function parseDialsFromQuery(searchParams: URLSearchParams): DefaultDialSet {
@@ -114,7 +105,6 @@ export function parseDialsFromQuery(searchParams: URLSearchParams): DefaultDialS
     hero_shader: pickEnum(searchParams.get('hero'), VALID_SHADERS, DEFAULT_DIALS.hero_shader),
     radius: pickEnum(searchParams.get('radius'), VALID_RADII, DEFAULT_DIALS.radius),
     density: pickEnum(searchParams.get('density'), VALID_DENSITIES, DEFAULT_DIALS.density),
-    accent_strategy: pickEnum(searchParams.get('accent'), VALID_ACCENTS, DEFAULT_DIALS.accent_strategy),
   }
   return enforceForbidden(raw)
 }
@@ -129,7 +119,6 @@ export function dialsToQueryString(dials: DefaultDialSet): string {
     hero: dials.hero_shader,
     radius: dials.radius,
     density: dials.density,
-    accent: dials.accent_strategy,
   })
   return '?' + p.toString()
 }

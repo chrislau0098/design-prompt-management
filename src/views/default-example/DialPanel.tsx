@@ -12,7 +12,6 @@ import type {
   DialHeroShader,
   DialRadius,
   DialDensity,
-  DialAccentStrategy,
   DialMode as AppDialMode,
 } from '@/lib/default-dials'
 import { DEFAULT_DIALS } from '@/lib/default-dials'
@@ -263,19 +262,6 @@ export function DialPanel({ dials, onChange, onReset }: DialPanelProps) {
                 </select>
               </div>
 
-              {/* 重音 */}
-              <div className="dk-dial-row">
-                <span className="dk-dial-label">重音</span>
-                <select
-                  className="dk-select"
-                  value={dials.accent_strategy}
-                  onChange={(e) => onChange('accent_strategy', e.target.value as DialAccentStrategy)}
-                >
-                  {(['silent', 'mono', 'semantic'] as DialAccentStrategy[]).map(v => (
-                    <option key={v} value={v}>{v}</option>
-                  ))}
-                </select>
-              </div>
 
             </div>
           </motion.div>

@@ -104,7 +104,7 @@ function buildDitheringColors(pH: number, isLight: boolean): { colorFront: strin
 // frantic in dark on the bright peak).
 
 const MESH_SPEED      = 0.85
-const GRAIN_SPEED     = 1.30
+const GRAIN_SPEED     = 1.72   // warm SoT: slot.json speed=1.72
 const DITHERING_SPEED = 0.70
 
 export function dialsToHeroShaderSlot(dials: DefaultDialSet): ShaderFragment | null {
@@ -137,8 +137,8 @@ export function dialsToHeroShaderSlot(dials: DefaultDialSet): ShaderFragment | n
     return {
       component: 'GrainGradient',
       props: {
-        // Warm v1.0.1: shape wave, softness 0.9, intensity 0.5, noise 0.04,
-        // scale 1.8. All adopted — proven warmth.
+        // Warm v1.0.1 SoT: shape wave, softness 0.9, intensity 0.5, noise 0.04,
+        // scale 1.8, rotation 0, offsetX 0, offsetY 0.24, fit 'cover', speed 1.72.
         shape:     'wave',
         colors,
         colorBack,
@@ -146,6 +146,10 @@ export function dialsToHeroShaderSlot(dials: DefaultDialSet): ShaderFragment | n
         intensity: isLight ? 0.50 : 0.45,
         noise:     0.04,
         scale:     1.8,
+        rotation:  0,
+        offsetX:   0,
+        offsetY:   0.24,
+        fit:       'cover',
         speed:     GRAIN_SPEED,
         speed_off_viewport: 0,
       },
