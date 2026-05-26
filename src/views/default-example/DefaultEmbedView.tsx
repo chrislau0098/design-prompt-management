@@ -15,7 +15,8 @@ import { KPIChapter } from '@/views/report-example/KPIChapter'
 import { TrendChapter } from '@/views/report-example/TrendChapter'
 import { TimelineChapter } from '@/views/report-example/TimelineChapter'
 import { InsightSection } from '@/views/report-example/InsightSection'
-import { CompareChapter } from '@/views/report-example/CompareChapter'
+// R-106 Fix 2 · CompareChapter removed from default route (Chris feedback).
+// Component file retained for fixed-style usage in ReportExampleView.
 import { RankingChapter } from '@/views/report-example/RankingChapter'
 import { ProportionChapter } from '@/views/report-example/ProportionChapter'
 import { AnnotationChapter } from '@/views/report-example/AnnotationChapter'
@@ -77,10 +78,9 @@ export function DefaultEmbedView({ device }: DefaultEmbedViewProps) {
           <TrendChapter pack="default" slot={slot} />
           <TimelineChapter pack="default" />
           <InsightSection pack="default" num="04" />
-          <CompareChapter pack="default" num="05" />
-          <RankingChapter pack="default" num="06" />
-          <ProportionChapter pack="default" num="07" />
-          <AnnotationChapter pack="default" num="08" />
+          <RankingChapter pack="default" num="05" />
+          <ProportionChapter pack="default" num="06" />
+          <AnnotationChapter pack="default" num="07" />
           <QuoteChapter pack="default" />
           <OutroChapter pack="default" />
         </div>

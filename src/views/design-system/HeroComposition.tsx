@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'motion/react'
 import * as PaperShaders from '@paper-design/shaders-react'
+import { Hero as DefaultHero } from '@/views/report-example/Hero'
 
 interface HeroCompositionProps {
   slot: Record<string, any>
@@ -289,7 +290,30 @@ function HeroContent({ slot, treatment, styleKey }: {
   return <div>{displayNumber}</div>
 }
 
+// R-106 Fix 1 (CRITICAL) · default style routes through the same Example <Hero>
+// component to guarantee visual parity between Example and DS view.
+function DefaultStyleHeroBlock({ slot }: { slot: Record<string, any> }) {
+  return (
+    <section className="section" id="m-shader">
+      <div className="section-header">
+        <span className="section-num">M-04</span>
+        <h2 className="section-title">Hero Section · Composition</h2>
+        <span className="section-desc">shader + typography + decoration + motion · synced with Example</span>
+      </div>
+      <div className="hero-stage" id="hero-stage" style={{ padding: 0, overflow: 'hidden' }}>
+        <DefaultHero pack="default" slot={slot} />
+      </div>
+    </section>
+  )
+}
+
 export function HeroComposition({ slot }: HeroCompositionProps) {
+  // Default style: route to single-source-of-truth <Hero> from the Example.
+  // Fixed styles (6) keep the legacy multi-treatment HeroComposition below.
+  if (slot.style_meta?.decorative_pack === 'default') {
+    return <DefaultStyleHeroBlock slot={slot} />
+  }
+
   const styleKey = slot.style_meta?.style_handle?.replace('-restraint-tech', '') || 'warm'
   const defaultTreatment = slot.molecular?.hero_geometry?.default_treatment as Treatment ?? 'asymmetric-split'
   const [treatment, setTreatment] = useState<Treatment>(defaultTreatment)

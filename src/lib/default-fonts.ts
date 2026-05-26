@@ -12,16 +12,19 @@ const FONT_LINK_URLS: Record<DialFontFamily, string[]> = {
     'https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&display=swap',
   ],
   editorial: [
-    'https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;1,400&family=Spectral:ital,wght@0,400;1,400&display=swap',
-    'https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap',
+    // R-106 Fix 3 · Spectral + EB Garamond replace Fraunces (Chris feedback: too rounded + too thick).
+    'https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&display=swap',
+    'https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&display=swap',
   ],
   technical: [
     'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=IBM+Plex+Mono:wght@400;700&display=swap',
     'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap',
   ],
   warmth: [
-    'https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=Outfit:wght@400;500&display=swap',
+    // R-106 Fix 4 · Spectral + EB Garamond serif for English title/number (Chris feedback: warmth title/number should be serif).
+    'https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,700&family=EB+Garamond:ital,wght@0,400;0,500;0,700&display=swap',
     'https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&display=swap',
+    'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap',
     'https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap',
   ],
   impact: [
@@ -47,8 +50,9 @@ export const FONT_STACKS: Record<DialFontFamily, { title: string; number: string
     mono:   '"Geist Mono", "JetBrains Mono", monospace',
   },
   editorial: {
-    title:  '"Fraunces", "Noto Serif SC", "Spectral", "Songti SC", serif',
-    number: '"Fraunces", "Spectral", serif',
+    // R-106 Fix 3 · Spectral-led classic serif (replaces chunky Fraunces 700).
+    title:  '"Spectral", "EB Garamond", "Noto Serif SC", "Songti SC", serif',
+    number: '"Spectral", "EB Garamond", serif',
     body:   '"Noto Serif SC", "Source Han Serif SC", serif',
     mono:   '"IBM Plex Mono", monospace',
   },
@@ -59,8 +63,9 @@ export const FONT_STACKS: Record<DialFontFamily, { title: string; number: string
     mono:   '"JetBrains Mono", monospace',
   },
   warmth: {
-    title:  '"DM Sans", "LXGW WenKai TC", "Outfit", "霞鹜文楷", sans-serif',
-    number: '"DM Sans", "Outfit", sans-serif',
+    // R-106 Fix 4 · English title/number → serif (Spectral); Chinese keeps LXGW WenKai; body stays Noto Sans SC.
+    title:  '"Spectral", "LXGW WenKai TC", "EB Garamond", "霞鹜文楷", serif',
+    number: '"Spectral", "EB Garamond", serif',
     body:   '"Noto Sans SC", "PingFang SC", sans-serif',
     mono:   '"DM Mono", "JetBrains Mono", monospace',
   },
