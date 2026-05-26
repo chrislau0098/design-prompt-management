@@ -133,6 +133,7 @@ export function getStyleVersions(
 
 // ── R-101 Phase 3 · short style key (App.tsx) → style handle (prompts folder name) ─
 const SHORT_TO_HANDLE: Record<string, string> = {
+  default: 'default',
   warm: 'warm-restraint-tech',
   theatre: 'theatre-dark',
   cool: 'cool-precision-tech',

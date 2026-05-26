@@ -58,6 +58,9 @@ export function QuoteChapter({ pack }: QuoteChapterProps) {
           {quoteText}
         </p>
         <span className="rep-quote-cite">{REPORT_MOCK.quote.cite}</span>
+        {REPORT_MOCK.quote.attribution && (
+          <span className="rep-quote-attribution">{REPORT_MOCK.quote.attribution}</span>
+        )}
       </div>
     </section>
   )

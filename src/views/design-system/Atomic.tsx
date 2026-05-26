@@ -78,9 +78,13 @@ export function Atomic({ slot }: AtomicProps) {
 
   // Typography samples
   const isEditorial = d.style_meta?.decorative_pack === 'editorial'
+  // R-102 G7.2 · CJK sample copy per family — display vs body
+  const cjkDisplaySample = '二〇二六年度战报'
+  const cjkBodySample = '本年度营收创历史新高,同比增长 18.2%,核心产品矩阵突破 4.54 亿月活用户。'
+
   const typeSamples = [
     {
-      label: 'Display Number',
+      label: 'Display Number · Latin',
       meta: `${t.display_number_lg}px · lh ${t.display_lh} · ls ${t.display_ls_em}em · ${t.display_stack[0]}`,
       el: (
         <div className="type-display type-display-number" style={{
@@ -96,15 +100,42 @@ export function Atomic({ slot }: AtomicProps) {
         </div>
       ),
     },
+    // R-102 G7.2 · CJK Display sample — exercises the 中文 Display stack actually
+    {
+      label: 'Display · 中文',
+      meta: `${Math.min(t.page_title_lg || t.section_primary_lg, 88)}px · sans-stack (中文 first when family ≠ Latin-only)`,
+      el: (
+        <div style={{
+          fontSize: Math.min(t.page_title_lg || t.section_primary_lg, 88),
+          fontFamily: 'var(--sans-stack)',
+          fontWeight: 700,
+          letterSpacing: '-0.03em',
+          lineHeight: 1.05,
+          color: 'var(--fg)',
+        }}>
+          {cjkDisplaySample}
+        </div>
+      ),
+    },
     t.hero_title_lg ? {
-      label: 'Hero Title',
+      label: 'Hero Title · 中英混排',
       meta: `${t.hero_title_lg}px · ${t.sans_stack[0]}`,
-      el: <div style={{ fontSize: Math.min(t.hero_title_lg, 80), fontFamily: 'var(--sans-stack)', fontWeight: 500, letterSpacing: '-0.035em', color: 'var(--fg)' }}>Confident Warmth · 暖光叙事</div>,
+      el: (
+        <div style={{
+          fontSize: Math.min(t.hero_title_lg, 80),
+          fontFamily: 'var(--sans-stack)',
+          fontWeight: 500,
+          letterSpacing: '-0.035em',
+          color: 'var(--fg)',
+        }}>
+          Annual Report 2026 · {cjkDisplaySample}
+        </div>
+      ),
     } : null,
     t.page_title_lg ? {
-      label: 'Page Title',
+      label: 'Page Title · Latin',
       meta: `${t.page_title_lg}px · ${t.display_stack[0]}`,
-      el: <div style={{ fontSize: Math.min(t.page_title_lg, 56), fontFamily: 'var(--display-stack)', fontWeight: 500, color: 'var(--fg)' }}>Page Title · 章节标题</div>,
+      el: <div style={{ fontSize: Math.min(t.page_title_lg, 56), fontFamily: 'var(--display-stack)', fontWeight: 500, color: 'var(--fg)' }}>Annual Report 2026</div>,
     } : null,
     {
       label: 'Section Primary',
@@ -112,9 +143,13 @@ export function Atomic({ slot }: AtomicProps) {
       el: <div style={{ fontSize: Math.min(t.section_primary_lg, 96), fontFamily: 'var(--display-stack)', fontWeight: 500, color: 'var(--fg)' }}>Section Primary</div>,
     },
     {
-      label: 'Section Secondary',
-      meta: `${t.section_secondary_lg}px`,
-      el: <div style={{ fontSize: Math.min(t.section_secondary_lg, 64), fontFamily: 'var(--display-stack)', fontWeight: 500, color: 'var(--fg)' }}>Section Secondary · 子标题</div>,
+      label: 'Section Secondary · 中英',
+      meta: `${t.section_secondary_lg}px · sans-stack`,
+      el: (
+        <div style={{ fontSize: Math.min(t.section_secondary_lg, 64), fontFamily: 'var(--sans-stack)', fontWeight: 500, color: 'var(--fg)' }}>
+          Section Secondary · 子标题层级
+        </div>
+      ),
     },
     {
       label: 'Section Tertiary',
@@ -129,11 +164,38 @@ export function Atomic({ slot }: AtomicProps) {
       </div>,
     },
     {
-      label: 'Body',
-      meta: `${t.body}px · cjk_body_max_ch ${t.cjk_body_max_ch} · feat: ${t.font_feature_settings.replace(/"/g, '')}`,
-      el: <div style={{ fontSize: t.body, maxWidth: `${t.cjk_body_max_ch}ch`, fontFamily: 'var(--sans-stack)', color: 'var(--fg)' }}>
-        这是一段中文正文示例，用来检验字号、行高、字重与中英文混排在该风格下的视觉节奏。Body copy at {t.body}px sets the rhythm for long-form reading inside reports.
-      </div>,
+      label: 'Body · 中文',
+      meta: `${t.body}px · cjk_body_max_ch ${t.cjk_body_max_ch} · sans-stack`,
+      el: (
+        <p style={{
+          fontSize: t.body,
+          maxWidth: `${t.cjk_body_max_ch}ch`,
+          fontFamily: 'var(--sans-stack)',
+          fontWeight: 400,
+          lineHeight: 1.65,
+          color: 'var(--fg-2)',
+          margin: 0,
+        }}>
+          {cjkBodySample}
+        </p>
+      ),
+    },
+    {
+      label: 'Body · Latin',
+      meta: `${t.body}px · ${t.sans_stack[0]} · feat: ${t.font_feature_settings.replace(/"/g, '')}`,
+      el: (
+        <p style={{
+          fontSize: t.body,
+          maxWidth: `${t.cjk_body_max_ch * 1.4}ch`,
+          fontFamily: 'var(--sans-stack)',
+          fontWeight: 400,
+          lineHeight: 1.55,
+          color: 'var(--fg-2)',
+          margin: 0,
+        }}>
+          Body copy at {t.body}px sets the rhythm for long-form reading inside reports — paired with the CJK stack above, mixed Latin / Han runs fall back per-glyph in modern browsers.
+        </p>
+      ),
     },
     {
       label: 'Caption / Mono',

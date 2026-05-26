@@ -2,11 +2,16 @@ import { motion } from 'motion/react'
 import { useRef } from 'react'
 // R-100 fix #4 · Use shared ChapterOpener (Report Example is SoT; DS Ornaments 之前 hard-code legacy editorial-chapter-banner div drifted)
 import { ChapterOpener } from '@/views/report-example/ChapterOpener'
+import { ornamentVisible } from '@/lib/parse-prompt-ornaments'
 // Inject report-example chapter CSS so .rep-chapter-opener / .rep-chapter-title also work inside DS Ornaments preview
 import '@/views/report-example/styles.css'
 
 interface OrnamentsProps {
   slot: Record<string, any>
+  // R-102 G7.1 · when styleKey='default', Ornaments are filtered by the set
+  // of ornament names actually referenced by the default Prompt md.
+  styleKey?: string
+  visible?: Set<string>
 }
 
 /* ─── Motion fade-up helper ─── */
@@ -550,98 +555,286 @@ function SystematicPack({ baseDuration, stagger, inviewMargin }: {
   )
 }
 
-export function Ornaments({ slot }: OrnamentsProps) {
+// ── DefaultPack ────────────────────────────────────────────────────────────
+// Renders only the ornament names actually referenced in the default Prompt md.
+// Order: ChapterBanner → Tag → Pill → DeltaIndicator → Separator → SealStamp.
+
+function DefaultPack({ visible, baseDuration, stagger, inviewMargin }: {
+  visible: Set<string>
+  baseDuration: number
+  stagger: number
+  inviewMargin: string
+}) {
+  const items: React.ReactNode[] = []
+
+  if (ornamentVisible(visible, 'ChapterBanner')) {
+    items.push(
+      <FadeUp key="cb" delay={0} duration={baseDuration} margin={inviewMargin} className="dec-section">
+        <div className="dec-section-tag">ChapterBanner · 通用章节封页</div>
+        <DecSplit
+          isolated={
+            <div style={{ width: '100%' }}>
+              <ChapterOpener pack="default" num="03" title="Numbers carry every claim." />
+            </div>
+          }
+          embedded={
+            <div className="mini-ctx-hero" style={{ padding: '20px 24px' }}>
+              <ChapterOpener pack="default" num="03" title="Numbers carry every claim." />
+              <div className="mini-ctx-prose">ShadBadge `CHAPTER · NN` + 章节标题 + hairline。default 风格唯一允许的章节封页装饰。</div>
+            </div>
+          }
+        />
+      </FadeUp>,
+    )
+  }
+
+  if (ornamentVisible(visible, 'Tag', 'Pill')) {
+    items.push(
+      <FadeUp key="tag" delay={stagger} duration={baseDuration} margin={inviewMargin} className="dec-section">
+        <div className="dec-section-tag">Tag / Pill · sharp 0px corner</div>
+        <DecSplit
+          isolated={
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
+              <span className="pill-outlined">Live</span>
+              <span className="pill-outlined">TNUM</span>
+              <span className="pill-outlined">Q4 · 2026</span>
+            </div>
+          }
+          embedded={
+            <div className="mini-ctx">
+              <div className="mini-ctx-label">METRIC HEADER</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+                <span className="mini-ctx-num" style={{ color: 'var(--primary)' }}>¥36.5<span className="mini-ctx-unit">亿</span></span>
+                <span className="pill-outlined">Q1 2026</span>
+                <span className="pill-outlined">Live</span>
+              </div>
+              <p className="mini-ctx-prose">Sharp 0px corner 不随 radius dial 改变。Thin border outline + body weight。</p>
+            </div>
+          }
+        />
+      </FadeUp>,
+    )
+  }
+
+  if (ornamentVisible(visible, 'DeltaIndicator')) {
+    items.push(
+      <FadeUp key="delta" delay={stagger * 2} duration={baseDuration} margin={inviewMargin} className="dec-section">
+        <div className="dec-section-tag">DeltaIndicator · inline glyph (no pill)</div>
+        <DecSplit
+          isolated={
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
+              <span className="delta-inline">▲ 18.2% <span style={{ opacity: 0.7, fontWeight: 400 }}>YoY</span></span>
+              <span className="delta-inline down">▼ 4.7% <span style={{ opacity: 0.7, fontWeight: 400 }}>QoQ</span></span>
+            </div>
+          }
+          embedded={
+            <div className="mini-ctx">
+              <div className="mini-ctx-label">KPI · 营收同比</div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 14, flexWrap: 'wrap' }}>
+                <span className="mini-ctx-num" style={{ color: 'var(--primary)' }}>¥36.5<span className="mini-ctx-unit">亿</span></span>
+                <span className="delta-inline">▲ 18.2%</span>
+              </div>
+              <p className="mini-ctx-prose">No pill, no border, no background。inline glyph + body weight 字符 + 数值。Up 用 ▲ primary;down 用 ▼ foreground-2(mono/silent)。</p>
+            </div>
+          }
+        />
+      </FadeUp>,
+    )
+  }
+
+  if (ornamentVisible(visible, 'Separator')) {
+    items.push(
+      <FadeUp key="sep" delay={stagger * 3} duration={baseDuration} margin={inviewMargin} className="dec-section">
+        <div className="dec-section-tag">Separator · 1px alpha hairline</div>
+        <DecSplit
+          isolated={
+            <div style={{ width: '100%', padding: '12px 0' }}>
+              <div className="orn-divider-alpha-hairline" />
+            </div>
+          }
+          embedded={
+            <div className="mini-ctx">
+              <p className="mini-ctx-prose">上一段:章节结束,留白处暗示节奏切换。</p>
+              <div className="orn-divider-alpha-hairline" style={{ margin: '8px 0' }} />
+              <p className="mini-ctx-prose">下一段:1px alpha hairline 切分段落,无 gradient、无 dot、无 fade。Radix Separator 原语。</p>
+            </div>
+          }
+        />
+      </FadeUp>,
+    )
+  }
+
+  if (ornamentVisible(visible, 'SealStamp')) {
+    items.push(
+      <FadeUp key="seal" delay={stagger * 4} duration={baseDuration} margin={inviewMargin} className="dec-section">
+        <div className="dec-section-tag">SealStamp · ceremonial 唯一例外</div>
+        <DecSplit
+          isolated={
+            <svg width={56} height={56} viewBox="0 0 56 56" aria-hidden>
+              <circle cx={28} cy={28} r={26} fill="var(--primary)" />
+              <text x={28} y={34} textAnchor="middle" fontSize={20} fontFamily="var(--display-stack)" fontWeight={700} fill="var(--bg)">03</text>
+            </svg>
+          }
+          embedded={
+            <div className="mini-ctx-hero" style={{ padding: '20px 24px' }}>
+              <div style={{ position: 'absolute', top: 16, right: 16 }}>
+                <svg width={36} height={36} viewBox="0 0 36 36" aria-hidden>
+                  <circle cx={18} cy={18} r={16} fill="var(--primary)" />
+                  <text x={18} y={23} textAnchor="middle" fontSize={13} fontFamily="var(--display-stack)" fontWeight={700} fill="var(--bg)">03</text>
+                </svg>
+              </div>
+              <div className="mini-ctx-hero-eyebrow">CHAPTER · 03</div>
+              <div className="mini-ctx-hero-title">章节圆印</div>
+              <p className="mini-ctx-prose" style={{ marginTop: 4 }}>仅 ceremonial font_family 允许:solid-fill 圆形章节标记,反白数字,28-40px。</p>
+            </div>
+          }
+        />
+      </FadeUp>,
+    )
+  }
+
+  if (items.length === 0) {
+    return (
+      <div className="dec-pack-grid">
+        <div className="dec-section">
+          <div className="dec-section-tag">未在 Prompt 中检出装饰元素</div>
+          <p className="mini-ctx-prose">当前 dial 组合下的 Prompt md 未引用任何已注册的 ornament 名称。</p>
+        </div>
+      </div>
+    )
+  }
+
+  return <div className="dec-pack-grid">{items}</div>
+}
+
+export function Ornaments({ slot, styleKey, visible }: OrnamentsProps) {
   const mt = slot.atomic?.motion_timing
-  const pack = slot.style_meta?.decorative_pack ?? 'editorial'
+  const rawPack = slot.style_meta?.decorative_pack ?? 'editorial'
+  const isDefault = styleKey === 'default' || rawPack === 'default'
+  const pack = isDefault ? 'default' : rawPack
 
   const motionRange = mt?.entrance_ms_range || [600, 1000]
   const baseDuration = (motionRange[0] + motionRange[1]) / 2 / 1000
   const stagger = mt?.stagger_children_s || 0.08
   const inviewMargin = mt?.inview_margin || '-20%'
 
-  // Dividers
-  const dividers = [
-    <OrnCard key="d1" name="Divider · hairline-dotdotdot" slot="molecular.dividers.content_divider" delay={0}>
-      <div className="orn-divider-dotdotdot">·  ·  ·</div>
-    </OrnCard>,
-    <OrnCard key="d2" name="Divider · gradient-hairline" slot="molecular.dividers.accent_divider" delay={stagger}>
-      <div className="orn-divider-gradient-hairline" />
-    </OrnCard>,
-    <OrnCard key="d3" name="Divider · alpha-hairline" slot="molecular.dividers.content_divider (alt)" delay={stagger * 2}>
-      <div className="orn-divider-alpha-hairline" />
-    </OrnCard>,
-  ]
+  // R-102 G7.1 · for default styleKey, filter Atomic ornament cards by what's
+  // actually mentioned in the default v0.1.md prompt. Other styles keep the
+  // full Atomic catalog (legacy behavior).
+  const defaultVisible = isDefault ? (visible ?? new Set<string>()) : null
+  function showOrn(...names: string[]): boolean {
+    if (!isDefault) return true
+    return defaultVisible !== null && names.some((n) => defaultVisible.has(n))
+  }
 
-  // Chapter markers
+  // Dividers — for default, only Separator (alpha-hairline) is referenced.
+  const dividers = [
+    showOrn('Separator') ? (
+      <OrnCard key="d3" name="Divider · alpha-hairline" slot="molecular.dividers.content_divider" delay={0}>
+        <div className="orn-divider-alpha-hairline" />
+      </OrnCard>
+    ) : null,
+    !isDefault && (
+      <OrnCard key="d1" name="Divider · hairline-dotdotdot" slot="molecular.dividers.content_divider" delay={stagger}>
+        <div className="orn-divider-dotdotdot">·  ·  ·</div>
+      </OrnCard>
+    ),
+    !isDefault && (
+      <OrnCard key="d2" name="Divider · gradient-hairline" slot="molecular.dividers.accent_divider" delay={stagger * 2}>
+        <div className="orn-divider-gradient-hairline" />
+      </OrnCard>
+    ),
+  ].filter(Boolean)
+
+  // Chapter markers — for default, only ChapterBanner (hairline-banner) +
+  // SealStamp (ceremonial only) get referenced.
   const chapterMarkers = [
-    <OrnCard key="cm1" name="Marker · hairline-banner" slot="editorial chapter_opener" delay={0}>
-      <div style={{ width: '100%', textAlign: 'left' }}>
-        <div className="orn-eyebrow">CHAPTER · 03</div>
-        <div style={{ height: 1, background: 'var(--border-strong)', marginTop: 8 }} />
-      </div>
-    </OrnCard>,
-    <OrnCard key="cm2" name="Marker · ChapterStamp (circular)" slot="theatrical / instrumental chapter_opener" delay={stagger}>
-      <svg width={56} height={56} viewBox="0 0 56 56" aria-hidden>
-        <circle cx={28} cy={28} r={26} fill="none" stroke="color-mix(in oklch, var(--primary) 40%, transparent)" strokeWidth={1} />
-        <text x={28} y={33} textAnchor="middle" fontSize={14} fontFamily="var(--mono-stack)" fill="var(--primary)">03</text>
-      </svg>
-    </OrnCard>,
-    <OrnCard key="cm3" name="Marker · ChapterStamp (text)" slot="editorial inline column" delay={stagger * 2}>
-      <div style={{ fontFamily: 'var(--mono-stack)', textAlign: 'center' }}>
-        <div style={{ fontSize: 10, fontWeight: 500, letterSpacing: '0.08em', color: 'var(--fg-3)' }}>No.</div>
-        <div style={{ fontSize: 18, fontWeight: 500, color: 'var(--primary)' }}>03</div>
-      </div>
-    </OrnCard>,
-  ]
+    showOrn('ChapterBanner') ? (
+      <OrnCard key="cm1" name="Marker · ChapterBanner (hairline)" slot="default chapter_opener" delay={0}>
+        <div style={{ width: '100%', textAlign: 'left' }}>
+          <div className="orn-eyebrow">CHAPTER · 03</div>
+          <div style={{ height: 1, background: 'var(--border-strong)', marginTop: 8 }} />
+        </div>
+      </OrnCard>
+    ) : null,
+    showOrn('ChapterStamp', 'SealStamp') ? (
+      <OrnCard key="cm2" name="Marker · ChapterStamp (circular)" slot="theatrical / instrumental / ceremonial" delay={stagger}>
+        <svg width={56} height={56} viewBox="0 0 56 56" aria-hidden>
+          <circle cx={28} cy={28} r={26} fill="none" stroke="color-mix(in oklch, var(--primary) 40%, transparent)" strokeWidth={1} />
+          <text x={28} y={33} textAnchor="middle" fontSize={14} fontFamily="var(--mono-stack)" fill="var(--primary)">03</text>
+        </svg>
+      </OrnCard>
+    ) : null,
+    !isDefault && (
+      <OrnCard key="cm3" name="Marker · ChapterStamp (text)" slot="editorial inline column" delay={stagger * 2}>
+        <div style={{ fontFamily: 'var(--mono-stack)', textAlign: 'center' }}>
+          <div style={{ fontSize: 10, fontWeight: 500, letterSpacing: '0.08em', color: 'var(--fg-3)' }}>No.</div>
+          <div style={{ fontSize: 18, fontWeight: 500, color: 'var(--primary)' }}>03</div>
+        </div>
+      </OrnCard>
+    ),
+  ].filter(Boolean)
 
   // Delta indicators
   const deltaIndicators = [
-    <OrnCard key="di1" name="DeltaIndicator · inline glyph (no pill)" slot="editorial decorative_pack" delay={0}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'center' }}>
-        <span className="delta-inline">▲ 18.2%</span>
-        <span className="delta-inline down">▼ 4.7%</span>
-      </div>
-    </OrnCard>,
-    <OrnCard key="di2" name="DeltaIndicator · pill rounded-[4px]" slot="theatrical / instrumental decorative_pack" delay={stagger}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}>
-        <span className="delta-pill"><span className="arrow">▲</span><span>18.2%</span></span>
-        <span className="delta-pill down"><span className="arrow">▼</span><span>4.7%</span></span>
-      </div>
-    </OrnCard>,
-  ]
+    showOrn('DeltaIndicator') ? (
+      <OrnCard key="di1" name="DeltaIndicator · inline glyph (no pill)" slot="default decorative_pack" delay={0}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'center' }}>
+          <span className="delta-inline">▲ 18.2%</span>
+          <span className="delta-inline down">▼ 4.7%</span>
+        </div>
+      </OrnCard>
+    ) : null,
+    !isDefault && (
+      <OrnCard key="di2" name="DeltaIndicator · pill rounded-[4px]" slot="theatrical / instrumental decorative_pack" delay={stagger}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}>
+          <span className="delta-pill"><span className="arrow">▲</span><span>18.2%</span></span>
+          <span className="delta-pill down"><span className="arrow">▼</span><span>4.7%</span></span>
+        </div>
+      </OrnCard>
+    ),
+  ].filter(Boolean)
 
   // Pills
   const pills = [
-    <OrnCard key="p1" name="Pill · shadcn Badge variant='outline'" slot="editorial Tags" delay={0}>
-      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'center' }}>
-        <span className="pill-shadcn-outline">Live</span>
-        <span className="pill-shadcn-outline">TNUM</span>
-      </div>
-    </OrnCard>,
-    <OrnCard key="p2" name="Pill · OutlinedPill (thin-border)" slot="instrumental decorative_pack" delay={stagger}>
-      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'center' }}>
-        <span className="pill-outlined">Live</span>
-        <span className="pill-outlined">Signal</span>
-      </div>
-    </OrnCard>,
-  ]
+    showOrn('Pill', 'Tag') ? (
+      <OrnCard key="p1" name="Pill · sharp 0px outline" slot="default Tags" delay={0}>
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'center' }}>
+          <span className="pill-outlined">Live</span>
+          <span className="pill-outlined">TNUM</span>
+        </div>
+      </OrnCard>
+    ) : null,
+    !isDefault && (
+      <OrnCard key="p2" name="Pill · OutlinedPill (thin-border)" slot="instrumental decorative_pack" delay={stagger}>
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'center' }}>
+          <span className="pill-outlined">Live</span>
+          <span className="pill-outlined">Signal</span>
+        </div>
+      </OrnCard>
+    ),
+  ].filter(Boolean)
 
-  // Quotes
+  // Quotes — default Prompt md doesn't introduce a Quote archetype ornament
   const quotes = [
-    <OrnCard key="q1" name="Quote · SVG L-shape 40×40" slot="editorial Quote archetype" delay={0}>
-      <svg width={40} height={40} viewBox="0 0 40 40" fill="none" aria-hidden className="quote-bracket-svg">
-        <path d="M 2 38 L 2 2 L 38 2" stroke="currentColor" strokeWidth={1} strokeLinecap="square" />
-      </svg>
-    </OrnCard>,
-    <OrnCard key="q2" name="Quote · lucide <Quote/>" slot="theatrical / instrumental Quote archetype" delay={stagger}>
-      <svg width={32} height={32} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" className="quote-lucide" aria-hidden>
-        <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" />
-        <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z" />
-      </svg>
-    </OrnCard>,
-  ]
+    !isDefault && (
+      <OrnCard key="q1" name="Quote · SVG L-shape 40×40" slot="editorial Quote archetype" delay={0}>
+        <svg width={40} height={40} viewBox="0 0 40 40" fill="none" aria-hidden className="quote-bracket-svg">
+          <path d="M 2 38 L 2 2 L 38 2" stroke="currentColor" strokeWidth={1} strokeLinecap="square" />
+        </svg>
+      </OrnCard>
+    ),
+    !isDefault && (
+      <OrnCard key="q2" name="Quote · lucide <Quote/>" slot="theatrical / instrumental Quote archetype" delay={stagger}>
+        <svg width={32} height={32} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" className="quote-lucide" aria-hidden>
+          <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" />
+          <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z" />
+        </svg>
+      </OrnCard>
+    ),
+  ].filter(Boolean)
 
-  // Eyebrow
+  // Eyebrow — universal; default uses it as the kicker primitive
   const eyebrow = [
     <OrnCard key="e1" name="Eyebrow / Kicker" slot="meta_tracking_em · primary text" delay={0}>
       <div className="orn-eyebrow">CHAPTER 03 · NUMBERS PERFORM</div>
@@ -650,6 +843,7 @@ export function Ornaments({ slot }: OrnamentsProps) {
 
   // Choose Decor pack content
   const packDesc: Record<string, string> = {
+    default: 'ChapterBanner · Tag/Pill · DeltaIndicator · Separator · SealStamp (ceremonial only) — Prompt 实际涉及',
     editorial: 'ChapterBanner · ChapterDivider · QuoteBracket · OutroSignature · inline DeltaIndicator — 杂志风装饰套件',
     theatrical: 'ChapterStamp (circular SVG) · SpotlightGradient · DeltaIndicator (pill) — 戏剧风',
     instrumental: 'ChapterStamp · OutlinedPill · drawn-horizon · feTurbulence noise — 仪表风',
@@ -657,6 +851,9 @@ export function Ornaments({ slot }: OrnamentsProps) {
   }
 
   const PackContent = () => {
+    if (isDefault) {
+      return <DefaultPack visible={defaultVisible ?? new Set()} baseDuration={baseDuration} stagger={stagger} inviewMargin={inviewMargin} />
+    }
     if (pack === 'theatrical') return <TheatricalPack slot={slot} baseDuration={baseDuration} stagger={stagger} inviewMargin={inviewMargin} />
     if (pack === 'instrumental') return <InstrumentalPack slot={slot} baseDuration={baseDuration} stagger={stagger} inviewMargin={inviewMargin} />
     if (pack === 'systematic') return <SystematicPack slot={slot} baseDuration={baseDuration} stagger={stagger} inviewMargin={inviewMargin} />

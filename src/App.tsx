@@ -18,6 +18,7 @@ import { Embed } from '@/Embed'
 import { cn } from '@/lib/utils'
 import { DesignSystemView } from '@/views/design-system/DesignSystemView'
 import { DesignPromptView, getLatestVersionForStyle } from '@/views/design-prompt/DesignPromptView'
+import { DefaultExampleView } from '@/views/default-example/DefaultExampleView'
 
 // Slot JSON imports (Stage 1 — data verification)
 import warmData from '@/data/warm.slot.json'
@@ -27,7 +28,7 @@ import swissData from '@/data/swiss.slot.json'
 import festiveRoyalData from '@/data/festive-royal.slot.json'
 import festiveEditorialData from '@/data/festive-editorial.slot.json'
 
-type StyleKey = 'warm' | 'theatre' | 'cool' | 'swiss' | 'festive-royal' | 'festive-editorial'
+type StyleKey = 'default' | 'warm' | 'theatre' | 'cool' | 'swiss' | 'festive-royal' | 'festive-editorial'
 // R-101 · view 顺序改:Example → System → Prompt(对齐新工作流:先看效果再派生)
 type ViewKey = 'design-example' | 'design-system' | 'design-prompt'
 type DeviceKey = 'web' | 'mobile'
@@ -56,6 +57,7 @@ interface StyleGroup {
 }
 
 const SLOT_MAP: Record<StyleKey, unknown> = {
+  default: null,  // default uses dial-derived tokens, no slot.json
   warm: warmData,
   theatre: theatreData,
   cool: coolData,
@@ -74,6 +76,10 @@ function deriveLabel(key: StyleKey): { label: string; sublabel: string } {
 }
 
 const STYLE_GROUPS: StyleGroup[] = [
+  {
+    label: '基座',
+    items: [{ key: 'default', label: '默认基座', sublabel: '参数化风格', version: 'v0.1' }],
+  },
   {
     label: '明亮',
     items: (['warm', 'swiss', 'festive-editorial'] as StyleKey[]).map((k) => ({
@@ -239,8 +245,11 @@ export default function App() {
 
           {/* Content area · R-101 顺序:Example → System → Prompt(对齐新工作流)*/}
           <main className="flex-1 overflow-y-auto">
-            {/* R-101 Phase 2 · Design Example 用 iframe 嵌入(scroll 触发动效 + 可拖宽)*/}
-            {activeView === 'design-example' && (
+            {/* Design Example · default = inline dial view; others = iframe embed */}
+            {activeView === 'design-example' && activeStyle === 'default' && (
+              <DefaultExampleView device={activeDevice} />
+            )}
+            {activeView === 'design-example' && activeStyle !== 'default' && (
               <ResizableIframe
                 src={`?embed=1&style=${activeStyle}&device=${activeDevice}&t=${activeStyle}`}
                 preset={activeDevice}

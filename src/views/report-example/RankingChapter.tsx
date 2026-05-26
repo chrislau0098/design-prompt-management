@@ -19,7 +19,7 @@ export function RankingChapter({ pack }: RankingChapterProps) {
       <div className="rep-ranking">
         {REPORT_MOCK.ranking.map((r, i) => (
           <div
-            className={`rep-rank-row${r.lead ? ' lead' : ''}`}
+            className={`rep-rank-row${r.lead ? ' lead' : ''}${i > 0 ? ' secondary' : ''}`}
             key={`rk-${i}`}
           >
             <div className="rep-rank-no">{r.rank}</div>
@@ -32,6 +32,9 @@ export function RankingChapter({ pack }: RankingChapterProps) {
               <span>{r.value}</span>
               <span className="unit">{r.unit}</span>
             </div>
+            {r.share && (
+              <div className="rep-rank-share">{r.share}</div>
+            )}
           </div>
         ))}
       </div>

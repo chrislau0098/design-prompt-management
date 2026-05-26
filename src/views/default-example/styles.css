@@ -1,0 +1,567 @@
+/* DefaultExampleView · Dial Panel styles · R-102 Phase 4.6 */
+
+/* ── Scoped canvas ── */
+/* All dial tokens + dark class are injected here, not on <html>.
+   DialPanel stays outside this scope and inherits <html> light defaults. */
+.report-canvas-scope {
+  /* Explicit light defaults so the canvas has token values even before first paint */
+  --background: oklch(0.985 0.002 232);
+  --surface-l1: oklch(0.985 0.002 232);
+  --surface-l2: oklch(0.965 0.002 232);
+  --surface-l3: oklch(0.935 0.002 232);
+  --foreground: oklch(0.14 0.008 232);
+  --foreground-2: oklch(0.42 0.008 232);
+  --foreground-3: oklch(0.62 0.008 232);
+  --border: oklch(0.14 0.008 232 / 0.10);
+  --border-strong: oklch(0.14 0.008 232 / 0.22);
+  --primary: oklch(0.48 0.22 232);
+  --primary-hl: oklch(0.58 0.22 232);
+  --primary-soft: oklch(0.92 0.04 232);
+  --bg: oklch(0.985 0.002 232);
+  --display-stack: "Geist", "Helvetica Neue", sans-serif;
+  --sans-stack: "Noto Sans SC", "PingFang SC", sans-serif;
+  --mono-stack: "Geist Mono", "JetBrains Mono", monospace;
+  --radius-panel: 6px;
+  --radius-card: 6px;
+  --radius-pill: 9999px;
+}
+
+/* Dark mode — scoped inside canvas, does not bleed to DialPanel */
+.report-canvas-scope.dark {
+  --background: oklch(0.10 0.002 232);
+  --surface-l1: oklch(0.12 0.002 232);
+  --surface-l2: oklch(0.14 0.002 232);
+  --surface-l3: oklch(0.17 0.002 232);
+  --foreground: oklch(0.92 0.006 232);
+  --foreground-2: oklch(0.70 0.006 232);
+  --foreground-3: oklch(0.50 0.006 232);
+  --border: oklch(0.92 0.006 232 / 0.14);
+  --border-strong: oklch(0.92 0.006 232 / 0.28);
+  --primary: oklch(0.58 0.22 232);
+  --primary-hl: oklch(0.68 0.22 232);
+  --primary-soft: oklch(0.20 0.04 232);
+  --bg: oklch(0.10 0.002 232);
+}
+
+/* fg/fg-2/fg-3 aliases used by some chapter components */
+.report-canvas-scope { --fg: var(--foreground); --fg-2: var(--foreground-2); --fg-3: var(--foreground-3); }
+
+/* default pack Hero — enable shader layer (mirrors pattern used by editorial/theatrical packs) */
+.report-canvas-scope .rep-hero.default {
+  background: var(--surface-l1);
+  isolation: isolate;
+}
+
+/* default pack shader wash — subtle radial glow matching default neutral palette */
+.report-canvas-scope .rep-hero-shader-wash.default {
+  background: radial-gradient(ellipse 800px 500px at 50% 30%, color-mix(in oklch, var(--primary) 10%, transparent), transparent 70%),
+              linear-gradient(180deg, color-mix(in oklch, var(--bg) 30%, transparent) 0%, var(--surface-l1) 85%);
+}
+
+.default-example-root {
+  min-height: 100%;
+  background: var(--background, #f9f9f9);
+}
+
+/* ── Dial Panel ── */
+.dial-panel {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--background, #f9f9f9);
+  border-bottom: 1px solid var(--border-strong, rgba(0,0,0,0.12));
+  padding: 0 20px;
+  font-family: var(--mono-stack, monospace);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.dial-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 36px;
+}
+
+.dial-panel-title {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--foreground-3, #888);
+  font-weight: 500;
+}
+
+.dial-panel-toggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--foreground-3, #888);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.dial-panel-toggle:hover {
+  background: var(--surface-l2, #f0f0f0);
+}
+
+.dial-panel-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  padding-bottom: 12px;
+}
+
+.dial-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dial-label {
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--foreground-3, #888);
+  white-space: nowrap;
+  min-width: 52px;
+}
+
+.dial-control {
+  display: flex;
+  align-items: center;
+}
+
+/* Hue slider */
+.dial-hue-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dial-hue-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 120px;
+  height: 6px;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+  border: 1px solid var(--border, rgba(0,0,0,0.1));
+}
+
+.dial-hue-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--foreground, #111);
+  cursor: pointer;
+  border: 2px solid var(--background, #fff);
+  box-shadow: 0 0 0 1px var(--border-strong, rgba(0,0,0,0.2));
+}
+
+.dial-hue-value {
+  font-size: 10px;
+  color: var(--foreground, #111);
+  min-width: 28px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Toggle buttons */
+.dial-toggle-group {
+  display: inline-flex;
+  border: 1px solid var(--border-strong, rgba(0,0,0,0.15));
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.dial-toggle-btn {
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--border-strong, rgba(0,0,0,0.15));
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--foreground-3, #888);
+  padding: 4px 10px;
+  transition: background 120ms, color 120ms;
+}
+
+.dial-toggle-btn:last-child {
+  border-right: none;
+}
+
+.dial-toggle-btn:hover:not(.active) {
+  background: var(--surface-l2, #f0f0f0);
+  color: var(--foreground, #111);
+}
+
+.dial-toggle-btn.active {
+  background: var(--primary, #3b5bdb);
+  color: #fff;
+}
+
+/* Select */
+.dial-select {
+  font-family: inherit;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--foreground, #111);
+  background: var(--surface-l2, #f0f0f0);
+  border: 1px solid var(--border-strong, rgba(0,0,0,0.15));
+  border-radius: 4px;
+  padding: 3px 8px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 20px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 6px center;
+}
+
+.dial-select:focus {
+  outline: none;
+  border-color: var(--primary, #3b5bdb);
+}
+
+/* Reset button */
+.dial-reset-btn {
+  font-family: inherit;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--foreground-3, #888);
+  background: transparent;
+  border: 1px solid var(--border, rgba(0,0,0,0.1));
+  border-radius: 4px;
+  padding: 4px 10px;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.dial-reset-btn:hover {
+  color: var(--foreground, #111);
+  border-color: var(--border-strong, rgba(0,0,0,0.2));
+}
+
+/* ── dk-sidebar-panel · fixed right-side sidebar pane ── */
+/* Not floating — flex sibling to report canvas. Right edge is draggable. */
+
+.dk-sidebar-panel {
+  position: relative;
+  flex-shrink: 0;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  background: rgba(18, 18, 18, 0.97);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: 'Geist Mono', 'JetBrains Mono', monospace;
+  color: rgba(255, 255, 255, 0.85);
+  user-select: none;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.10) transparent;
+  z-index: 40;
+  max-height: 100vh;
+}
+
+/* Left drag resize handle */
+.dk-resize-handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 10;
+  transition: background 120ms;
+}
+.dk-resize-handle:hover,
+.dk-resize-handle:active {
+  background: rgba(255,255,255,0.10);
+}
+
+.dk-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dk-panel-title {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  font-weight: 500;
+}
+
+.dk-panel-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dk-panel-action-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.40);
+  font-family: inherit;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color 120ms, border-color 120ms;
+}
+
+.dk-panel-action-btn:hover {
+  color: rgba(255,255,255,0.75);
+  border-color: rgba(255,255,255,0.25);
+}
+
+.dk-panel-collapse-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.40);
+  font-size: 12px;
+  padding: 2px 6px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.dk-panel-body {
+  padding: 10px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.10) transparent;
+}
+
+/* Dial row: label + control + optional preview */
+.dk-dial-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  padding-block: 2px;
+}
+
+/* Dial section: vertical stack for color + presets */
+.dk-dial-section {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.dk-dial-label {
+  font-size: 8.5px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.38);
+  white-space: nowrap;
+  min-width: 68px;
+  flex-shrink: 0;
+}
+
+/* Mode / neutral toggle group */
+.dk-toggle-group {
+  display: inline-flex;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.dk-toggle-btn {
+  background: transparent;
+  border: none;
+  border-right: 1px solid rgba(255,255,255,0.10);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.45);
+  padding: 4px 10px;
+  transition: background 100ms, color 100ms;
+  line-height: 1;
+}
+
+.dk-toggle-btn:last-child {
+  border-right: none;
+}
+
+.dk-toggle-btn:hover:not(.active) {
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.75);
+}
+
+.dk-toggle-btn.active {
+  background: rgba(255,255,255,0.14);
+  color: rgba(255,255,255,0.95);
+}
+
+/* Mode preview swatch */
+.dk-preview-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* Named color preset row */
+.dk-preset-row {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.dk-preset-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 100ms, border-color 100ms;
+  padding: 0;
+  outline: none;
+}
+
+.dk-preset-swatch:hover {
+  transform: scale(1.15);
+}
+
+.dk-preset-swatch.active {
+  border-color: rgba(255,255,255,0.70);
+}
+
+/* Current hex label */
+.dk-color-hex {
+  font-size: 9px;
+  color: rgba(255,255,255,0.40);
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Lightness shift value badge */
+.dk-value-badge {
+  font-size: 9px;
+  color: rgba(255,255,255,0.55);
+  font-variant-numeric: tabular-nums;
+  min-width: 28px;
+  text-align: right;
+}
+
+/* Radius demo rect */
+.dk-radius-demo {
+  width: 16px;
+  height: 12px;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.25);
+  flex-shrink: 0;
+  transition: border-radius 120ms;
+}
+
+/* ── Native ColorPicker triple ── */
+.dk-color-picker-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dk-native-color {
+  width: 28px;
+  height: 28px;
+  border: none;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.dk-native-color::-webkit-color-swatch-wrapper { padding: 0; }
+.dk-native-color::-webkit-color-swatch { border: none; border-radius: 3px; }
+
+.dk-hex-input {
+  flex: 1;
+  min-width: 0;
+  font-family: inherit;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 4px;
+  padding: 4px 8px;
+  outline: none;
+}
+.dk-hex-input:focus {
+  border-color: rgba(255,255,255,0.30);
+}
+
+/* Hue / lightness shift range slider */
+.dk-hue-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 5px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.28) 100%);
+  outline: none;
+  cursor: pointer;
+}
+.dk-hue-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.85);
+  cursor: pointer;
+  border: 1.5px solid rgba(0,0,0,0.3);
+}
+.dk-hue-slider::-moz-range-thumb {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.85);
+  cursor: pointer;
+  border: 1.5px solid rgba(0,0,0,0.3);
+}
+
+/* Select control */
+.dk-select {
+  flex: 1;
+  min-width: 0;
+  font-family: inherit;
+  font-size: 9.5px;
+  letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 4px;
+  padding: 4px 22px 4px 8px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' stroke='rgba(255,255,255,0.4)' stroke-width='1.5' fill='none' stroke-linecap='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 7px center;
+  background-size: 10px;
+  outline: none;
+}
+.dk-select:focus {
+  border-color: rgba(255,255,255,0.28);
+}
+.dk-select option {
+  background: #1a1a1a;
+  color: rgba(255,255,255,0.85);
+}

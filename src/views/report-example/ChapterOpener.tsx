@@ -44,26 +44,28 @@ export function FestiveEditorialChapterOpener({ num, title }: { num: string; tit
   )
 }
 
-// Default (editorial, theatrical, instrumental, systematic): Badge + h2
+// Default (editorial, theatrical, instrumental, systematic): vertical stack — eyebrow Badge + h2 title + hairline
 const badgeStyle = (isSystematic: boolean): React.CSSProperties => ({
   fontFamily: 'var(--mono-stack)',
-  letterSpacing: isSystematic ? '0.12em' : '0.18em',
+  letterSpacing: '0.16em',
   textTransform: 'uppercase',
   fontSize: 10,
   fontWeight: isSystematic ? 700 : 500,
   borderColor: 'var(--border-strong)',
+  alignSelf: 'flex-start',
 })
 
 export function DefaultChapterOpener({ pack, num, title }: ChapterOpenerProps) {
   const isSystematic = pack === 'systematic'
   return (
-    <div className="rep-chapter-opener" key="op">
+    <div className="rep-chapter-opener default" key="op">
       <Badge variant="outline" className="rep-chapter-num" style={badgeStyle(isSystematic)}>
-        {isSystematic ? num : `CHAPTER · ${num}`}
+        {isSystematic ? num : `CH · ${num}`}
       </Badge>
       <h2 className="rep-chapter-title">
-        {title}
+        {isSystematic ? title : title}
       </h2>
+      <div className="rep-chapter-hairline" aria-hidden="true" />
     </div>
   )
 }

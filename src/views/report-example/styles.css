@@ -155,7 +155,7 @@
 }
 
 .rep-hero-lead {
-  font-family: var(--sans-stack);
+  font-family: var(--body-stack, var(--sans-stack));
   font-size: 17px;
   font-weight: 400;
   line-height: 1.55;
@@ -190,6 +190,7 @@
 
 .rep-chapter:last-child { border-bottom: none; }
 
+/* base: festive-royal / festive-editorial override to flex-row (kept by their own CSS below) */
 .rep-chapter-opener {
   display: flex;
   align-items: baseline;
@@ -197,6 +198,32 @@
   margin-bottom: 32px;
   padding-bottom: 14px;
   border-bottom: 1px solid var(--border-strong);
+}
+
+/* default / systematic / theatrical / instrumental: vertical stack eyebrow → title → hairline */
+.rep-chapter-opener.default {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 32px;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.rep-chapter-opener.default .rep-chapter-hairline {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--border-strong);
+  margin-top: 10px;
+  flex-shrink: 0;
+}
+
+/* systematic: 2px thick hairline, full-width */
+.report-frame.systematic .rep-chapter-opener.default .rep-chapter-hairline {
+  height: 2px;
+  background: var(--fg);
 }
 
 .rep-chapter-num {
@@ -220,11 +247,45 @@
   text-wrap: balance;
 }
 
-.report-frame.systematic .rep-chapter-opener { border-bottom-width: 2px; border-bottom-color: var(--fg); }
+/* systematic hairline handled by .rep-chapter-opener.default .rep-chapter-hairline above */
 .report-frame.systematic .rep-chapter-num { font-family: var(--sans-stack); font-weight: 700; font-size: 14px; }
 .report-frame.systematic .rep-chapter-title { font-weight: 700; text-transform: uppercase; }
 
 /* ─── KPI grid ─── */
+/* Phase 4.7: asymmetric split — primary 60% / secondary 40% */
+.rep-kpi-split {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 0 32px;
+  align-items: start;
+}
+@container report (max-width: 700px) {
+  .rep-kpi-split { grid-template-columns: 1fr; gap: 20px 0; }
+}
+
+.rep-kpi-primary-col {
+  /* full-height primary cell */
+}
+
+.rep-kpi-secondary-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  border-left: 1px solid var(--border-strong);
+  padding-left: 28px;
+}
+.report-frame.systematic .rep-kpi-secondary-col { border-left-width: 2px; border-left-color: var(--fg); }
+@container report (max-width: 700px) {
+  .rep-kpi-secondary-col {
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid var(--border-strong);
+    padding-top: 20px;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* legacy grid (kept for any other usage, now secondary only) */
 .rep-kpi-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -371,6 +432,90 @@
   align-self: flex-start;
 }
 
+/* ─── Trend split 70/30 ─── */
+.rep-trend-split {
+  display: grid;
+  grid-template-columns: 2.3fr 1fr;
+  gap: 0 24px;
+  align-items: start;
+}
+@container report (max-width: 800px) {
+  .rep-trend-split { grid-template-columns: 1fr; gap: 20px 0; }
+}
+.rep-trend-aside {
+  border-left: 1px solid var(--border-strong);
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 12px;
+}
+.report-frame.systematic .rep-trend-aside { border-left-width: 2px; border-left-color: var(--fg); }
+.rep-trend-aside-label {
+  font-family: var(--mono-stack);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+.report-frame.systematic .rep-trend-aside-label { font-family: var(--sans-stack); font-weight: 700; color: var(--fg); }
+.rep-trend-mini-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.rep-tmt-header, .rep-tmt-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4px 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono-stack);
+  font-size: 11px;
+  color: var(--fg-2);
+}
+.rep-tmt-header {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+  border-bottom-color: var(--border-strong);
+}
+.rep-tmt-row .current { color: var(--primary); font-weight: 600; }
+.rep-tmt-row .last { color: var(--fg-3); }
+.report-frame.systematic .rep-tmt-header { font-family: var(--sans-stack); font-weight: 700; }
+.report-frame.systematic .rep-tmt-row { font-family: var(--sans-stack); }
+.rep-trend-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.rep-trend-leg-item {
+  font-family: var(--mono-stack);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--fg-3);
+}
+.rep-trend-leg-item::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 2px;
+  flex-shrink: 0;
+}
+.rep-trend-leg-item.current::before { background: var(--chart-1); }
+.rep-trend-leg-item.last::before {
+  background: var(--chart-3);
+  background-image: repeating-linear-gradient(90deg, var(--chart-3) 0, var(--chart-3) 4px, transparent 4px, transparent 8px);
+  border-top: 1px dashed var(--chart-3);
+  background: none;
+}
+
 /* ─── Chart ─── */
 .rep-chart-stage {
   margin-top: 12px;
@@ -429,7 +574,295 @@
 }
 .report-frame.systematic .rep-chart-meta .num { font-weight: 700; }
 
-/* ─── Comparison ─── */
+/* ─── Comparison · Phase 4.10 G6.2 redesign ─── */
+/* Inline horizontal composition — previous → delta → current on one axis.
+   No 3-col card, no boxed delta. Numbers carry the contrast through
+   color + scale; delta lives inline as typography. */
+
+.rep-comp-inline {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.rep-comp-inline-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.6fr);
+  align-items: baseline;
+  gap: 24px;
+}
+@container report (max-width: 700px) {
+  .rep-comp-inline-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    align-items: start;
+  }
+}
+
+.rep-comp-inline-prev,
+.rep-comp-inline-curr {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.rep-comp-inline-curr { align-items: flex-end; }
+@container report (max-width: 700px) {
+  .rep-comp-inline-curr { align-items: flex-start; }
+}
+
+.rep-comp-inline-year {
+  font-family: var(--mono-stack);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+.rep-comp-inline-year.curr { color: var(--primary); }
+.report-frame.systematic .rep-comp-inline-year {
+  font-family: var(--sans-stack);
+  font-weight: 700;
+}
+
+.rep-comp-inline-prev-num {
+  font-family: var(--display-stack);
+  font-size: clamp(28px, 3.6vw, 48px);
+  font-weight: 500;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  color: var(--fg-3);
+  font-feature-settings: "tnum", "lnum";
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.rep-comp-inline-prev-unit {
+  font-size: 0.5em;
+  margin-left: 2px;
+}
+.report-frame.systematic .rep-comp-inline-prev-num { font-weight: 700; }
+
+.rep-comp-inline-curr-num {
+  font-family: var(--display-stack);
+  font-size: clamp(56px, 8vw, 104px);
+  font-weight: 500;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  color: var(--primary);
+  font-feature-settings: "tnum", "lnum";
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.rep-comp-inline-curr-unit {
+  font-size: 0.32em;
+  color: var(--primary-hl);
+  margin-left: 4px;
+}
+.report-frame.systematic .rep-comp-inline-curr-num { font-weight: 700; }
+.report-frame.theatrical .rep-comp-inline-curr-num { font-weight: 600; }
+.report-frame.instrumental .rep-comp-inline-curr-num { color: var(--fg); font-weight: 600; }
+
+.rep-comp-inline-delta {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: var(--display-stack);
+  color: var(--primary);
+  white-space: nowrap;
+  padding: 0 4px;
+}
+@container report (max-width: 700px) {
+  .rep-comp-inline-delta {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    width: fit-content;
+  }
+}
+
+.rep-comp-inline-arrow {
+  font-family: var(--mono-stack);
+  font-size: clamp(20px, 2.4vw, 32px);
+  font-weight: 400;
+  color: var(--fg-3);
+  letter-spacing: 0;
+}
+
+.rep-comp-inline-delta-val {
+  font-size: clamp(24px, 3vw, 40px);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 0.95;
+  font-feature-settings: "tnum", "lnum";
+}
+.report-frame.systematic .rep-comp-inline-delta-val { font-weight: 700; }
+.report-frame.theatrical .rep-comp-inline-delta-val { font-weight: 600; }
+
+.rep-comp-inline-delta-unit {
+  font-size: clamp(12px, 1.3vw, 16px);
+  color: var(--primary-hl);
+  letter-spacing: -0.01em;
+}
+
+.rep-comp-inline-delta-pct {
+  font-family: var(--mono-stack);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--primary);
+  margin-left: 4px;
+}
+.report-frame.systematic .rep-comp-inline-delta-pct {
+  font-family: var(--sans-stack);
+  font-weight: 700;
+}
+
+.rep-comp-inline-detail {
+  font-family: var(--body-stack, var(--sans-stack));
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--fg-2);
+  margin: 0;
+  max-width: 56ch;
+  text-wrap: pretty;
+}
+
+/* Breakdown rail — paired ghost / solid tracks for 2025 → 2026 */
+.rep-compare-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 36px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-strong);
+}
+
+.rep-compare-breakdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding-bottom: 12px;
+  font-family: var(--mono-stack);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+.report-frame.systematic .rep-compare-breakdown-header {
+  font-family: var(--sans-stack);
+  font-weight: 700;
+  color: var(--fg);
+}
+
+.rep-compare-breakdown-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  text-transform: none;
+  letter-spacing: 0.08em;
+  font-size: 10px;
+}
+.rep-compare-breakdown-legend .leg {
+  display: inline-block;
+  width: 14px;
+  height: 6px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.rep-compare-breakdown-legend .leg.ghost {
+  background: color-mix(in oklch, var(--primary) 22%, transparent);
+}
+.rep-compare-breakdown-legend .leg.solid {
+  background: var(--primary);
+}
+
+.rep-compare-breakdown-row {
+  display: grid;
+  grid-template-columns: minmax(96px, 0.8fr) minmax(0, 2fr) minmax(160px, 0.9fr);
+  align-items: center;
+  gap: 16px 20px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.rep-compare-breakdown-row:last-child {
+  border-bottom: none;
+}
+@container report (max-width: 700px) {
+  .rep-compare-breakdown-row {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "label values"
+      "tracks tracks";
+    gap: 6px 16px;
+  }
+  .rep-compare-breakdown-row .label { grid-area: label; }
+  .rep-compare-breakdown-row .values { grid-area: values; justify-self: end; }
+  .rep-compare-breakdown-row .rep-compare-breakdown-tracks { grid-area: tracks; }
+}
+
+.rep-compare-breakdown-row .label {
+  font-family: var(--body-stack, var(--sans-stack));
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fg);
+  letter-spacing: -0.005em;
+}
+.report-frame.systematic .rep-compare-breakdown-row .label {
+  font-family: var(--sans-stack);
+  font-weight: 700;
+}
+
+.rep-compare-breakdown-tracks {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.rep-compare-breakdown-tracks .track {
+  height: 6px;
+  background: var(--surface-l3);
+  overflow: hidden;
+  position: relative;
+}
+.rep-compare-breakdown-tracks .track.ghost {
+  height: 4px;
+}
+.rep-compare-breakdown-tracks .track .fill {
+  height: 100%;
+  background: var(--primary);
+  transition: width 320ms cubic-bezier(0.18, 0.85, 0.22, 1);
+}
+.rep-compare-breakdown-tracks .track.ghost .fill {
+  background: color-mix(in oklch, var(--primary) 24%, transparent);
+}
+
+.rep-compare-breakdown-row .values {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: var(--mono-stack);
+  font-size: 12px;
+  font-feature-settings: "tnum", "lnum";
+  white-space: nowrap;
+  justify-self: end;
+}
+.rep-compare-breakdown-row .values .muted { color: var(--fg-3); }
+.rep-compare-breakdown-row .values .arrow { color: var(--fg-3); }
+.rep-compare-breakdown-row .values .bright {
+  color: var(--primary);
+  font-weight: 600;
+}
+.report-frame.systematic .rep-compare-breakdown-row .values {
+  font-family: var(--sans-stack);
+  font-weight: 700;
+}
+
+/* Legacy classes kept for any non-default chapter still using them */
 .rep-comparison {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -462,31 +895,13 @@
 .report-frame.theatrical .rep-comp-num { font-weight: 600; }
 .report-frame.instrumental .rep-comp-num { color: var(--fg); font-weight: 600; }
 .report-frame.instrumental .rep-comp-col.previous .rep-comp-num { color: var(--fg-3); }
-.rep-comp-detail { font-family: var(--sans-stack); font-size: 13px; color: var(--fg-2); line-height: 1.5; margin-top: 4px; }
-
-.rep-compare-bar {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-top: 28px;
-  padding-top: 24px;
-  border-top: 1px solid var(--border);
-}
-.rep-compare-bar .row {
-  display: grid;
-  grid-template-columns: 80px 1fr 80px;
-  align-items: center;
-  gap: 16px;
-  font-family: var(--mono-stack);
-  font-size: 12px;
+.rep-comp-detail {
+  font-family: var(--body-stack, var(--sans-stack));
+  font-size: 13px;
   color: var(--fg-2);
+  line-height: 1.5;
+  margin-top: 4px;
 }
-.rep-compare-bar .row .label { letter-spacing: 0.1em; text-transform: uppercase; color: var(--fg-3); }
-.rep-compare-bar .row .value { text-align: right; color: var(--fg); font-weight: 500; }
-.report-frame.systematic .rep-compare-bar .row .value { font-family: var(--sans-stack); font-weight: 700; }
-.rep-bar-track { height: 8px; background: var(--surface-l3); border-radius: 0; overflow: hidden; }
-.report-frame.systematic .rep-bar-track { background: var(--surface-l2); }
-.rep-bar-fill { height: 100%; background: var(--primary); }
 
 /* ─── Quote interstitial ─── */
 .rep-quote {
@@ -520,6 +935,17 @@
   margin-top: 20px;
 }
 .report-frame.systematic .rep-quote-cite { font-family: var(--sans-stack); font-weight: 700; }
+.rep-quote-attribution {
+  display: block;
+  font-family: var(--sans-stack);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--fg-3);
+  margin-top: 8px;
+  letter-spacing: 0;
+  font-style: italic;
+}
+.report-frame.systematic .rep-quote-attribution { font-style: normal; font-family: var(--sans-stack); }
 
 /* ─── Outro ─── */
 .rep-outro {
@@ -572,20 +998,23 @@
 .rep-timeline {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 20px;
   padding: 16px 0 8px;
 }
 @container report (max-width: 800px) {
-  .rep-timeline { grid-template-columns: 1fr; gap: 28px; }
+  .rep-timeline { grid-template-columns: 1fr 1fr; gap: 20px; }
 }
-/* Round-85 #14 fix: dot horizontal center + line Y alignment */
+@container report (max-width: 480px) {
+  .rep-timeline { grid-template-columns: 1fr; gap: 24px; }
+}
+/* Phase 4.7: 7-node timeline connector line */
 .rep-timeline::before {
   content: '';
   position: absolute;
   top: 37px;
   left: 6px;
-  right: calc((100% - 72px) / 4 - 6px);
+  right: calc((100% - 72px) / 7 - 6px);
   height: 1px;
   background: var(--border-strong);
   z-index: 0;
@@ -619,10 +1048,10 @@
   height: 10px;
   margin-top: 17px;
 }
-/* Round-86 fix */
+/* Phase 4.7: systematic 7-node timeline connector */
 .report-frame.systematic .rep-timeline::before {
   left: 5px;
-  right: calc((100% - 72px) / 4 - 5px);
+  right: calc((100% - 72px) / 7 - 5px);
 }
 .report-frame.theatrical .rep-tl-dot { background: var(--primary); border-color: var(--primary); }
 .rep-tl-period {
@@ -643,21 +1072,51 @@
   letter-spacing: -0.01em;
 }
 .report-frame.systematic .rep-tl-title { font-weight: 700; text-transform: uppercase; letter-spacing: -0.005em; }
-.rep-tl-detail { font-family: var(--sans-stack); font-size: 13px; line-height: 1.55; color: var(--fg-2); margin: 0; }
+.rep-tl-figure {
+  font-family: var(--mono-stack);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--primary);
+  background: color-mix(in oklch, var(--primary) 8%, transparent);
+  border: 1px solid color-mix(in oklch, var(--primary) 20%, transparent);
+  border-radius: 3px;
+  padding: 2px 7px;
+  display: inline-block;
+  align-self: flex-start;
+}
+.report-frame.systematic .rep-tl-figure {
+  border-radius: 0;
+  font-family: var(--sans-stack);
+  font-weight: 700;
+}
+.rep-tl-detail { font-family: var(--body-stack, var(--sans-stack)); font-size: 13px; line-height: 1.55; color: var(--fg-2); margin: 0; }
 
 /* ─── Ranking ─── */
 .rep-ranking { display: flex; flex-direction: column; gap: 0; }
 .rep-rank-row {
   display: grid;
-  grid-template-columns: 44px 1fr auto;
+  grid-template-columns: 44px 1fr auto 56px;
   align-items: baseline;
-  gap: 20px;
+  gap: 16px 20px;
   padding: 18px 0;
   border-bottom: 1px solid var(--border);
 }
-.rep-rank-row:first-child { border-top: 1px solid var(--border-strong); padding-top: 22px; }
+/* secondary rows (not lead) are slightly smaller/muted */
+.rep-rank-row.secondary:not(.lead) {
+  padding: 14px 0;
+}
+.rep-rank-row.secondary:not(.lead) .rep-rank-name {
+  font-size: 15px;
+}
+.rep-rank-row.secondary:not(.lead) .rep-rank-value {
+  font-size: 18px;
+  color: var(--fg-2);
+}
+/* Phase 4.10 G6.4 · drop the duplicate top hairline — chapter opener already
+   places one immediately above. Keep the per-row bottom hairline only. */
+.rep-rank-row:first-child { padding-top: 12px; }
 .rep-rank-row:last-child { border-bottom: none; }
-.report-frame.systematic .rep-rank-row:first-child { border-top: 1px solid var(--border-strong); }
 .rep-rank-no {
   font-family: var(--mono-stack);
   font-size: 11px;
@@ -703,71 +1162,274 @@
 .report-frame.theatrical .rep-rank-value { font-weight: 600; }
 .rep-rank-value .unit { font-size: 0.6em; margin-left: 3px; color: var(--fg-3); }
 .rep-rank-row.lead .rep-rank-value .unit { color: var(--primary-hl); }
+.rep-rank-share {
+  font-family: var(--mono-stack);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--fg-3);
+  text-align: right;
+}
+.rep-rank-row.lead .rep-rank-share { color: var(--primary); font-weight: 600; }
+.report-frame.systematic .rep-rank-share { font-family: var(--sans-stack); font-weight: 700; }
 
-/* ─── Proportion Field ─── */
-.rep-proportion { display: flex; flex-direction: column; gap: 16px; }
+/* ─── Proportion Field · Phase 4.10 G6.3 redesign ─── */
+/* Equal-height columns via grid stretch. Refined right legend
+   with ordinal rank, hairline-separated rows, footer total. */
+
+.rep-proportion-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 0 40px;
+  align-items: stretch;
+}
+@container report (max-width: 700px) {
+  .rep-proportion-split {
+    grid-template-columns: 1fr;
+    gap: 28px 0;
+    align-items: start;
+  }
+}
+
+.rep-proportion-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  min-height: 100%;
+}
+
 .rep-prop-summary {
   display: flex;
   align-items: baseline;
   gap: 16px;
-  margin-bottom: 16px;
   padding-bottom: 16px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-strong);
+  flex-wrap: wrap;
 }
+
 .rep-prop-headline {
   font-family: var(--display-stack);
-  font-size: clamp(28px, 4vw, 44px);
+  font-size: clamp(36px, 5vw, 56px);
   font-weight: 500;
   color: var(--primary);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
   line-height: 0.95;
   font-feature-settings: "tnum", "lnum";
 }
 .report-frame.systematic .rep-prop-headline { font-weight: 700; }
 .report-frame.theatrical .rep-prop-headline { font-weight: 600; }
 .report-frame.instrumental .rep-prop-headline { color: var(--fg); font-weight: 600; }
+
 .rep-prop-caption {
   font-family: var(--mono-stack);
   font-size: 12px;
   color: var(--fg-3);
   letter-spacing: 0.12em;
   text-transform: uppercase;
+  max-width: 40ch;
 }
-.report-frame.systematic .rep-prop-caption { font-family: var(--sans-stack); font-weight: 700; }
-.rep-prop-rows { display: flex; flex-direction: column; gap: 12px; }
+.report-frame.systematic .rep-prop-caption {
+  font-family: var(--sans-stack);
+  font-weight: 700;
+}
+
+.rep-prop-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+}
+
 .rep-prop-row {
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: baseline;
-  gap: 8px 16px;
+  gap: 6px 16px;
   padding: 4px 0;
 }
-.rep-prop-row .name { font-family: var(--sans-stack); font-size: 14px; font-weight: 500; color: var(--fg); }
-.report-frame.systematic .rep-prop-row .name { font-weight: 700; }
+
+.rep-prop-row .name {
+  font-family: var(--body-stack, var(--sans-stack));
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fg);
+}
+.report-frame.systematic .rep-prop-row .name {
+  font-family: var(--sans-stack);
+  font-weight: 700;
+}
+
 .rep-prop-row .value {
   font-family: var(--display-stack);
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
   color: var(--fg);
   font-feature-settings: "tnum";
   letter-spacing: -0.01em;
 }
-.rep-prop-row .value .pct { color: var(--fg-2); font-size: 0.85em; margin-left: 6px; }
+.rep-prop-row .value .pct { color: var(--fg-2); font-size: 0.7em; margin-left: 2px; }
 .report-frame.systematic .rep-prop-row .value { font-weight: 700; }
-.rep-prop-rail {
+.rep-prop-row.lead .value { color: var(--primary); }
+
+.rep-prop-rail-bar {
   grid-column: 1 / -1;
   height: 4px;
   background: var(--surface-l3);
-  border-radius: 2px;
   overflow: hidden;
   position: relative;
 }
-.report-frame.systematic .rep-prop-rail { border-radius: 0; background: var(--surface-l2); height: 6px; }
-.rep-prop-rail .fill { height: 100%; background: var(--primary); border-radius: 2px; }
-.report-frame.systematic .rep-prop-rail .fill { border-radius: 0; }
-.rep-prop-row.lead .rep-prop-rail .fill { background: var(--primary); }
-.rep-prop-row:not(.lead) .rep-prop-rail .fill {
+.report-frame.systematic .rep-prop-rail-bar {
+  background: var(--surface-l2);
+  height: 6px;
+}
+.rep-prop-rail-bar .fill {
+  height: 100%;
   background: color-mix(in oklch, var(--primary) 55%, var(--surface-l3));
+  transition: width 320ms cubic-bezier(0.18, 0.85, 0.22, 1);
+}
+.rep-prop-row.lead .rep-prop-rail-bar .fill { background: var(--primary); }
+
+/* Right legend — equal-height via stretch, refined typography */
+.rep-prop-legend {
+  border-left: 1px solid var(--border-strong);
+  padding-left: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-height: 100%;
+}
+.report-frame.systematic .rep-prop-legend {
+  border-left-width: 2px;
+  border-left-color: var(--fg);
+}
+@container report (max-width: 700px) {
+  .rep-prop-legend {
+    border-left: none;
+    padding-left: 0;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-strong);
+  }
+}
+
+.rep-prop-legend-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-strong);
+  margin-bottom: 10px;
+}
+
+.rep-prop-legend-label {
+  font-family: var(--mono-stack);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+.report-frame.systematic .rep-prop-legend-label {
+  font-family: var(--sans-stack);
+  font-weight: 700;
+}
+
+.rep-prop-legend-sublabel {
+  font-family: var(--mono-stack);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+
+.rep-prop-legend-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.rep-prop-legend-row {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto auto;
+  align-items: baseline;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--body-stack, var(--sans-stack));
+  font-size: 13px;
+  color: var(--fg-2);
+}
+.rep-prop-legend-row:last-child { border-bottom: none; }
+.rep-prop-legend-row.lead { color: var(--fg); }
+
+.rep-prop-legend-rank {
+  font-family: var(--mono-stack);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--fg-3);
+}
+.report-frame.systematic .rep-prop-legend-rank {
+  font-family: var(--sans-stack);
+  font-weight: 700;
+}
+.rep-prop-legend-row.lead .rep-prop-legend-rank { color: var(--primary); }
+
+.rep-prop-legend-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.report-frame.systematic .rep-prop-legend-row.lead .rep-prop-legend-name {
+  font-weight: 700;
+}
+
+.rep-prop-legend-val {
+  font-family: var(--mono-stack);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--fg);
+  text-align: right;
+  white-space: nowrap;
+  font-feature-settings: "tnum", "lnum";
+}
+.rep-prop-legend-row.lead .rep-prop-legend-val { color: var(--primary); }
+
+.rep-prop-legend-abs {
+  font-family: var(--mono-stack);
+  font-size: 11px;
+  color: var(--fg-3);
+  text-align: right;
+  white-space: nowrap;
+  font-feature-settings: "tnum", "lnum";
+}
+
+.rep-prop-legend-total {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 12px;
+  align-items: baseline;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-strong);
+  font-family: var(--mono-stack);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--fg);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.report-frame.systematic .rep-prop-legend-total {
+  font-family: var(--sans-stack);
+  font-weight: 700;
+}
+.rep-prop-legend-total .label { color: var(--fg-2); }
+.rep-prop-legend-total .pct,
+.rep-prop-legend-total .abs {
+  font-feature-settings: "tnum", "lnum";
 }
 
 /* ─── Annotation Rail ─── */
@@ -835,8 +1497,229 @@
   color: var(--fg-3);
 }
 .report-frame.systematic .rep-ann-side .label { font-family: var(--sans-stack); font-weight: 700; color: var(--fg); }
-.rep-ann-side .text { font-family: var(--sans-stack); font-size: 13px; line-height: 1.6; color: var(--fg-2); margin: 0; text-wrap: pretty; }
+.rep-ann-side .text { font-family: var(--body-stack, var(--sans-stack)); font-size: 13px; line-height: 1.6; color: var(--fg-2); margin: 0; text-wrap: pretty; }
 .rep-ann-side .citation { font-family: var(--mono-stack); font-size: 11px; color: var(--fg-3); letter-spacing: 0.1em; margin-top: 4px; }
+
+/* Phase 4.7: extra annotation notes in sidebar */
+.rep-ann-extra-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.rep-ann-note-label {
+  font-family: var(--mono-stack);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+  margin-bottom: 3px;
+}
+.report-frame.systematic .rep-ann-note-label { font-family: var(--sans-stack); font-weight: 700; }
+.rep-ann-note-text {
+  font-family: var(--body-stack, var(--sans-stack));
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--fg-2);
+  margin: 0;
+}
+
+/* ─── Insight Section · Phase 4.10 G6.1 redesign ─── */
+/* Editorial typographic field — no card grid, no side-stripe border.
+   Hero insight (large statement + figure) + hairline-separated rows. */
+
+.rep-insight-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  grid-template-areas:
+    "eyebrow   figure"
+    "statement figure"
+    "detail    figure";
+  gap: 12px 32px;
+  align-items: start;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border-strong);
+}
+@container report (max-width: 700px) {
+  .rep-insight-hero {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "eyebrow"
+      "figure"
+      "statement"
+      "detail";
+    gap: 8px;
+  }
+}
+
+.rep-insight-hero-eyebrow {
+  grid-area: eyebrow;
+  font-family: var(--mono-stack);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+.report-frame.systematic .rep-insight-hero-eyebrow {
+  font-family: var(--sans-stack);
+  font-weight: 700;
+}
+
+.rep-insight-hero-statement {
+  grid-area: statement;
+  font-family: var(--display-stack);
+  font-size: clamp(26px, 3.6vw, 44px);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--fg);
+  text-wrap: balance;
+  margin: 0;
+  max-width: 22ch;
+}
+.report-frame.systematic .rep-insight-hero-statement {
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.report-frame.theatrical .rep-insight-hero-statement { font-weight: 600; }
+
+.rep-insight-hero-figure {
+  grid-area: figure;
+  font-family: var(--display-stack);
+  font-size: clamp(18px, 2vw, 22px);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--primary);
+  text-align: right;
+  padding-left: 20px;
+  border-left: 1px solid var(--border-strong);
+  font-feature-settings: "tnum", "lnum";
+  align-self: stretch;
+  display: flex;
+  align-items: flex-start;
+}
+@container report (max-width: 700px) {
+  .rep-insight-hero-figure {
+    text-align: left;
+    padding-left: 0;
+    border-left: none;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+}
+.report-frame.systematic .rep-insight-hero-figure {
+  font-weight: 700;
+  border-left-width: 2px;
+  border-left-color: var(--fg);
+}
+
+.rep-insight-hero-detail {
+  grid-area: detail;
+  font-family: var(--body-stack, var(--sans-stack));
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--fg-2);
+  max-width: 44ch;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.rep-insight-rows {
+  list-style: none;
+  padding: 0;
+  margin: 32px 0 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.rep-insight-row {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) minmax(0, 0.8fr);
+  align-items: baseline;
+  gap: 20px 24px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+}
+.rep-insight-row:last-child { border-bottom: none; padding-bottom: 0; }
+@container report (max-width: 700px) {
+  .rep-insight-row {
+    grid-template-columns: 32px 1fr;
+    grid-template-areas:
+      "idx statement"
+      "idx figure"
+      ".   detail";
+    gap: 6px 12px;
+  }
+  .rep-insight-row-body { grid-area: statement; }
+  .rep-insight-row-figure { grid-area: figure; text-align: left !important; }
+  .rep-insight-row-detail { grid-area: detail; }
+  .rep-insight-row-index { grid-area: idx; }
+}
+
+.rep-insight-row-index {
+  font-family: var(--mono-stack);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  color: var(--fg-3);
+}
+.report-frame.systematic .rep-insight-row-index {
+  font-family: var(--sans-stack);
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.rep-insight-row-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.rep-insight-row-statement {
+  font-family: var(--display-stack);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  text-wrap: balance;
+}
+.report-frame.systematic .rep-insight-row-statement {
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.rep-insight-row-detail {
+  font-family: var(--body-stack, var(--sans-stack));
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--fg-2);
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.rep-insight-row-figure {
+  font-family: var(--display-stack);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+  color: var(--primary);
+  text-align: right;
+  font-feature-settings: "tnum", "lnum";
+  align-self: baseline;
+}
+.report-frame.systematic .rep-insight-row-figure {
+  font-weight: 700;
+}
+.report-frame.theatrical .rep-insight-row-figure { font-weight: 600; }
+
 
 /* ─── Festive Royal overrides ─── */
 /* R-94 Stage 6: golden_hairline class */
@@ -920,3 +1803,56 @@
   background: var(--primary);
   flex-shrink: 0;
 }
+
+/* ─── Density dial — section padding overrides ─── */
+/* Applied via .report-canvas-scope.density-* class on canvas wrapper */
+.report-canvas-scope.density-sparse .rep-chapter {
+  padding-block: 80px;
+}
+@container report (max-width: 800px) {
+  .report-canvas-scope.density-sparse .rep-chapter {
+    padding-block: 56px;
+  }
+}
+
+.report-canvas-scope.density-balanced .rep-chapter {
+  /* default — inherits 56px 48px from .rep-chapter above */
+}
+
+.report-canvas-scope.density-dense .rep-chapter {
+  padding-block: 28px;
+}
+@container report (max-width: 800px) {
+  .report-canvas-scope.density-dense .rep-chapter {
+    padding-block: 20px;
+  }
+}
+
+/* ─── Accent strategy dial — color overrides ─── */
+/* silent: focal numbers use foreground instead of primary */
+.report-canvas-scope.accent-silent .rep-hero-num {
+  color: var(--foreground);
+}
+.report-canvas-scope.accent-silent .rep-hero-num .pfx,
+.report-canvas-scope.accent-silent .rep-hero-num .unit {
+  color: var(--foreground-2);
+}
+.report-canvas-scope.accent-silent .rep-kpi-num {
+  color: var(--foreground);
+}
+.report-canvas-scope.accent-silent .rep-kpi-num .unit {
+  color: var(--foreground-2);
+}
+.report-canvas-scope.accent-silent .rep-ann-stat {
+  color: var(--foreground);
+}
+.report-canvas-scope.accent-silent .rep-ann-stat .unit {
+  color: var(--foreground-2);
+}
+.report-canvas-scope.accent-silent .rep-hero-eyebrow {
+  color: var(--foreground-3);
+}
+
+/* mono (default): no override needed */
+
+/* semantic: keep primary; token additions handled in default-tokens.ts */

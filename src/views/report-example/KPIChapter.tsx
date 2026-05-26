@@ -67,6 +67,10 @@ function KPICell({ k, pack }: { k: typeof REPORT_MOCK.kpis[0]; pack: string }) {
 
 export function KPIChapter({ pack }: KPIChapterProps) {
   const isSystematic = pack === 'systematic'
+  // Primary KPI = GMV (from REPORT_MOCK), secondary = kpis array
+  const primary = REPORT_MOCK.kpis[0]
+  const secondary = REPORT_MOCK.kpis.slice(1)
+
   return (
     <section className={`rep-chapter ${pack}`}>
       <ChapterOpener
@@ -74,10 +78,16 @@ export function KPIChapter({ pack }: KPIChapterProps) {
         num="01"
         title={isSystematic ? 'CORE METRICS' : '核心指标 · Core Metrics'}
       />
-      <div className="rep-kpi-grid">
-        {REPORT_MOCK.kpis.map((k, i) => (
-          <KPICell key={i} k={k} pack={pack} />
-        ))}
+      {/* Asymmetric split: primary 60% / secondary grid 40% */}
+      <div className="rep-kpi-split">
+        <div className="rep-kpi-primary-col">
+          <KPICell k={primary} pack={pack} />
+        </div>
+        <div className="rep-kpi-secondary-col">
+          {secondary.map((k, i) => (
+            <KPICell key={i} k={k} pack={pack} />
+          ))}
+        </div>
       </div>
     </section>
   )

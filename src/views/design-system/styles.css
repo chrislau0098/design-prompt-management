@@ -1,6 +1,22 @@
 /* ─── Design System View CSS ─── */
 /* Migrated from reference index.html · Stage 2 · R-94 */
 
+/* R-102 Phase 4.8 · Scoped token container for default dial-driven DS view */
+.ds-canvas-scope {
+  min-height: 100%;
+  background: var(--background, var(--bg, #fff));
+  color: var(--fg, #111);
+  position: relative;
+}
+
+/* R-102 Phase 4.8 · DialPanel overlay inside DS view — same floating panel as DefaultExampleView */
+.ds-canvas-scope .dk-custom-panel {
+  position: fixed;
+  top: 64px;
+  right: 20px;
+  z-index: 50;
+}
+
 /* ─── Layout sections ─── */
 .ds-container {
   max-width: 1280px;

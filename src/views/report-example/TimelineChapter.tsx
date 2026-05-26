@@ -22,6 +22,7 @@ export function TimelineChapter({ pack }: TimelineChapterProps) {
             <div className="rep-tl-dot" />
             <div className="rep-tl-period">{m.period}</div>
             <div className="rep-tl-title">{m.title}</div>
+            {m.figure && <div className="rep-tl-figure">{m.figure}</div>}
             <p className="rep-tl-detail">{m.detail}</p>
           </div>
         ))}

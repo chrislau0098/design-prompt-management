@@ -2,6 +2,7 @@
 // Visited via /?embed=1&style=warm&device=web (App.tsx routes to this when ?embed= present)
 // No sidebar / nav — just the report. scroll-triggered animations (motion whileInView,
 // AnimateNumber) fire naturally as the user scrolls inside the iframe.
+// R-102: ?style=default is served directly (DefaultExampleView), not via iframe.
 
 import { useEffect } from 'react'
 import { ReportExampleView } from '@/views/report-example/ReportExampleView'
@@ -32,10 +33,16 @@ function getParam(name: string): string | null {
 }
 
 export function Embed() {
-  const styleParam = getParam('style') as StyleKey | null
+  const styleParam = getParam('style')
   const deviceParam = getParam('device') as DeviceKey | null
-  const styleKey: StyleKey = styleParam && STYLE_KEYS.includes(styleParam) ? styleParam : 'warm'
   const device: DeviceKey = deviceParam === 'mobile' ? 'mobile' : 'web'
+
+  // `default` style is not iframe-embedded — App.tsx renders DefaultExampleView directly.
+  // If somehow reached via embed, fall back to warm.
+  const styleKey: StyleKey =
+    styleParam && STYLE_KEYS.includes(styleParam as StyleKey)
+      ? (styleParam as StyleKey)
+      : 'warm'
 
   const slot = SLOT_MAP[styleKey]
 

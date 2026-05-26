@@ -21,12 +21,15 @@ export const REPORT_MOCK = {
     { name: 'Sep', value: 38, last: 32 }, { name: 'Oct', value: 41, last: 33 },
     { name: 'Nov', value: 44, last: 35 }, { name: 'Dec', value: 48, last: 36 },
   ],
-  // Round-82 改 4: NEW Timeline / Sequence chapter mock (Q1-Q4 milestones)
+  // Round-82 改 4 / Phase 4.7 扩: 7-node timeline with figure numbers
   timeline: [
-    { period: 'Q1 · 2026', title: '产品矩阵重组', detail: '三条核心业务线统一进入新框架,基础日活用户从 3.1 亿跃升至 3.6 亿。' },
-    { period: 'Q2 · 2026', title: 'AI 助手公测', detail: '智能对话能力嵌入核心场景,首月留存提升 14 个百分点。' },
-    { period: 'Q3 · 2026', title: '海外双地区开服', detail: '新加坡 / 阿姆斯特丹节点上线,海外 GMV 占比首次跨过 18%。' },
-    { period: 'Q4 · 2026', title: '系统化复利显现', detail: '四个季度产品复利叠加,Q4 单季营收 ¥11.2 亿,创历史峰值。' },
+    { period: 'Q1 · Jan', title: '产品矩阵重组', detail: '三条核心业务线统一进入新框架,基础日活用户从 3.1 亿跃升至 3.6 亿。', figure: '+16% DAU' },
+    { period: 'Q1 · Mar', title: '付费率破阈', detail: '付费率首次突破 8%,ARPU 同步抬升至 ¥298,验证高价值用户留存路径。', figure: '8.1% CVR' },
+    { period: 'Q2 · 2026', title: 'AI 助手公测', detail: '智能对话能力嵌入核心场景,首月留存提升 14 个百分点。', figure: '+14pp 留存' },
+    { period: 'Q3 · Jul', title: '海外双地区开服', detail: '新加坡 / 阿姆斯特丹节点上线,海外 GMV 占比首次跨过 18%。', figure: '18% 海外占比' },
+    { period: 'Q3 · Sep', title: 'NPS 历史高点', detail: 'Net Promoter Score 达到 67,较年初提升 9 分,连续三季度正向改善。', figure: 'NPS 67' },
+    { period: 'Q4 · Oct', title: '广告系统升级', detail: '新归因模型上线,广告主 ROAS 提升 22%,平台广告营收环比 +18%。', figure: '+22% ROAS' },
+    { period: 'Q4 · Dec', title: '系统化复利显现', detail: '四个季度产品复利叠加,Q4 单季营收 ¥11.2 亿,创历史峰值。', figure: '¥11.2亿 / Q' },
   ],
   compare: {
     current: { year: '2026', num: '36.5', unit: '亿', detail: '同比增长 18.2%' },
@@ -38,13 +41,16 @@ export const REPORT_MOCK = {
       { label: '其他', value2026: 3.3, value2025: 3.4, max: 20 },
     ],
   },
-  // Round-82 改 4: NEW Peer Set / Ranking chapter mock (top-5 by GMV)
+  // Round-82 改 4 / Phase 4.7 扩: 8-row ranking with share %
   ranking: [
-    { rank: 'NO.1', name: 'Vibe view', sub: '本公司', value: '36.5', unit: '亿', lead: true },
-    { rank: 'NO.2', name: 'Aurora Group', sub: '消费 / 内容', value: '18.2', unit: '亿', lead: false },
-    { rank: 'NO.3', name: 'Northstar Labs', sub: '广告 / SaaS', value: '9.7', unit: '亿', lead: false },
-    { rank: 'NO.4', name: 'Pulse Studio', sub: '订阅 / Tools', value: '4.8', unit: '亿', lead: false },
-    { rank: 'NO.5', name: 'Origin Works', sub: '内容 / 社区', value: '2.1', unit: '亿', lead: false },
+    { rank: 'NO.1', name: 'Vibe view', sub: '本公司', value: '36.5', unit: '亿', share: '38.4%', lead: true },
+    { rank: 'NO.2', name: 'Aurora Group', sub: '消费 / 内容', value: '18.2', unit: '亿', share: '19.2%', lead: false },
+    { rank: 'NO.3', name: 'Northstar Labs', sub: '广告 / SaaS', value: '9.7', unit: '亿', share: '10.2%', lead: false },
+    { rank: 'NO.4', name: 'Pulse Studio', sub: '订阅 / Tools', value: '6.4', unit: '亿', share: '6.7%', lead: false },
+    { rank: 'NO.5', name: 'Origin Works', sub: '内容 / 社区', value: '4.8', unit: '亿', share: '5.1%', lead: false },
+    { rank: 'NO.6', name: 'Crestline Inc.', sub: '企业 / B2B', value: '3.2', unit: '亿', share: '3.4%', lead: false },
+    { rank: 'NO.7', name: 'Refract Media', sub: '短视频', value: '2.1', unit: '亿', share: '2.2%', lead: false },
+    { rank: 'NO.8', name: 'Others', sub: '长尾合计', value: '14.1', unit: '亿', share: '14.8%', lead: false },
   ],
   // Round-82 改 4: NEW Proportion Field chapter mock (market share)
   proportion: {
@@ -72,6 +78,7 @@ export const REPORT_MOCK = {
     text: '增长不再来自单一爆款,而来自系统性的产品矩阵复利。',
     textSwiss: 'GROWTH IS THE INTEREST OF A WELL-BUILT SYSTEM.',
     cite: 'CEO · 2026 ANNUAL LETTER',
+    attribution: '写于 2026 年 12 月 31 日年终致全员信',
   },
   outro: {
     claim: '当数字归于平静,叙事仍在延续。',
@@ -79,3 +86,30 @@ export const REPORT_MOCK = {
     colophon: 'END OF REPORT · 2026·05·21',
   },
 }
+
+export const INSIGHTS_MOCK = {
+  eyebrow: 'KEY INSIGHTS · 核心洞察',
+  items: [
+    {
+      statement: '增长飞轮已形成正向闭环',
+      metric: 'DAU × ARPU 双升 · 复合增速 21%',
+      detail: '月活与付费率同步提升,打破"规模 vs 变现"零和格局。',
+    },
+    {
+      statement: 'AI 助手是本年最大增量',
+      metric: '首月 +14pp 留存率',
+      detail: '智能对话功能改写高价值用户的产品粘性曲线,留存提升效果明显优于历史版本。',
+    },
+    {
+      statement: '海外市场占比首次破阈',
+      metric: '18% 海外 GMV 占比',
+      detail: '新加坡 / 阿姆斯特丹节点上线半年即贡献规模,海外路径验证完成。',
+    },
+    {
+      statement: '广告系统升级释放单位价值',
+      metric: '+22% ROAS · 广告营收 +18%',
+      detail: '新归因模型使广告主实际回报提升,带动平台广告收入连续两季加速增长。',
+    },
+  ],
+}
+

@@ -105,6 +105,9 @@ export function TrendChapter({ pack, slot }: TrendChapterProps) {
     </>
   )
 
+  // Q4 monthly detail mini-table (last 3 months)
+  const q4Mini = REPORT_MOCK.trend.slice(-3)
+
   const trendChartStage = isTheatrical ? (
     <div className="rep-chart-stage">
       <div className="rep-chart-stage-inner">{chartStageContent}</div>
@@ -120,7 +123,31 @@ export function TrendChapter({ pack, slot }: TrendChapterProps) {
         num="02"
         title={isSystematic ? 'MONTHLY TREND' : '增长轨迹 · Monthly Trend'}
       />
-      {trendChartStage}
+      {/* Asymmetric split: chart 70% / mini-table 30% */}
+      <div className="rep-trend-split">
+        <div className="rep-trend-main">{trendChartStage}</div>
+        <aside className="rep-trend-aside">
+          <div className="rep-trend-aside-label">{isSystematic ? 'Q4 DETAIL' : 'Q4 月度详情'}</div>
+          <div className="rep-trend-mini-table">
+            <div className="rep-tmt-header">
+              <span>月份</span>
+              <span>本期</span>
+              <span>去年</span>
+            </div>
+            {q4Mini.map((row, i) => (
+              <div className="rep-tmt-row" key={`tmt-${i}`}>
+                <span>{row.name}</span>
+                <span className="current">{row.value}</span>
+                <span className="last">{row.last}</span>
+              </div>
+            ))}
+          </div>
+          <div className="rep-trend-legend">
+            <span className="rep-trend-leg-item current">{isSystematic ? '2026' : '2026 本期'}</span>
+            <span className="rep-trend-leg-item last">{isSystematic ? '2025' : '2025 去年'}</span>
+          </div>
+        </aside>
+      </div>
     </section>
   )
 }
