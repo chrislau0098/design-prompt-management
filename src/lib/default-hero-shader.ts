@@ -1,9 +1,13 @@
-// default-hero-shader.ts · R-102 Phase 4.10
-// Derives slot.molecular.hero_shader from dial values.
-// Light/dark dual-mode aware; parameters derived from brand_hue with
-// ranges and structure mirrored from fixed-style slot.json references
-// (warm-restraint-tech v1.0.1 grain, cool-precision-tech v0.5.1 godrays,
-// swiss-systematic-blue v0.6 dithering, theatre-dark v6.7.1 mesh).
+// default-hero-shader.ts · R-103 Phase 2 rebuild
+// Parameters anchored to proven fixed-style slot.json references:
+//   mesh      → theatre-dark v6.7.1 (distortion 0.8 / swirl 0.3 / speed 0.5 +
+//               5-color ramp culminating in a brand peak around L 0.65)
+//   grain     → warm-restraint-tech v1.0.1 (wave / softness 0.9 / intensity 0.5
+//               / scale 1.8 / speed 1.72 with a 4-color L 0.74–0.95 ramp)
+//   dithering → swiss-systematic-blue v0.6 (8x8 simplex size 3 / speed 0.4)
+// Dark mode boosted (Chris feedback: "太暗"): mesh L ramp now reaches 0.40 +
+// a brand peak around L 0.55 for life. Speeds boosted (Chris feedback:
+// "0.5 还是慢") to track the originals more closely.
 
 import type { DefaultDialSet, DialHeroShader } from './default-dials'
 import { hexToOKLCH, oklchToHex } from './color-utils'
@@ -14,50 +18,54 @@ interface ShaderFragment {
 }
 
 // ── Mesh palette ──────────────────────────────────────────────────────────────
-// Mirrors the structure of warm-restraint-tech (light) and theatre-dark (dark):
-// 4–5 hex steps, ΔL ≤ 0.10, max C 0.06 (light) / 0.08 (dark), grouped around
-// brand hue with one neighboring-hue point for chromatic life.
+// Theatre-dark structure: dark base → brand mid → brand peak → neighbor → return.
+// Light mirror: high-L base → brand breath → brand peak (mid-L) → neighbor.
 
 function buildMeshColorsLight(pH: number): string[] {
-  // light: L ramp 0.97 → 0.86, C 0.018–0.055, hue stays on brand
+  // light: 5-step ramp L 0.97 → 0.85, with a brand-peak step at C 0.060
   return [
-    oklchToHex(0.970, 0.012, pH),                  // near-white tint
-    oklchToHex(0.940, 0.030, pH),                  // pale wash
-    oklchToHex(0.905, 0.050, pH),                  // brand breath
-    oklchToHex(0.880, 0.055, (pH + 18) % 360),     // neighboring hue accent
-    oklchToHex(0.925, 0.024, pH),                  // soft return
+    oklchToHex(0.970, 0.010, pH),                  // near-white tint
+    oklchToHex(0.940, 0.028, pH),                  // pale brand wash
+    oklchToHex(0.890, 0.060, pH),                  // brand peak
+    oklchToHex(0.910, 0.050, (pH + 22) % 360),     // neighboring hue accent
+    oklchToHex(0.955, 0.018, pH),                  // soft return
   ]
 }
 
 function buildMeshColorsDark(pH: number): string[] {
-  // dark: L ramp 0.10 → 0.24, C 0.025–0.075, brand breath on neighboring hue
+  // dark: 5-step ramp L 0.10 → 0.55. Chris's "太暗" feedback fixed: peak L 0.55,
+  // C 0.10 → real chromatic life, not muddy near-black.
   return [
-    oklchToHex(0.105, 0.020, pH),                  // near-black tint
-    oklchToHex(0.165, 0.045, pH),                  // brand wash
-    oklchToHex(0.225, 0.075, pH),                  // brand breath
-    oklchToHex(0.185, 0.060, (pH + 18) % 360),     // neighboring hue accent
-    oklchToHex(0.125, 0.030, pH),                  // soft return
+    oklchToHex(0.105, 0.020, pH),                  // near-black tint (base)
+    oklchToHex(0.205, 0.050, pH),                  // brand wash mid
+    oklchToHex(0.550, 0.100, pH),                  // brand peak — bright life
+    oklchToHex(0.320, 0.080, (pH + 22) % 360),     // neighboring hue mid
+    oklchToHex(0.150, 0.030, pH),                  // soft return
   ]
 }
 
 // ── Grain palette ─────────────────────────────────────────────────────────────
-// 3 hex steps, light/dark inverted. Inspired by warm-restraint-tech grain wave.
+// Warm v1.0.1 structure: pale-L base → mid-L brand step → low-L brand peak →
+// neighbor accent. Dark inverted with similar contrast amplitude.
 
 function buildGrainColorsLight(pH: number): string[] {
+  // light: L 0.97 → 0.78 spread (warm reference ran 0.95 → 0.74 — close).
   return [
-    oklchToHex(0.965, 0.012, pH),
-    oklchToHex(0.910, 0.040, pH),
-    oklchToHex(0.855, 0.060, pH),
-    oklchToHex(0.890, 0.045, (pH + 18) % 360),
+    oklchToHex(0.970, 0.010, pH),
+    oklchToHex(0.910, 0.038, pH),
+    oklchToHex(0.840, 0.058, pH),
+    oklchToHex(0.870, 0.050, (pH + 22) % 360),
   ]
 }
 
 function buildGrainColorsDark(pH: number): string[] {
+  // dark: L 0.10 → 0.42 spread. Brand peak L 0.42, C 0.090 — much warmer than
+  // the previous max-L 0.25 which felt nearly black.
   return [
-    oklchToHex(0.115, 0.018, pH),
-    oklchToHex(0.180, 0.050, pH),
-    oklchToHex(0.250, 0.075, pH),
-    oklchToHex(0.205, 0.060, (pH + 18) % 360),
+    oklchToHex(0.105, 0.020, pH),
+    oklchToHex(0.220, 0.060, pH),
+    oklchToHex(0.420, 0.090, pH),
+    oklchToHex(0.290, 0.075, (pH + 22) % 360),
   ]
 }
 
@@ -66,38 +74,38 @@ function grainBackLight(pH: number): string {
 }
 
 function grainBackDark(pH: number): string {
-  return oklchToHex(0.100, 0.014, pH)
+  // Sits one step above dark base, gives the wave a ground that's not pure black.
+  return oklchToHex(0.120, 0.014, pH)
 }
 
 // ── Dithering palette ─────────────────────────────────────────────────────────
-// Mirrors swiss-systematic-blue: colorFront soft mid neutral with whisper tint,
-// colorBack near-surface. Inverted for dark mode.
+// Swiss v0.6: colorFront L 0.78 (#C8CACE) on colorBack L 0.94 (#EEEFF1).
+// Dark inverted: colorFront slightly above mid, colorBack one step above base.
 
 function buildDitheringColors(pH: number, isLight: boolean): { colorFront: string; colorBack: string } {
   if (isLight) {
     return {
-      // L 0.62, C 0.012 — mid-neutral with the slightest brand tint
-      colorFront: oklchToHex(0.620, 0.012, pH),
-      // L 0.945 — sits just below background L 0.985 (one step down)
+      // L 0.62 — mid-neutral with brand tint, like swiss's #C8CACE
+      colorFront: oklchToHex(0.620, 0.014, pH),
       colorBack:  oklchToHex(0.945, 0.006, pH),
     }
   }
   return {
-    // L 0.36, C 0.024 — softly visible against dark surface
-    colorFront: oklchToHex(0.360, 0.024, pH),
-    // L 0.135 — sits just above background L 0.10 (one step up)
-    colorBack:  oklchToHex(0.135, 0.012, pH),
+    // L 0.42 — clearly above the dark surface (Chris: dark mode less muddy)
+    colorFront: oklchToHex(0.420, 0.030, pH),
+    colorBack:  oklchToHex(0.140, 0.012, pH),
   }
 }
 
 // ── Speed ─────────────────────────────────────────────────────────────────────
-// Per fixed-style references: warm grain v1.0.1 speed 1.72 felt right for
-// a "warm breath"; cool godrays 0.8; swiss dithering 0.4; theatre mesh 0.5.
-// We target 0.45–0.55 — comfortable breath, never anxious, never static.
+// Anchored to references: theatre mesh 0.5, warm grain 1.72, swiss dithering 0.4.
+// Chris (round-6): "0.5 还是慢" → push mesh / dithering up to ~0.85 / 0.70,
+// keep grain in the warm 1.30 zone (1.72 felt right at warm but a touch
+// frantic in dark on the bright peak).
 
-const MESH_SPEED      = 0.50
-const GRAIN_SPEED     = 0.55
-const DITHERING_SPEED = 0.45
+const MESH_SPEED      = 0.85
+const GRAIN_SPEED     = 1.30
+const DITHERING_SPEED = 0.70
 
 export function dialsToHeroShaderSlot(dials: DefaultDialSet): ShaderFragment | null {
   const type: DialHeroShader = dials.hero_shader
@@ -112,12 +120,12 @@ export function dialsToHeroShaderSlot(dials: DefaultDialSet): ShaderFragment | n
       component: 'MeshGradient',
       props: {
         colors,
-        // distortion / swirl: warm v1.0.1 went hard on softness; theatre v6.7.1
-        // ran distortion 0.8 / swirl 0.3. We sit in the middle.
-        distortion:  0.65,
-        swirl:       0.35,
-        grainMixer:  isLight ? 0.04 : 0.06,
-        speed:       MESH_SPEED,
+        // Theatre reference: distortion 0.8, swirl 0.3. We adopt those — they
+        // are the parameters that work in real dark fixed-style use.
+        distortion: 0.80,
+        swirl:      0.30,
+        grainMixer: isLight ? 0.06 : 0.10,
+        speed:      MESH_SPEED,
         speed_off_viewport: 0,
       },
     }
@@ -129,15 +137,16 @@ export function dialsToHeroShaderSlot(dials: DefaultDialSet): ShaderFragment | n
     return {
       component: 'GrainGradient',
       props: {
-        // 'wave' shape mirrors warm v1.0.1 — soft breathing form
-        shape:    'wave',
+        // Warm v1.0.1: shape wave, softness 0.9, intensity 0.5, noise 0.04,
+        // scale 1.8. All adopted — proven warmth.
+        shape:     'wave',
         colors,
         colorBack,
-        softness: 0.75,
-        intensity: isLight ? 0.10 : 0.14,
-        noise:    isLight ? 0.04 : 0.06,
-        scale:    1.4,
-        speed:    GRAIN_SPEED,
+        softness:  0.9,
+        intensity: isLight ? 0.50 : 0.45,
+        noise:     0.04,
+        scale:     1.8,
+        speed:     GRAIN_SPEED,
         speed_off_viewport: 0,
       },
     }

@@ -5,15 +5,16 @@ import { REPORT_MOCK } from './data'
 
 interface RankingChapterProps {
   pack: string
+  num?: string
 }
 
-export function RankingChapter({ pack }: RankingChapterProps) {
+export function RankingChapter({ pack, num = '05' }: RankingChapterProps) {
   const isSystematic = pack === 'systematic'
   return (
     <section className={`rep-chapter ${pack}`}>
       <ChapterOpener
         pack={pack}
-        num="05"
+        num={num}
         title={isSystematic ? 'PEER SET' : '同业坐标 · Peer Set'}
       />
       <div className="rep-ranking">

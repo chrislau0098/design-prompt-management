@@ -7,9 +7,10 @@ import { REPORT_MOCK } from './data'
 
 interface ProportionChapterProps {
   pack: string
+  num?: string
 }
 
-export function ProportionChapter({ pack }: ProportionChapterProps) {
+export function ProportionChapter({ pack, num = '06' }: ProportionChapterProps) {
   const isSystematic = pack === 'systematic'
   const rows = REPORT_MOCK.proportion.rows
   const total = rows.reduce((s, r) => s + r.value, 0)
@@ -19,7 +20,7 @@ export function ProportionChapter({ pack }: ProportionChapterProps) {
     <section className={`rep-chapter ${pack}`}>
       <ChapterOpener
         pack={pack}
-        num="06"
+        num={num}
         title={isSystematic ? 'MARKET SHARE' : '市场份额 · Proportion Field'}
       />
 

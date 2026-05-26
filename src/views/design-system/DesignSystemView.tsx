@@ -74,16 +74,8 @@ function DefaultDesignSystemView() {
   const meta = slot.style_meta as Record<string, any>
 
   return (
-    <>
-      <DialPanel
-        dials={dials}
-        onChange={updateDial}
-        onReset={() => {
-          setDials(DEFAULT_DIALS)
-          pushUrl(DEFAULT_DIALS)
-        }}
-      />
-      <div ref={canvasRef} className="ds-canvas-scope">
+    <div className="default-example-root">
+      <div ref={canvasRef} className="ds-canvas-scope" style={{ flex: 1, minWidth: 0 }}>
         <div className="ds-container">
           {/* Meta panel */}
           <section className="meta-panel">
@@ -127,7 +119,15 @@ function DefaultDesignSystemView() {
           <Ornaments slot={slot} styleKey="default" visible={visibleOrnaments} />
         </div>
       </div>
-    </>
+      <DialPanel
+        dials={dials}
+        onChange={updateDial}
+        onReset={() => {
+          setDials(DEFAULT_DIALS)
+          pushUrl(DEFAULT_DIALS)
+        }}
+      />
+    </div>
   )
 }
 

@@ -107,8 +107,11 @@ export function dialsToTokens(dials: DefaultDialSet): Record<string, string> {
     tokens['--outro-bg']      = oklch(0.10,  neutralC, pH)
   }
 
-  // --bg alias (used by ReportExampleView)
-  tokens['--bg'] = tokens['--background']
+  // short-name aliases
+  tokens['--bg']   = tokens['--background']
+  tokens['--fg']   = tokens['--foreground']
+  tokens['--fg-2'] = tokens['--foreground-2']
+  tokens['--fg-3'] = tokens['--foreground-3']
 
   // semantic accent extras (accent_strategy=semantic)
   if (dials.accent_strategy === 'semantic') {

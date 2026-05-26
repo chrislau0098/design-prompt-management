@@ -159,18 +159,18 @@ export function Atomic({ slot }: AtomicProps) {
     {
       label: 'Quote',
       meta: `${t.quote_lg}px · ${isEditorial ? 'italic' : 'normal'}`,
-      el: <div style={{ fontSize: t.quote_lg, fontFamily: 'var(--display-stack)', fontStyle: isEditorial ? 'italic' : 'normal', color: 'var(--fg)' }}>
+      el: <div style={{ fontSize: t.quote_lg, fontFamily: 'var(--body-stack, var(--sans-stack))', fontStyle: isEditorial ? 'italic' : 'normal', color: 'var(--fg)' }}>
         "Drama comes from the warm light field, the chapter hairline cadence, and confident sans typography held at medium weight."
       </div>,
     },
     {
       label: 'Body · 中文',
-      meta: `${t.body}px · cjk_body_max_ch ${t.cjk_body_max_ch} · sans-stack`,
+      meta: `${t.body}px · cjk_body_max_ch ${t.cjk_body_max_ch} · body-stack`,
       el: (
         <p style={{
           fontSize: t.body,
           maxWidth: `${t.cjk_body_max_ch}ch`,
-          fontFamily: 'var(--sans-stack)',
+          fontFamily: 'var(--body-stack, var(--sans-stack))',
           fontWeight: 400,
           lineHeight: 1.65,
           color: 'var(--fg-2)',
@@ -187,7 +187,7 @@ export function Atomic({ slot }: AtomicProps) {
         <p style={{
           fontSize: t.body,
           maxWidth: `${t.cjk_body_max_ch * 1.4}ch`,
-          fontFamily: 'var(--sans-stack)',
+          fontFamily: 'var(--body-stack, var(--sans-stack))',
           fontWeight: 400,
           lineHeight: 1.55,
           color: 'var(--fg-2)',

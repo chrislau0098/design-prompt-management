@@ -101,10 +101,10 @@ export function DefaultExampleView({ device }: DefaultExampleViewProps) {
             <TrendChapter pack="default" slot={slot} />
             <TimelineChapter pack="default" />
             <InsightSection pack="default" num="04" />
-            <CompareChapter pack="default" />
-            <RankingChapter pack="default" />
-            <ProportionChapter pack="default" />
-            <AnnotationChapter pack="default" />
+            <CompareChapter pack="default" num="05" />
+            <RankingChapter pack="default" num="06" />
+            <ProportionChapter pack="default" num="07" />
+            <AnnotationChapter pack="default" num="08" />
             <QuoteChapter pack="default" />
             <OutroChapter pack="default" />
           </div>

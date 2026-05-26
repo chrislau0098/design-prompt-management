@@ -7,11 +7,18 @@ export const REPORT_MOCK = {
   gmv: { num: '36.5', unit: '亿', prefix: '¥' },
   delta: { dir: 'up' as const, value: '18.2%', label: 'YoY' },
   lead: '本年度营收创历史新高,同比增长 18.2%,核心产品矩阵突破 4.54 亿月活用户。',
+  // Phase 4.11 · KPI long-number stress test:
+  // — short num (NPS 67 / 2 char)
+  // — medium num (4.54 亿 / 4 char)
+  // — long num (1,234,567 / 9 char)
+  // — extreme long num (9,876,543.21 / 12 char) — must not overflow KPI cell
   kpis: [
     { label: '月活用户', num: '4.54', unit: '亿', delta: '+12.0%' },
     { label: '付费率', num: '8.7', unit: '%', delta: '+1.2pp' },
-    { label: 'ARPU', num: '320', unit: '¥', delta: '+24.0%' },
-    { label: 'NPS', num: '67', unit: '', delta: '+9' },
+    { label: 'ARPU', num: '1,234', unit: '¥', delta: '+24.0%' },
+    { label: 'NPS · 净推荐值', num: '67', unit: '', delta: '+9' },
+    { label: '累计交易额', num: '9,876,543', unit: '¥', delta: '+18.6%' },
+    { label: '广告 ROAS', num: '12,345.78', unit: '%', delta: '+22.0%' },
   ],
   trend: [
     { name: 'Jan', value: 22, last: 16 }, { name: 'Feb', value: 28, last: 22 },

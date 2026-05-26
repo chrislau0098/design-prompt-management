@@ -1,8 +1,12 @@
-// InsightSection — editorial typographic field for core insights
-// Phase 4.10 G6.1 redesign: no card grid, no side-stripe border.
-// Layout: one hero insight (large statement + figure inline) + three
-// supporting insights laid out as eyebrow → statement → detail rows
-// separated by hairlines. Numbers carry weight; cards stay absent.
+// Section · Key Insights — Editorial Typographic Field (R-103 Phase 2 rebuild)
+//
+// Composition: hero insight on top (Typographic Field — type alone),
+// supporting insights below as Sequence Track (index → statement → detail →
+// figure right). Hairline separation, no cards, no side stripes.
+//
+// Phase 4.10 G6.1 redesign kept as the structural baseline; this round
+// refines spacing rhythm and removes the asymmetric figure-rail column
+// that competed with the statement for attention.
 
 import { ChapterOpener } from './ChapterOpener'
 import { INSIGHTS_MOCK } from './data'
@@ -25,7 +29,7 @@ export function InsightSection({ pack = 'default', num = '04' }: InsightSectionP
         title={isSystematic ? 'KEY INSIGHTS' : '核心洞察 · Key Insights'}
       />
 
-      {/* Hero insight: large statement + figure inline, no card */}
+      {/* Hero insight — Typographic Field, eyebrow + statement + figure underline */}
       <div className="rep-insight-hero">
         <div className="rep-insight-hero-eyebrow">{isSystematic ? 'INSIGHT 01' : '主洞察 · 01'}</div>
         <h3 className="rep-insight-hero-statement">{hero.statement}</h3>
@@ -33,7 +37,7 @@ export function InsightSection({ pack = 'default', num = '04' }: InsightSectionP
         <p className="rep-insight-hero-detail">{hero.detail}</p>
       </div>
 
-      {/* Supporting insights: numbered rows, hairline-separated */}
+      {/* Supporting insights — Sequence Track */}
       <ol className="rep-insight-rows">
         {rest.map((item, i) => {
           const idx = String(i + 2).padStart(2, '0')

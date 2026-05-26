@@ -3,9 +3,8 @@
 //   festive-editorial: HairlineRule + claim + colophon (no END)
 //   festive-royal: 終 SealStamp + claim + GoldenHairline + colophon
 //   editorial: ember-row ornament + claim + colophon
-//   default: ShadSeparator-style hairline + claim + colophon
+//   default: pure Typographic Field (claim + colophon, no separator)
 
-import { Separator } from '@/components/ui/separator'
 import { REPORT_MOCK } from './data'
 
 interface OutroChapterProps {
@@ -66,7 +65,6 @@ export function OutroChapter({ pack }: OutroChapterProps) {
     // default (systematic, theatrical, instrumental, warm)
     content = (
       <>
-        <Separator className="rep-outro-hairline" style={{ marginBottom: 16 }} />
         <p className="rep-outro-claim">
           {isSystematic ? REPORT_MOCK.outro.claimSwiss : REPORT_MOCK.outro.claim}
         </p>
