@@ -1,10 +1,13 @@
-// DefaultExampleView · R-104
+// DefaultExampleView · R-112
 // Design Example for `style=default`.
 // Architecture: DialPanel lives in parent; report renders inside ResizableIframe.
-// Dial change → dialsToQueryString → iframe src updated → Embed reads fresh URL query.
-// DefaultDesignSystemView still renders directly (no iframe needed there).
+// R-112 fix #1: dial change → postMessage to iframe (no src reload). iframe src is
+// frozen to the mount-time dials so React never re-sets src and triggers a reload.
+// URL is still pushState'd so share / refresh keeps the configuration.
+// Iframe-side (DefaultEmbedView) sends 'embed-ready' once it mounts; parent
+// only starts posting 'dials-update' after that signal arrives.
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 
 import { parseDialsFromQuery, dialsToQueryString, DEFAULT_DIALS } from '@/lib/default-dials'
 import type { DefaultDialSet } from '@/lib/default-dials'
@@ -21,6 +24,15 @@ export function DefaultExampleView({ device }: DefaultExampleViewProps) {
   const [dials, setDials] = useState<DefaultDialSet>(() =>
     parseDialsFromQuery(new URLSearchParams(window.location.search))
   )
+  const iframeRef = useRef<HTMLIFrameElement | null>(null)
+  const [iframeReady, setIframeReady] = useState(false)
+
+  // R-112 · iframe src is built ONCE at mount and never re-set.
+  // After mount, dial updates go through postMessage instead of changing src.
+  const [iframeSrc] = useState(() => {
+    const initial = parseDialsFromQuery(new URLSearchParams(window.location.search))
+    return `?embed=1${dialsToQueryString(initial).replace('?', '&')}`
+  })
 
   // Push URL whenever dials change (so share / refresh works)
   const pushUrl = useCallback((next: DefaultDialSet) => {
@@ -44,7 +56,7 @@ export function DefaultExampleView({ device }: DefaultExampleViewProps) {
     })
   }
 
-  // Listen for back/forward navigation
+  // Listen for back/forward navigation (URL → state)
   useEffect(() => {
     function onPop() {
       setDials(parseDialsFromQuery(new URLSearchParams(window.location.search)))
@@ -53,8 +65,23 @@ export function DefaultExampleView({ device }: DefaultExampleViewProps) {
     return () => window.removeEventListener('popstate', onPop)
   }, [])
 
-  // Build iframe src from current dials — embed=1 signals Embed.tsx to render without chrome
-  const iframeSrc = `?embed=1${dialsToQueryString(dials).replace('?', '&')}`
+  // R-112 · listen for iframe's 'embed-ready' handshake
+  useEffect(() => {
+    function onMessage(e: MessageEvent) {
+      if (e.origin !== window.location.origin) return
+      if (e.data?.type === 'embed-ready') setIframeReady(true)
+    }
+    window.addEventListener('message', onMessage)
+    return () => window.removeEventListener('message', onMessage)
+  }, [])
+
+  // R-112 · push dial updates to the iframe AFTER it signaled ready
+  useEffect(() => {
+    if (!iframeReady) return
+    const win = iframeRef.current?.contentWindow
+    if (!win) return
+    win.postMessage({ type: 'dials-update', dials }, window.location.origin)
+  }, [dials, iframeReady])
 
   return (
     <div className="default-example-root" style={{ display: 'flex', alignItems: 'stretch', minHeight: '100%' }}>
@@ -63,6 +90,7 @@ export function DefaultExampleView({ device }: DefaultExampleViewProps) {
         <ResizableIframe
           src={iframeSrc}
           preset={device}
+          iframeRef={iframeRef}
         />
       </div>
 

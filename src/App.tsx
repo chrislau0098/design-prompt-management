@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import {
   Sidebar,
   SidebarContent,
@@ -14,11 +14,17 @@ import {
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { SegmentToggle } from '@/components/segment-toggle'
 import { ResizableIframe } from '@/components/resizable-iframe'
+import { ScenarioPlaceholder } from '@/components/scenario-placeholder'
 import { Embed } from '@/Embed'
 import { cn } from '@/lib/utils'
 import { DesignSystemView } from '@/views/design-system/DesignSystemView'
 import { DesignPromptView, getLatestVersionForStyle } from '@/views/design-prompt/DesignPromptView'
 import { DefaultExampleView } from '@/views/default-example/DefaultExampleView'
+import {
+  SCENARIOS_REGISTRY,
+  getScenario,
+  type ScenarioKey,
+} from '@/lib/scenarios'
 
 // Slot JSON imports (Stage 1 — data verification)
 import warmData from '@/data/warm.slot.json'
@@ -75,30 +81,58 @@ function deriveLabel(key: StyleKey): { label: string; sublabel: string } {
   return { label: parts[0] ?? key, sublabel: parts[1] ?? '' }
 }
 
-const STYLE_GROUPS: StyleGroup[] = [
-  {
-    label: '基座',
-    items: [{ key: 'default', label: '默认基座', sublabel: '参数化风格', version: 'v0.1' }],
-  },
-  {
-    label: '明亮',
-    items: (['warm', 'swiss', 'festive-editorial'] as StyleKey[]).map((k) => ({
-      key: k, ...deriveLabel(k), version: getLatestVersionForStyle(k),
+// R-112 · style groups are scenario-scoped now. Builder returns the groups
+// for the given scenario's available styleKeys. Stub scenarios get no groups
+// (the main area shows ScenarioPlaceholder instead).
+function buildStyleGroupsForScenario(scenarioKey: ScenarioKey): StyleGroup[] {
+  const scenario = getScenario(scenarioKey)
+  if (scenario.status !== 'shipped' || !scenario.styleKeys) return []
+
+  // For now only campaign-report ships; once new scenarios land they can pick
+  // their own groupings here (or move to a per-scenario groupings file).
+  if (scenarioKey === 'campaign-report') {
+    const has = (k: StyleKey) => scenario.styleKeys!.includes(k)
+    const groups: StyleGroup[] = []
+    if (has('default')) {
+      groups.push({
+        label: '基座',
+        items: [{ key: 'default', label: '默认基座', sublabel: '参数化风格', version: 'v0.1' }],
+      })
+    }
+    const bright = (['warm', 'swiss', 'festive-editorial'] as StyleKey[]).filter(has)
+    if (bright.length) {
+      groups.push({
+        label: '明亮',
+        items: bright.map((k) => ({ key: k, ...deriveLabel(k), version: getLatestVersionForStyle(k) })),
+      })
+    }
+    const dark = (['theatre', 'cool'] as StyleKey[]).filter(has)
+    if (dark.length) {
+      groups.push({
+        label: '暗黑',
+        items: dark.map((k) => ({ key: k, ...deriveLabel(k), version: getLatestVersionForStyle(k) })),
+      })
+    }
+    const colored = (['festive-royal'] as StyleKey[]).filter(has)
+    if (colored.length) {
+      groups.push({
+        label: '彩色',
+        items: colored.map((k) => ({ key: k, ...deriveLabel(k), version: getLatestVersionForStyle(k) })),
+      })
+    }
+    return groups
+  }
+
+  // Fallback: flat list with auto-derived labels
+  return [{
+    label: 'styles',
+    items: scenario.styleKeys.map((k) => ({
+      key: k as StyleKey,
+      ...deriveLabel(k as StyleKey),
+      version: getLatestVersionForStyle(k),
     })),
-  },
-  {
-    label: '暗黑',
-    items: (['theatre', 'cool'] as StyleKey[]).map((k) => ({
-      key: k, ...deriveLabel(k), version: getLatestVersionForStyle(k),
-    })),
-  },
-  {
-    label: '彩色',
-    items: (['festive-royal'] as StyleKey[]).map((k) => ({
-      key: k, ...deriveLabel(k), version: getLatestVersionForStyle(k),
-    })),
-  },
-]
+  }]
+}
 
 export default function App() {
   // R-101 Phase 2 · /?embed=1 → render Embed (pure ReportExampleView for iframe load)
@@ -107,12 +141,33 @@ export default function App() {
   }
 
   // R-101 · default view = Design Example(新工作流:Chris 先看效果再确认)
+  // R-112 · activeScenario added; styles list and main area both react to it.
   const [activeView, setActiveView] = useState<ViewKey>('design-example')
+  const [activeScenario, setActiveScenario] = useState<ScenarioKey>('campaign-report')
   const [activeStyle, setActiveStyle] = useState<StyleKey>('warm')
   const [activeDevice, setActiveDevice] = useState<DeviceKey>('web')
 
+  const scenarioConfig = getScenario(activeScenario)
+  const isScenarioShipped = scenarioConfig.status === 'shipped'
+
+  const styleGroups = useMemo(
+    () => buildStyleGroupsForScenario(activeScenario),
+    [activeScenario]
+  )
+
+  function switchScenario(next: ScenarioKey) {
+    if (next === activeScenario) return
+    setActiveScenario(next)
+    const nextScenario = getScenario(next)
+    // Snap activeStyle to the first available style in the new scenario (if any)
+    if (nextScenario.status === 'shipped' && nextScenario.styleKeys?.length) {
+      const first = nextScenario.styleKeys[0] as StyleKey
+      setActiveStyle(first)
+    }
+  }
+
   const slot = SLOT_MAP[activeStyle]
-  const activeStyleItem = STYLE_GROUPS.flatMap((g) => g.items).find((i) => i.key === activeStyle)
+  const activeStyleItem = styleGroups.flatMap((g) => g.items).find((i) => i.key === activeStyle)
 
   // R-96 反馈 v2 · main bg per view(design-system / report-example 用 slot bg / design-prompt 全局暗黑)
   const mainBg = activeView === 'design-prompt' ? 'var(--background)' : 'var(--bg)'
@@ -146,9 +201,58 @@ export default function App() {
             </div>
           </SidebarHeader>
 
-          {/* Style groups */}
+          {/* R-112 · Scenario picker (top) + Style groups (below) */}
           <SidebarContent className="px-2 py-3 gap-1">
-            {STYLE_GROUPS.map((group) => (
+            <SidebarGroup className="py-1">
+              <SidebarGroupLabel className="px-3 pb-1 text-[10px] uppercase tracking-[0.14em] text-[var(--muted-foreground)] font-medium">
+                场景 · Scenario
+              </SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {SCENARIOS_REGISTRY.map((sc) => {
+                    const isActive = activeScenario === sc.key
+                    const isStub = sc.status === 'stub'
+                    return (
+                      <SidebarMenuItem key={sc.key}>
+                        <SidebarMenuButton
+                          isActive={isActive}
+                          onClick={() => switchScenario(sc.key)}
+                          className={cn(
+                            'group relative h-auto py-2 px-3 rounded-md transition-colors',
+                            'hover:bg-[var(--surface-2)] data-[active=true]:bg-[var(--sidebar-accent)] data-[active=true]:text-[var(--sidebar-accent-foreground)]',
+                            isStub && 'opacity-60'
+                          )}
+                          title={isStub ? `${sc.label} 暂未实装` : sc.label}
+                        >
+                          <span
+                            className={cn(
+                              'absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-5 rounded-r-sm transition-opacity',
+                              isActive ? 'bg-[var(--accent)] opacity-100' : 'opacity-0'
+                            )}
+                            aria-hidden
+                          />
+                          <div className="flex items-center justify-between w-full ml-1">
+                            <div className="flex flex-col items-start gap-0.5 leading-tight">
+                              <span className="text-[13px] font-medium">{sc.label}</span>
+                              <span className="text-[10.5px] text-[var(--muted-foreground)]">
+                                {sc.sublabel}
+                              </span>
+                            </div>
+                            {isStub && (
+                              <span className="text-[9.5px] font-mono uppercase tracking-[0.08em] px-1.5 py-0.5 rounded-sm border border-[var(--border)] text-[var(--muted-foreground)]">
+                                stub
+                              </span>
+                            )}
+                          </div>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    )
+                  })}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+
+            {styleGroups.map((group) => (
               <SidebarGroup key={group.label} className="py-1">
                 <SidebarGroupLabel className="px-3 pb-1 text-[10px] uppercase tracking-[0.14em] text-[var(--muted-foreground)] font-medium">
                   {group.label}
@@ -243,25 +347,29 @@ export default function App() {
             )}
           </header>
 
-          {/* Content area · R-101 顺序:Example → System → Prompt(对齐新工作流)*/}
+          {/* Content area · R-101 顺序:Example → System → Prompt(对齐新工作流) ·
+              R-112: stub scenario 整体走 ScenarioPlaceholder. */}
           <main className="flex-1 overflow-y-auto">
-            {/* Design Example · default = inline dial view; others = iframe embed */}
-            {activeView === 'design-example' && activeStyle === 'default' && (
+            {!isScenarioShipped && (
+              <ScenarioPlaceholder scenario={scenarioConfig} view={activeView} />
+            )}
+
+            {isScenarioShipped && activeView === 'design-example' && activeStyle === 'default' && (
               <DefaultExampleView device={activeDevice} />
             )}
-            {activeView === 'design-example' && activeStyle !== 'default' && (
+            {isScenarioShipped && activeView === 'design-example' && activeStyle !== 'default' && (
               <ResizableIframe
                 src={`?embed=1&style=${activeStyle}&device=${activeDevice}&t=${activeStyle}`}
                 preset={activeDevice}
               />
             )}
-            {activeView === 'design-system' && (
+            {isScenarioShipped && activeView === 'design-system' && (
               <DesignSystemView
                 styleKey={activeStyle}
                 slot={slot as Record<string, any>}
               />
             )}
-            {activeView === 'design-prompt' && (
+            {isScenarioShipped && activeView === 'design-prompt' && (
               <DesignPromptView styleKey={activeStyle} />
             )}
           </main>

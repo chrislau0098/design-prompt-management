@@ -1,9 +1,12 @@
-// DefaultEmbedView · R-104
+// DefaultEmbedView · R-112
 // Iframe-side renderer for style=default in embed mode.
-// Reads dials from URL query — no DialPanel. Scoped token injection.
-// scroll-triggered animations fire naturally (IntersectionObserver per-frame).
+// R-112 fix #1: bootstraps dials from URL on mount, then listens for
+// 'dials-update' postMessage from the parent. Sends 'embed-ready' once
+// mounted so the parent knows it can start posting. Token / font / shader
+// re-apply runs in an effect keyed on `dials`, so dial changes patch the
+// scoped element in-place instead of reloading the whole page.
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { parseDialsFromQuery } from '@/lib/default-dials'
 import { applyDefaultDials } from '@/lib/default-tokens'
@@ -40,16 +43,39 @@ interface DefaultEmbedViewProps {
 }
 
 export function DefaultEmbedView({ device }: DefaultEmbedViewProps) {
-  const dials = parseDialsFromQuery(new URLSearchParams(window.location.search))
+  const [dials, setDials] = useState<DefaultDialSet>(() =>
+    parseDialsFromQuery(new URLSearchParams(window.location.search))
+  )
   const canvasRef = useRef<HTMLDivElement>(null)
 
+  // R-112 · re-apply scoped tokens whenever dials change.
+  // Re-runs on every dial update from parent postMessage — patches in place,
+  // never remounts the report tree.
   useEffect(() => {
     const el = canvasRef.current
     if (!el) return
     loadFontFamily(dials.font_family)
     applyFontStack(dials.font_family, el)
     applyDefaultDials(dials, el)
-  }, []) // Dials come from URL at mount — URL is static inside iframe lifetime
+  }, [dials])
+
+  // R-112 · listen for parent's dial updates + announce ready
+  useEffect(() => {
+    function onMessage(e: MessageEvent) {
+      if (e.origin !== window.location.origin) return
+      if (e.data?.type === 'dials-update' && e.data.dials) {
+        setDials(e.data.dials as DefaultDialSet)
+      }
+    }
+    window.addEventListener('message', onMessage)
+    // Tell parent we're mounted and ready to receive dial updates
+    try {
+      window.parent?.postMessage({ type: 'embed-ready' }, window.location.origin)
+    } catch {
+      /* parent may be cross-origin in dev — ignore */
+    }
+    return () => window.removeEventListener('message', onMessage)
+  }, [])
 
   const frameClass = [
     'report-frame',
@@ -63,13 +89,14 @@ export function DefaultEmbedView({ device }: DefaultEmbedViewProps) {
     `density-${dials.density}`,
   ].filter(Boolean).join(' ')
 
-  const slot = buildSlot(dials)
+  // R-112 · slot rebuilds reactively on dials change → Hero shader props refresh
+  const slot = useMemo(() => buildSlot(dials), [dials])
 
   return (
     <div
       ref={canvasRef}
       className={canvasClass}
-      style={{ minHeight: '100vh', padding: '24px', background: 'var(--bg)' }}
+      style={{ minHeight: '100vh', background: 'var(--bg)' }}
     >
       <div className={frameClass}>
         <div className="report-stage">

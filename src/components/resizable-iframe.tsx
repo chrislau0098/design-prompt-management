@@ -13,6 +13,8 @@ interface ResizableIframeProps {
   minWidth?: number
   /** Max draggable width (defaults to stage width if container measured) */
   maxWidth?: number
+  /** R-112 · optional ref to the inner iframe element (for postMessage from parent) */
+  iframeRef?: React.RefObject<HTMLIFrameElement | null>
 }
 
 const PRESET_WIDTHS: Record<'web' | 'mobile', number> = {
@@ -20,7 +22,7 @@ const PRESET_WIDTHS: Record<'web' | 'mobile', number> = {
   mobile: 420,
 }
 
-export function ResizableIframe({ src, preset, minWidth = 320, maxWidth }: ResizableIframeProps) {
+export function ResizableIframe({ src, preset, minWidth = 320, maxWidth, iframeRef }: ResizableIframeProps) {
   const stageRef = useRef<HTMLDivElement>(null)
   const [stageWidth, setStageWidth] = useState<number>(0)
   const [width, setWidth] = useState<number>(PRESET_WIDTHS[preset])
@@ -77,6 +79,7 @@ export function ResizableIframe({ src, preset, minWidth = 320, maxWidth }: Resiz
     <div ref={stageRef} className="resizable-iframe-stage">
       <div className="resizable-iframe-frame" style={{ width }}>
         <iframe
+          ref={iframeRef}
           src={src}
           title="Design Example preview"
           loading="lazy"

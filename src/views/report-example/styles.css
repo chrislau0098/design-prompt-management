@@ -15,8 +15,7 @@
   container-type: inline-size;
   container-name: report;
   transition: max-width 250ms cubic-bezier(0.25, 0, 0, 1);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-card);
+  /* R-112 Chris feedback · 去 border / radius — page 直接撑满 iframe */
   overflow: hidden;
   background: var(--bg);
   position: relative;

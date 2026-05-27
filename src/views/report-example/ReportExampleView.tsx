@@ -37,7 +37,7 @@ export function ReportExampleView({ styleKey, slot, device }: ReportExampleViewP
   ].filter(Boolean).join(' ')
 
   return (
-    <div style={{ padding: '24px', minHeight: '100%' }}>
+    <div style={{ minHeight: '100%' }}>
       <div className={frameClass}>
         <div className="report-stage">
           {/* Hero — Round-83 rule: Hero ≠ chapter, no ChapterStamp/kicker */}
