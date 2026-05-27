@@ -1,7 +1,7 @@
-// R-101 Phase 2 · Resizable iframe wrapper for Design Example
+// R-112.6 · Iframe wrapper for Design Example (drag-to-resize 暂去除)
 // - iframe loads /?embed=1&style=...&device=... (Embed.tsx renders pure ReportExampleView)
-// - Manual width adjust via right-edge drag handle (Q-D Chris requirement)
-// - Web/Mobile toggle = quick preset (Q-D Chris: "切换 Web|Mobile 只是快速设置宽度值")
+// - Web/Mobile preset 切换决定宽度: Web = stage-bound (max 1280); Mobile = 420 居中
+// - R-112.6 Chris feedback: 拖拽调整宽度有 bug,先去除 drag handle + width readout
 // - scroll-triggered animations inside iframe fire naturally (IntersectionObserver per-frame)
 
 import { useEffect, useRef, useState } from 'react'
@@ -9,10 +9,6 @@ import { useEffect, useRef, useState } from 'react'
 interface ResizableIframeProps {
   src: string
   preset: 'web' | 'mobile'
-  /** Min draggable width */
-  minWidth?: number
-  /** Max draggable width (defaults to stage width if container measured) */
-  maxWidth?: number
   /** R-112 · optional ref to the inner iframe element (for postMessage from parent) */
   iframeRef?: React.RefObject<HTMLIFrameElement | null>
 }
@@ -22,12 +18,12 @@ const PRESET_WIDTHS: Record<'web' | 'mobile', number> = {
   mobile: 420,
 }
 
-export function ResizableIframe({ src, preset, minWidth = 320, maxWidth, iframeRef }: ResizableIframeProps) {
+export function ResizableIframe({ src, preset, iframeRef }: ResizableIframeProps) {
   const stageRef = useRef<HTMLDivElement>(null)
   const [stageWidth, setStageWidth] = useState<number>(0)
   const [width, setWidth] = useState<number>(PRESET_WIDTHS[preset])
 
-  // Track stage size for clamping max width to container
+  // Track stage size so Web preset can fit the available column
   useEffect(() => {
     if (!stageRef.current) return
     const ro = new ResizeObserver((entries) => {
@@ -38,42 +34,15 @@ export function ResizableIframe({ src, preset, minWidth = 320, maxWidth, iframeR
     return () => ro.disconnect()
   }, [])
 
-  // Re-apply preset whenever the Web/Mobile toggle changes
+  // Re-apply preset whenever the Web/Mobile toggle (or stage size) changes
   useEffect(() => {
-    const target = PRESET_WIDTHS[preset]
-    // Web = stage-bound (use measured stage width up to PRESET_WIDTHS.web); Mobile = exact 420
     if (preset === 'web') {
-      setWidth(stageWidth ? Math.min(stageWidth - 32, PRESET_WIDTHS.web) : PRESET_WIDTHS.web)
+      // Web = stage-bound (use measured stage width up to PRESET_WIDTHS.web)
+      setWidth(stageWidth ? Math.min(stageWidth, PRESET_WIDTHS.web) : PRESET_WIDTHS.web)
     } else {
-      setWidth(target)
+      setWidth(PRESET_WIDTHS.mobile)
     }
   }, [preset, stageWidth])
-
-  const max = maxWidth ?? (stageWidth ? stageWidth - 32 : 1920)
-
-  // Drag-to-resize on right edge
-  const dragRef = useRef<{ startX: number; startW: number } | null>(null)
-  function onMouseDown(e: React.MouseEvent) {
-    dragRef.current = { startX: e.clientX, startW: width }
-    document.body.style.cursor = 'col-resize'
-    document.body.style.userSelect = 'none'
-    window.addEventListener('mousemove', onMouseMove)
-    window.addEventListener('mouseup', onMouseUp)
-  }
-  function onMouseMove(e: MouseEvent) {
-    if (!dragRef.current) return
-    const dx = e.clientX - dragRef.current.startX
-    // Resize is centered: 1 px drag → 2 px width change (both sides grow)
-    const next = Math.min(max, Math.max(minWidth, dragRef.current.startW + dx * 2))
-    setWidth(next)
-  }
-  function onMouseUp() {
-    dragRef.current = null
-    document.body.style.cursor = ''
-    document.body.style.userSelect = ''
-    window.removeEventListener('mousemove', onMouseMove)
-    window.removeEventListener('mouseup', onMouseUp)
-  }
 
   return (
     <div ref={stageRef} className="resizable-iframe-stage">
@@ -85,16 +54,6 @@ export function ResizableIframe({ src, preset, minWidth = 320, maxWidth, iframeR
           loading="lazy"
           allowFullScreen
           className="resizable-iframe-iframe"
-        />
-        {/* width readout */}
-        <div className="resizable-iframe-badge">{Math.round(width)}px</div>
-        {/* right-edge drag handle */}
-        <div
-          className="resizable-iframe-handle"
-          onMouseDown={onMouseDown}
-          role="separator"
-          aria-orientation="vertical"
-          title="Drag to resize"
         />
       </div>
     </div>

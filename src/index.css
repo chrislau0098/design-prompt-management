@@ -85,9 +85,8 @@ body.embed-no-scrollbar::-webkit-scrollbar {
   border-top: 1px solid var(--border);
 }
 
-/* R-112 · ResizableIframe — Chris feedback: iframe 撑满,无滚动条,无边距和边框.
-   stage padding/frame border/box-shadow 全部去掉; width badge 移到 frame 内右上 floating;
-   drag handle 改成 overlay 在 frame 内右边缘. iframe 直接铺满主区. */
+/* R-112.6 · Iframe wrapper — Chris feedback: 拖拽调宽 bug 较多,先去 drag + width readout.
+   stage padding/frame border/box-shadow 全部去掉; iframe 铺满主区 width (preset 决定). */
 .resizable-iframe-stage {
   position: relative;
   display: flex;
@@ -112,53 +111,6 @@ body.embed-no-scrollbar::-webkit-scrollbar {
   height: 100%;
   border: 0;
   display: block;
-}
-/* Floating width readout: top-right corner, glass chip, ignores pointer. */
-.resizable-iframe-badge {
-  position: absolute;
-  top: 10px;
-  right: 12px;
-  padding: 3px 8px;
-  font: 10.5px/1 "Geist Mono", ui-monospace, monospace;
-  color: var(--muted-foreground);
-  background: color-mix(in oklab, var(--background) 70%, transparent);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-radius: 4px;
-  letter-spacing: 0.04em;
-  user-select: none;
-  pointer-events: none;
-  z-index: 2;
-}
-/* Drag handle stays as a thin overlay near the right edge. */
-.resizable-iframe-handle {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 8px;
-  cursor: col-resize;
-  z-index: 3;
-}
-.resizable-iframe-handle::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  right: 2px;
-  width: 2px;
-  height: 32px;
-  background: color-mix(in oklab, var(--accent) 60%, var(--muted-foreground));
-  border-radius: 1px;
-  transform: translateY(-50%);
-  opacity: 0;
-  transition: opacity 120ms;
-}
-.resizable-iframe-stage:hover .resizable-iframe-handle::before {
-  opacity: 0.35;
-}
-.resizable-iframe-handle:hover::before,
-.resizable-iframe-handle:active::before {
-  opacity: 1;
 }
 
 /* ─────────────────────────────────────────────────────────────
