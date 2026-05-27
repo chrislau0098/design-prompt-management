@@ -20,6 +20,8 @@ export interface DefaultDialSet {
   hero_shader: DialHeroShader
   radius: DialRadius
   density: DialDensity
+  /** R-113.5 · Optional Hero background image URL. Empty = use shader. */
+  hero_image_url: string
 }
 
 export const DEFAULT_DIALS: DefaultDialSet = {
@@ -30,6 +32,7 @@ export const DEFAULT_DIALS: DefaultDialSet = {
   hero_shader: 'mesh',
   radius: 'sharp',
   density: 'balanced',
+  hero_image_url: '',
 }
 
 const VALID_MODES: DialMode[] = ['light', 'dark']
@@ -110,6 +113,7 @@ export function parseDialsFromQuery(searchParams: URLSearchParams): DefaultDialS
     hero_shader: pickEnum(searchParams.get('hero'), VALID_SHADERS, preset.hero_shader),
     radius: pickEnum(searchParams.get('radius'), VALID_RADII, preset.radius),
     density: pickEnum(searchParams.get('density'), VALID_DENSITIES, preset.density),
+    hero_image_url: searchParams.get('heroimg') ?? DEFAULT_DIALS.hero_image_url,
   }
   return enforceForbidden(raw)
 }
@@ -125,5 +129,6 @@ export function dialsToQueryString(dials: DefaultDialSet): string {
     radius: dials.radius,
     density: dials.density,
   })
+  if (dials.hero_image_url) p.set('heroimg', dials.hero_image_url)
   return '?' + p.toString()
 }

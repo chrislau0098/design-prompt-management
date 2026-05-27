@@ -13,6 +13,8 @@ import { applyDefaultDials } from '@/lib/default-tokens'
 import { loadFontFamily, applyFontStack } from '@/lib/default-fonts'
 import { dialsToHeroShaderSlot } from '@/lib/default-hero-shader'
 import type { DefaultDialSet } from '@/lib/default-dials'
+import { FontFamilyContext } from '@/components/font-family-context'
+import { ReportModeContext } from '@/components/report-mode-context'
 import { Hero } from '@/views/report-example/Hero'
 import { KPIChapter } from '@/views/report-example/KPIChapter'
 import { TrendChapter } from '@/views/report-example/TrendChapter'
@@ -30,10 +32,14 @@ import './styles.css'
 
 function buildSlot(dials: DefaultDialSet): Record<string, unknown> {
   const heroShader = dialsToHeroShaderSlot(dials)
+  const heroImageUrl = dials.hero_image_url?.trim() ?? ''
+  const molecular: Record<string, unknown> = {}
+  if (heroShader) molecular.hero_shader = heroShader
+  if (heroImageUrl) molecular.hero_image_url = heroImageUrl
   return {
     style_meta: { decorative_pack: 'default', mode: dials.mode, brand_color: dials.brand_color },
     atomic: {},
-    molecular: heroShader ? { hero_shader: heroShader } : {},
+    molecular,
     patterned: {},
   }
 }
@@ -93,25 +99,30 @@ export function DefaultEmbedView({ device }: DefaultEmbedViewProps) {
   const slot = useMemo(() => buildSlot(dials), [dials])
 
   return (
-    <div
-      ref={canvasRef}
-      className={canvasClass}
-      style={{ minHeight: '100vh', background: 'var(--bg)' }}
-    >
-      <div className={frameClass}>
-        <div className="report-stage">
-          <Hero pack="default" slot={slot} />
-          <KPIChapter pack="default" />
-          <TrendChapter pack="default" slot={slot} />
-          <TimelineChapter pack="default" />
-          <InsightSection pack="default" num="04" />
-          <RankingChapter pack="default" num="05" />
-          <ProportionChapter pack="default" num="06" />
-          <AnnotationChapter pack="default" num="07" />
-          <QuoteChapter pack="default" />
-          <OutroChapter pack="default" />
+    <FontFamilyContext.Provider value={dials.font_family}>
+      <ReportModeContext.Provider value={dials.mode}>
+      <div
+        ref={canvasRef}
+        className={canvasClass}
+        data-font-family={dials.font_family}
+        style={{ minHeight: '100vh', background: 'var(--bg)' }}
+      >
+        <div className={frameClass}>
+          <div className="report-stage">
+            <Hero pack="default" slot={slot} />
+            <KPIChapter pack="default" />
+            <TrendChapter pack="default" slot={slot} />
+            <TimelineChapter pack="default" />
+            <InsightSection pack="default" num="04" />
+            <RankingChapter pack="default" num="05" />
+            <ProportionChapter pack="default" num="06" />
+            <AnnotationChapter pack="default" num="07" />
+            <QuoteChapter pack="default" />
+            <OutroChapter pack="default" />
+          </div>
         </div>
       </div>
-    </div>
+      </ReportModeContext.Provider>
+    </FontFamilyContext.Provider>
   )
 }

@@ -1,10 +1,14 @@
 // R-100 fix #5 · Shared ChartTooltipCard for DS view + Report Example
-// Previously TrendChapter only set cursor/wrapperStyle and fell back to recharts
-// default Tooltip (unstyled) while Molecular (DS) had a full per-pack styled
-// ChartTooltipCard. Three-Way Sync principle 12 violation. This module is now
-// the single source of truth — both views import it.
+// R-113.8 · Mode-aware text colors. Recharts Tooltip wrapper can escape the
+// `.report-canvas-scope.dark` subtree (Recharts portals it for positioning),
+// causing `var(--fg)` to fall back to :root and render dark text on dark bg.
+// We consume ReportModeContext (when provided by DefaultEmbedView) and hard-
+// code mode-correct hex colors so legibility is preserved no matter where the
+// tooltip wrapper ends up in the DOM. Fixed styles (no provider) keep the
+// original CSS-variable behavior unchanged.
 
 import * as React from 'react'
+import { useReportMode } from '@/components/report-mode-context'
 
 interface TooltipPayloadEntry {
   name?: string
@@ -19,7 +23,29 @@ interface ChartTooltipCardProps {
   pack: string
 }
 
+// R-113.8 · Mode-explicit color tokens. Used to harden inline styles against
+// Recharts wrapper escaping the `.report-canvas-scope.dark` subtree.
+const MODE_COLORS = {
+  light: {
+    bg:      '#fafbfc',
+    surface: '#f0f2f5',
+    border:  'rgba(20, 28, 40, 0.22)',
+    fg:      '#11151c',
+    fg2:     '#4a5260',
+    fg3:     '#838b95',
+  },
+  dark: {
+    bg:      '#0e1115',
+    surface: '#1c2026',
+    border:  'rgba(240, 244, 248, 0.28)',
+    fg:      '#e5e8ed',
+    fg2:     '#a8aeb6',
+    fg3:     '#76808c',
+  },
+} as const
+
 export function ChartTooltipCard({ active, payload, label, pack }: ChartTooltipCardProps) {
+  const mode = useReportMode() // null when used in fixed style (no provider)
   if (!active || !payload || !payload.length) return null
 
   const stylesByPack: Record<string, React.CSSProperties> = {
@@ -79,16 +105,27 @@ export function ChartTooltipCard({ active, payload, label, pack }: ChartTooltipC
   const ls = labelStyles[pack]   ?? labelStyles.editorial
   const vs = valueStyles[pack]   ?? valueStyles.editorial
 
+  // R-113.8 · If ReportModeContext is set (default style), override the
+  // CSS-variable colors with mode-explicit hex so the tooltip remains legible
+  // even when Recharts portals the wrapper out of `.report-canvas-scope.dark`.
+  const colors = mode ? MODE_COLORS[mode] : null
+  const containerOverride: React.CSSProperties = colors
+    ? { background: colors.bg, borderColor: colors.border, color: colors.fg }
+    : {}
+  const labelOverride: React.CSSProperties = colors ? { color: colors.fg3 } : {}
+  const valueOverride: React.CSSProperties = colors ? { color: colors.fg } : {}
+  const nameOverride: React.CSSProperties = colors ? { color: colors.fg3 } : { color: 'var(--fg-3)' }
+
   return (
-    <div style={s}>
-      {label != null && <div style={ls}>{String(label)}</div>}
+    <div style={{ ...s, ...containerOverride }}>
+      {label != null && <div style={{ ...ls, ...labelOverride }}>{String(label)}</div>}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
         {payload.map((p: any, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 16 }}>
-            <span style={{ color: 'var(--fg-3)', fontSize: 11, fontFamily: 'var(--mono-stack)', letterSpacing: '0.04em' }}>
+            <span style={{ fontSize: 11, fontFamily: 'var(--mono-stack)', letterSpacing: '0.04em', ...nameOverride }}>
               {p.name ?? p.dataKey}
             </span>
-            <span style={vs}>
+            <span style={{ ...vs, ...valueOverride }}>
               {typeof p.value === 'number' ? p.value.toLocaleString() : p.value}
             </span>
           </div>

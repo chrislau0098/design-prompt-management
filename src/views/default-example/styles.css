@@ -50,7 +50,97 @@
 .report-canvas-scope .rep-hero.default {
   background: var(--surface-l1);
   isolation: isolate;
+  padding: 96px 56px 88px;
 }
+@container report (max-width: 800px) {
+  .report-canvas-scope .rep-hero.default { padding: 64px 24px 56px; }
+}
+
+/* R-113.3 · default Hero left-right grid (copy on left, peak number on right).
+   Stacks vertical on mobile/small containers. */
+.report-canvas-scope .rep-hero.default .rep-hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 48px 56px;
+  align-items: end;
+  position: relative;
+  z-index: 2;
+}
+@container report (max-width: 800px) {
+  .report-canvas-scope .rep-hero.default .rep-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+    align-items: start;
+  }
+}
+.report-canvas-scope .rep-hero.default .rep-hero-col-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 28px;
+  min-width: 0;
+}
+.report-canvas-scope .rep-hero.default .rep-hero-col-copy .rep-hero-eyebrow { margin: 0; }
+.report-canvas-scope .rep-hero.default .rep-hero-col-copy .rep-hero-title {
+  margin: 0;
+  max-width: 18ch;
+}
+.report-canvas-scope .rep-hero.default .rep-hero-col-copy .rep-hero-lead {
+  margin: 0;
+  max-width: 44ch;
+}
+.report-canvas-scope .rep-hero.default .rep-hero-col-figure {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  min-width: 0;
+}
+@container report (max-width: 800px) {
+  .report-canvas-scope .rep-hero.default .rep-hero-col-figure { align-items: flex-start; }
+}
+.report-canvas-scope .rep-hero.default .rep-hero-col-figure .rep-hero-num {
+  text-align: right;
+}
+@container report (max-width: 800px) {
+  .report-canvas-scope .rep-hero.default .rep-hero-col-figure .rep-hero-num { text-align: left; }
+}
+
+/* R-113.5 · Hero image background mode (user-provided image instead of shader).
+   Image fills the section; an overlay tints toward bg color for legibility.
+   Light mode overlay = bg over image 35%; dark mode = bg over image 55%. */
+.report-canvas-scope .rep-hero-bg-image {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+.report-canvas-scope .rep-hero-bg-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.report-canvas-scope .rep-hero-bg-image-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklch, var(--bg) 25%, transparent) 0%,
+    color-mix(in oklch, var(--bg) 50%, transparent) 100%
+  );
+}
+.report-canvas-scope.dark .rep-hero-bg-image-overlay {
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklch, var(--bg) 45%, transparent) 0%,
+    color-mix(in oklch, var(--bg) 70%, transparent) 100%
+  );
+}
+/* When the image is on, suppress the soft brand wash to keep visuals coherent. */
+.report-canvas-scope .rep-hero.default.has-hero-image .rep-hero-shader-wash { display: none; }
 
 /* default pack: no wash overlay — shader strength is controlled at the shader
    parameter level (see default-hero-shader.ts), keeping the Design Prompt simple
@@ -614,4 +704,220 @@
 .dk-select option {
   background: #1a1a1a;
   color: rgba(255,255,255,0.85);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   R-113.4 · ChapterOpener variants (default style, per font_family dial)
+   Each variant ships its own rhythm + typographic anchor so chapter openers
+   feel meaningfully different across the 6 STYLE_PRESETS, not just slightly
+   re-typed. All variants are scoped to `.report-canvas-scope` so they only
+   apply inside the default-style Example iframe — fixed styles untouched.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Shared base for default variants — vertical stack, generous bottom margin. */
+.report-canvas-scope .rep-chapter-opener.default[class*="variant-"] {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.report-canvas-scope .rep-chapter-opener.default[class*="variant-"] .rep-chapter-title {
+  margin: 0;
+  font-family: var(--title-stack, var(--display-stack));
+}
+
+/* ── geometric · vertical primary bar + uppercase mono num + crisp hairline */
+.report-canvas-scope .rep-chapter-opener.default.variant-geometric .rco-geo-row {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+.report-canvas-scope .rep-chapter-opener.default.variant-geometric .rco-geo-bar {
+  display: inline-block;
+  width: 3px;
+  height: 18px;
+  background: var(--primary);
+  border-radius: 1px;
+  transform: translateY(2px);
+  flex-shrink: 0;
+}
+.report-canvas-scope .rep-chapter-opener.default.variant-geometric .rco-geo-num {
+  font-family: var(--mono-stack, monospace);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--foreground-2);
+}
+.report-canvas-scope .rep-chapter-opener.default.variant-geometric .rep-chapter-title {
+  font-weight: 600;
+  font-size: clamp(28px, 4.2vw, 40px);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+/* ── editorial · large outline serif numeral above title + thin underline */
+.report-canvas-scope .rep-chapter-opener.default.variant-editorial {
+  gap: 6px;
+}
+.report-canvas-scope .rep-chapter-opener.default.variant-editorial .rco-edit-num {
+  display: block;
+  font-family: var(--title-stack);
+  font-size: clamp(56px, 7vw, 84px);
+  line-height: 0.9;
+  font-weight: 400;
+  font-style: italic;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--primary);
+  text-stroke: 1px var(--primary);
+  letter-spacing: -0.02em;
+}
+.report-canvas-scope .rep-chapter-opener.default.variant-editorial .rep-chapter-title {
+  font-weight: 500;
+  font-size: clamp(28px, 4.2vw, 44px);
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+}
+.report-canvas-scope .rep-chapter-opener.default.variant-editorial .rco-edit-hairline {
+  border: none;
+  margin: 16px 0 0;
+  height: 1px;
+  background: var(--border-strong);
+  max-width: 56px;
+}
+
+/* ── technical · bracketed mono num + dashed hairline + uppercase title */
+.report-canvas-scope .rep-chapter-opener.default.variant-technical .rco-tech-row {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.report-canvas-scope .rep-chapter-opener.default.variant-technical .rco-tech-bracket {
+  font-family: var(--mono-stack, monospace);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--primary);
+  padding: 2px 6px;
+  background: color-mix(in oklch, var(--primary) 10%, transparent);
+  border-radius: 2px;
+}
+.report-canvas-scope .rep-chapter-opener.default.variant-technical .rep-chapter-title {
+  font-weight: 700;
+  font-size: clamp(24px, 3.6vw, 32px);
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.report-canvas-scope .rep-chapter-opener.default.variant-technical .rco-tech-hairline {
+  border: none;
+  border-top: 1px dashed var(--border-strong);
+  margin: 8px 0 0;
+}
+
+/* ── warmth · circle filled num pill + rounded soft hairline */
+.report-canvas-scope .rep-chapter-opener.default.variant-warmth .rco-warm-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.report-canvas-scope .rep-chapter-opener.default.variant-warmth .rco-warm-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--bg);
+  font-family: var(--number-stack);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0;
+  flex-shrink: 0;
+}
+.report-canvas-scope .rep-chapter-opener.default.variant-warmth .rep-chapter-title {
+  font-weight: 600;
+  font-size: clamp(26px, 4vw, 36px);
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+}
+.report-canvas-scope .rep-chapter-opener.default.variant-warmth .rco-warm-hairline {
+  border: none;
+  margin: 12px 0 0;
+  height: 2px;
+  background: color-mix(in oklch, var(--primary) 30%, transparent);
+  border-radius: 1px;
+}
+
+/* ── impact · huge bold num inline-left + thick primary hairline */
+.report-canvas-scope .rep-chapter-opener.default.variant-impact .rco-impact-row {
+  display: flex;
+  align-items: baseline;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.report-canvas-scope .rep-chapter-opener.default.variant-impact .rco-impact-num {
+  font-family: var(--title-stack);
+  font-size: clamp(48px, 6.5vw, 72px);
+  line-height: 0.92;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: 0.02em;
+}
+.report-canvas-scope .rep-chapter-opener.default.variant-impact .rep-chapter-title {
+  font-weight: 700;
+  font-size: clamp(28px, 4.4vw, 40px);
+  line-height: 1.05;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+.report-canvas-scope .rep-chapter-opener.default.variant-impact .rco-impact-hairline {
+  border: none;
+  margin: 8px 0 0;
+  height: 3px;
+  background: var(--primary);
+}
+
+/* ── ceremonial · ornament-framed num + serif title + dotted hairline */
+.report-canvas-scope .rep-chapter-opener.default.variant-ceremonial .rco-cere-row {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.report-canvas-scope .rep-chapter-opener.default.variant-ceremonial .rco-cere-frame {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.report-canvas-scope .rep-chapter-opener.default.variant-ceremonial .rco-cere-mark {
+  color: var(--primary);
+  font-size: 12px;
+  transform: translateY(-3px);
+}
+.report-canvas-scope .rep-chapter-opener.default.variant-ceremonial .rco-cere-num {
+  font-family: var(--title-stack);
+  font-size: clamp(30px, 4vw, 40px);
+  line-height: 1;
+  font-weight: 700;
+  color: var(--foreground);
+  letter-spacing: -0.01em;
+}
+.report-canvas-scope .rep-chapter-opener.default.variant-ceremonial .rep-chapter-title {
+  font-weight: 600;
+  font-size: clamp(26px, 3.8vw, 36px);
+  line-height: 1.22;
+  letter-spacing: -0.005em;
+}
+.report-canvas-scope .rep-chapter-opener.default.variant-ceremonial .rco-cere-hairline {
+  border: none;
+  margin: 14px 0 0;
+  height: 4px;
+  background-image: radial-gradient(circle, var(--border-strong) 1px, transparent 1.5px);
+  background-size: 10px 4px;
+  background-repeat: repeat-x;
+  background-position: left center;
 }

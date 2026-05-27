@@ -13,6 +13,7 @@ import { Card } from '@/components/ui/card'
 import { ChapterOpener } from './ChapterOpener'
 import { REPORT_MOCK } from './data'
 import { cn } from '@/lib/utils'
+import { AnimNum } from '@/components/anim-number'
 
 interface KPIChapterProps {
   pack: string
@@ -39,7 +40,7 @@ function KPICell({ k, pack }: { k: typeof REPORT_MOCK.kpis[0]; pack: string }) {
     <>
       <div className="rep-kpi-label">{k.label}</div>
       <div className={cn('rep-kpi-num', numScaleClass(k.num))}>
-        <span>{k.num}</span>
+        <AnimNum text={k.num} />
         {k.unit ? <span className="unit">{k.unit}</span> : null}
       </div>
       <div className="rep-kpi-delta">

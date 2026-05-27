@@ -1,5 +1,6 @@
 import * as PaperShaders from '@paper-design/shaders-react'
 import { REPORT_MOCK } from './data'
+import { AnimNum } from '@/components/anim-number'
 
 interface HeroProps {
   pack: string
@@ -45,9 +46,69 @@ function HeroShader({ slot }: { slot: Record<string, any> }) {
   )
 }
 
+// R-113.5 · Hero image background mode. When slot.molecular.hero_image_url is set,
+// the shader layer is replaced with an <img> filling the section, plus a tinted
+// overlay (driven by --mode) to keep title text legible. Falls back to shader
+// when no image is provided.
+function HeroBackground({ slot }: { slot: Record<string, any> }) {
+  const heroImageUrl = slot.molecular?.hero_image_url as string | undefined
+  if (heroImageUrl) {
+    return (
+      <>
+        <div className="rep-hero-bg-image" aria-hidden="true">
+          <img src={heroImageUrl} alt="" loading="lazy" />
+        </div>
+        <div className="rep-hero-bg-image-overlay" aria-hidden="true" />
+      </>
+    )
+  }
+  return (
+    <div className="rep-hero-shader" aria-hidden="true">
+      <HeroShader slot={slot} />
+    </div>
+  )
+}
+
 export function Hero({ pack, slot }: HeroProps) {
   const isSystematic = pack === 'systematic'
+  const isDefault = pack === 'default'
+  const hasHeroImage = Boolean(slot.molecular?.hero_image_url)
 
+  // Default style: two-column grid layout (left: copy / right: peak number).
+  // Fixed styles: keep the original vertical-stack composition.
+  if (isDefault) {
+    return (
+      <section
+        className={`rep-hero default ${hasHeroImage ? 'has-hero-image' : ''}`}
+      >
+        <HeroBackground slot={slot} />
+        <div className={`rep-hero-shader-wash ${pack}`} aria-hidden="true" />
+
+        <div className="rep-hero-grid">
+          <div className="rep-hero-col-copy">
+            <div className="rep-hero-eyebrow">{REPORT_MOCK.eyebrow}</div>
+            <h1 className="rep-hero-title">{REPORT_MOCK.title}</h1>
+            <p className="rep-hero-lead">{REPORT_MOCK.lead}</p>
+          </div>
+
+          <div className="rep-hero-col-figure">
+            <div className="rep-hero-num">
+              <span className="pfx">{REPORT_MOCK.gmv.prefix}</span>
+              <AnimNum text={REPORT_MOCK.gmv.num} durationS={1.8} />
+              <span className="unit">{REPORT_MOCK.gmv.unit}</span>
+            </div>
+            <div className="rep-hero-delta">
+              <span>{REPORT_MOCK.delta.dir === 'up' ? '▲' : '▼'}</span>
+              <span>{REPORT_MOCK.delta.value}</span>
+              <span className="label">{REPORT_MOCK.delta.label}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  // Fixed styles — vertical stack (unchanged)
   return (
     <section className={`rep-hero ${pack}`}>
       {/* R-93 A1 · Cinnabar Imprint removed (Chris reject R-92 #26) */}
@@ -65,7 +126,7 @@ export function Hero({ pack, slot }: HeroProps) {
       <div className="rep-hero-bigrow">
         <div className="rep-hero-num">
           <span className="pfx">{REPORT_MOCK.gmv.prefix}</span>
-          <span>{REPORT_MOCK.gmv.num}</span>
+          <AnimNum text={REPORT_MOCK.gmv.num} durationS={1.8} />
           <span className="unit">{REPORT_MOCK.gmv.unit}</span>
         </div>
         <div className="rep-hero-delta">

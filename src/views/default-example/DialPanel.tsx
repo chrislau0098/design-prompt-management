@@ -296,6 +296,19 @@ export function DialPanel({ dials, onChange, onReset }: DialPanelProps) {
                         </select>
                       </div>
 
+                      {/* R-113.5 · Hero 图片背景 URL(留空 = 用 shader) */}
+                      <div className="dk-dial-section">
+                        <span className="dk-dial-label">Hero 图片背景</span>
+                        <input
+                          type="url"
+                          className="dk-hex-input"
+                          value={dials.hero_image_url}
+                          onChange={(e) => onChange('hero_image_url', e.target.value)}
+                          placeholder="https://... (留空用 shader)"
+                          spellCheck={false}
+                        />
+                      </div>
+
                     </div>
                   </motion.div>
                 )}
