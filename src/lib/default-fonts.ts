@@ -33,7 +33,9 @@ const FONT_LINK_URLS: Record<DialFontFamily, string[]> = {
     'https://cdn.jsdelivr.net/npm/cn-fontsource-smiley-sans-oblique-regular/font.css',
   ],
   ceremonial: [
-    'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Cinzel:wght@700&display=swap',
+    // R-114.3 · 英文换 EB Garamond 主导 (古典印刷衬线,与中文仿宋/毛笔楷书 mood 协调).
+    // Playfair Display / Cinzel 保留作为 fallback / number stack 备选.
+    'https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=Playfair+Display:ital,wght@0,700;1,400&family=Cinzel:wght@700&display=swap',
     // 马善政毛笔楷书 via Google Fonts
     'https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap',
     // 朱雀仿宋 via ZSFT
@@ -77,9 +79,12 @@ export const FONT_STACKS: Record<DialFontFamily, { title: string; number: string
     mono:   '"JetBrains Mono", monospace',
   },
   ceremonial: {
-    title:  '"Playfair Display", "Ma Shan Zheng", "Cinzel", "马善政毛笔楷书", serif',
-    number: '"Playfair Display", "Cinzel", serif',
-    body:   '"Zhuque Fangsong", "朱雀仿宋", "Noto Serif SC", "FZShuSong-Z01", serif',
+    // R-114.3 · EB Garamond 主导英文(古典印刷衬线),与 Ma Shan Zheng / 朱雀仿宋
+    // 协调成统一的"传统印刷"mood — 不再混 Playfair Display didone 衍生与
+    // 毛笔楷书行书造成的视觉跳脱.
+    title:  '"EB Garamond", "Ma Shan Zheng", "Zhuque Fangsong", "马善政毛笔楷书", "朱雀仿宋", "Noto Serif SC", serif',
+    number: '"EB Garamond", "Playfair Display", "Cinzel", serif',
+    body:   '"EB Garamond", "Zhuque Fangsong", "朱雀仿宋", "Noto Serif SC", "FZShuSong-Z01", serif',
     mono:   '"IBM Plex Mono", monospace',
   },
 }

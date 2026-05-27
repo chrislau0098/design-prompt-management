@@ -81,13 +81,14 @@ export function FixedStyleChapterOpener({ pack, num, title }: ChapterOpenerProps
 // meaningfully when Chris switches font_family — not just type.
 
 function GeometricOpener({ num, title }: { num: string; title: string }) {
+  // R-114.2 · Chapter stamp 移到标题左上角(stamp 独占一行 → title 一行 → hairline)
   return (
     <div className="rep-chapter-opener default variant-geometric" key="op">
-      <div className="rco-geo-row">
+      <div className="rco-geo-stamp">
         <span className="rco-geo-bar" aria-hidden />
         <span className="rco-geo-num">CH · {num}</span>
-        <h2 className="rep-chapter-title">{title}</h2>
       </div>
+      <h2 className="rep-chapter-title">{title}</h2>
       <Separator className="rep-chapter-hairline" />
     </div>
   )

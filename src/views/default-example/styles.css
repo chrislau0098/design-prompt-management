@@ -726,19 +726,22 @@
   font-family: var(--title-stack, var(--display-stack));
 }
 
-/* ── geometric · vertical primary bar + uppercase mono num + crisp hairline */
-.report-canvas-scope .rep-chapter-opener.default.variant-geometric .rco-geo-row {
-  display: flex;
-  align-items: baseline;
-  gap: 14px;
+/* ── geometric · stamp 独占一行(左上角)→ title → hairline */
+.report-canvas-scope .rep-chapter-opener.default.variant-geometric {
+  gap: 10px;
+}
+.report-canvas-scope .rep-chapter-opener.default.variant-geometric .rco-geo-stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  align-self: flex-start;
 }
 .report-canvas-scope .rep-chapter-opener.default.variant-geometric .rco-geo-bar {
   display: inline-block;
   width: 3px;
-  height: 18px;
+  height: 14px;
   background: var(--primary);
   border-radius: 1px;
-  transform: translateY(2px);
   flex-shrink: 0;
 }
 .report-canvas-scope .rep-chapter-opener.default.variant-geometric .rco-geo-num {
@@ -748,12 +751,14 @@
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--foreground-2);
+  line-height: 1;
 }
 .report-canvas-scope .rep-chapter-opener.default.variant-geometric .rep-chapter-title {
   font-weight: 600;
   font-size: clamp(28px, 4.2vw, 40px);
   line-height: 1.15;
   letter-spacing: -0.01em;
+  margin-top: 4px;
 }
 
 /* ── editorial · large outline serif numeral above title + thin underline */

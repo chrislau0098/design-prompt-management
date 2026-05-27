@@ -50,6 +50,18 @@ function parseDisplayValue(text: string): Parsed | null {
   }
 }
 
+// R-114.1 · motion-plus AnimateNumber renders each digit position into a
+// fixed-width Mask and scrolls a column of 0-9 inside it. With proportional
+// fonts (Geist, EB Garamond, Ma Shan Zheng — basically every non-mono face we
+// route to) digit char widths differ, so the Mask under-sizes and digits
+// overlap. Forcing OpenType `tnum` + `tabular-nums` makes the active variant
+// render every digit at the same advance width, which the Mask sizing relies on.
+const TABULAR_STYLE: React.CSSProperties = {
+  fontFeatureSettings: '"tnum" 1, "lnum" 1',
+  fontVariantNumeric: 'tabular-nums lining-nums',
+  letterSpacing: 0,
+}
+
 export function AnimNum({ text, className, durationS = 1.4 }: AnimNumProps) {
   const ref = useRef<HTMLSpanElement>(null)
   const isInView = useInView(ref, { once: true, margin: '0px 0px -10% 0px' })
@@ -59,14 +71,19 @@ export function AnimNum({ text, className, durationS = 1.4 }: AnimNumProps) {
 
   // Unparseable strings or reduced-motion users: render static text.
   if (!parsed || reducedMotion) {
-    return <span ref={ref} className={className}>{text}</span>
+    return (
+      <span ref={ref} className={className} style={TABULAR_STYLE}>
+        {text}
+      </span>
+    )
   }
 
   return (
-    <span ref={ref} className={className}>
+    <span ref={ref} className={className} style={TABULAR_STYLE}>
       <AnimateNumber
         transition={{ duration: durationS, ease: [0.2, 0.7, 0.1, 1] }}
         format={parsed.format}
+        style={TABULAR_STYLE}
       >
         {isInView ? parsed.value : 0}
       </AnimateNumber>
