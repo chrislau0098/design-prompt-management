@@ -4,7 +4,6 @@ import { Atomic } from './Atomic'
 import { Molecular } from './Molecular'
 import { HeroComposition } from './HeroComposition'
 import { Ornaments } from './Ornaments'
-import { FontInventory } from './FontInventory'
 import { loadLatestPromptMd } from '../design-prompt/glob-loader'
 import { parsePromptOrnaments } from '@/lib/parse-prompt-ornaments'
 import { parseDialsFromQuery, dialsToQueryString, DEFAULT_DIALS } from '@/lib/default-dials'
@@ -115,11 +114,10 @@ function DefaultDesignSystemView() {
             <div className="meta-proposition">{meta?.description_zh || meta?.proposition}</div>
           </section>
 
-          {/* M-01 Color + M-02 Typography + M-05 RSS */}
-          <Atomic slot={slot} />
-
-          {/* M-02b · R-117.3 Font Inventory — per font_family stack + CDN source */}
-          <FontInventory family={dials.font_family} />
+          {/* M-01 Color + M-02b Font Inventory + M-02 Typography + M-05 RSS
+              R-119 · FontInventory 通过 fontFamily prop 由 Atomic 渲染,
+              位置在 Atomic 内部 Typography (字号节奏) 上方. */}
+          <Atomic slot={slot} fontFamily={dials.font_family} />
 
           {/* M-03 Charts */}
           <Molecular slot={slot} />

@@ -1,7 +1,12 @@
 import { fmtOKLCH, type OklchObj } from './oklch'
+import { FontInventory } from './FontInventory'
+import type { DialFontFamily } from '@/lib/default-dials'
 
 interface AtomicProps {
   slot: Record<string, any>
+  /** R-119 · default style 时透传 font_family,Atomic 在 Typography section 之上
+      渲染 FontInventory; fixed style 不传则不渲染. */
+  fontFamily?: DialFontFamily
 }
 
 /* ─── Swatch group ─── */
@@ -27,7 +32,7 @@ function SwatchGroup({ items }: { items: Array<{ name: string; value: any; h: nu
   )
 }
 
-export function Atomic({ slot }: AtomicProps) {
+export function Atomic({ slot, fontFamily }: AtomicProps) {
   const c = slot.atomic?.color
   const t = slot.atomic?.typography
   const r = slot.atomic?.radius
@@ -233,6 +238,9 @@ export function Atomic({ slot }: AtomicProps) {
         <div className="subsection-title">Overlays &amp; Borders</div>
         <SwatchGroup items={overlay} />
       </section>
+
+      {/* R-119 · Font Inventory(default style 时显示,放在 Typography 字号节奏上方) */}
+      {fontFamily && <FontInventory family={fontFamily} />}
 
       {/* M-02 Typography */}
       <section className="section" id="m-type">

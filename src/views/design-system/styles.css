@@ -1303,9 +1303,12 @@
 .festive-royal-delta-inline.down { color: var(--fg-2); }
 
 /* ─────────────────────────────────────────────────────────────────────────
-   R-117.3 · FontInventory section (default style DS view)
-   Per font_family stack table — title / number / body / mono roles each
-   with stack order + CDN source badge + inject flag + 中文 notes.
+   FontInventory section (default style DS view)
+   Per font_family stack table — title, number, body, mono roles each with
+   stack order + CDN source badge + inject flag + 中文 notes.
+   R-119 · 颜色 token 改用 default scope (surface-l1/l2/l3 + foreground
+   + foreground-2/3 + border + border-strong),跟随 ds-canvas-scope 的
+   light/dark 自动切换;不再 hardcode main App dark chrome.
    ───────────────────────────────────────────────────────────────────────── */
 
 .font-inventory-section { /* inherits .section base spacing */ }
@@ -1323,7 +1326,7 @@
   gap: 0 16px;
   align-items: start;
   padding: 12px 0;
-  border-top: 1px solid var(--border, rgba(255,255,255,0.08));
+  border-top: 1px solid var(--border);
 }
 .font-role-block:first-child { border-top: none; padding-top: 0; }
 
@@ -1331,7 +1334,7 @@
   font: 500 12px/1.4 var(--mono-stack, ui-monospace, monospace);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--muted-foreground, rgba(255,255,255,0.55));
+  color: var(--foreground-3);
   padding-top: 2px;
 }
 
@@ -1350,11 +1353,11 @@
   flex-wrap: wrap;
   gap: 8px;
   padding: 6px 10px;
-  background: var(--surface-2, rgba(255,255,255,0.04));
+  background: var(--surface-l2);
   border-radius: 4px;
-  border: 1px solid var(--border, rgba(255,255,255,0.06));
+  border: 1px solid var(--border);
   font-size: 12.5px;
-  color: var(--foreground, rgba(255,255,255,0.85));
+  color: var(--foreground);
 }
 
 .font-stack-order {
@@ -1364,9 +1367,9 @@
   width: 18px;
   height: 18px;
   border-radius: 2px;
-  background: var(--surface-3, rgba(255,255,255,0.08));
+  background: var(--surface-l3);
   font: 500 10px/1 var(--mono-stack, monospace);
-  color: var(--muted-foreground);
+  color: var(--foreground-2);
   flex-shrink: 0;
 }
 
@@ -1388,50 +1391,52 @@
   white-space: nowrap;
 }
 
+/* Source badge palette stays brand-fixed across modes (intentional —
+   these mark CDN provenance, not data; identifiable color recall). */
 .font-source-google-fonts {
-  background: color-mix(in oklch, #4285f4 18%, transparent);
-  color: #6b9cf7;
-  border: 1px solid color-mix(in oklch, #4285f4 35%, transparent);
+  background: color-mix(in oklch, #4285f4 14%, transparent);
+  color: color-mix(in oklch, #4285f4 65%, var(--foreground));
+  border: 1px solid color-mix(in oklch, #4285f4 32%, transparent);
 }
 .font-source-jsdelivr {
-  background: color-mix(in oklch, #f59e0b 18%, transparent);
-  color: #fbbf24;
+  background: color-mix(in oklch, #f59e0b 14%, transparent);
+  color: color-mix(in oklch, #b45309 60%, var(--foreground));
   border: 1px solid color-mix(in oklch, #f59e0b 35%, transparent);
 }
 .font-source-zsft {
-  background: color-mix(in oklch, #ec4899 18%, transparent);
-  color: #f472b6;
-  border: 1px solid color-mix(in oklch, #ec4899 35%, transparent);
+  background: color-mix(in oklch, #ec4899 14%, transparent);
+  color: color-mix(in oklch, #be185d 60%, var(--foreground));
+  border: 1px solid color-mix(in oklch, #ec4899 32%, transparent);
 }
 .font-source-system {
-  background: color-mix(in oklch, var(--muted-foreground) 14%, transparent);
-  color: var(--muted-foreground);
-  border: 1px solid var(--border-strong, rgba(255,255,255,0.14));
+  background: color-mix(in oklch, var(--foreground-3) 14%, transparent);
+  color: var(--foreground-2);
+  border: 1px solid var(--border-strong);
 }
 
 .font-inject-yes {
   font: 500 10px/1.3 var(--mono-stack, monospace);
   letter-spacing: 0.04em;
-  color: #fb923c;
+  color: color-mix(in oklch, #fb923c 70%, var(--foreground));
   padding: 2px 6px;
   border-radius: 3px;
-  background: color-mix(in oklch, #fb923c 12%, transparent);
-  border: 1px solid color-mix(in oklch, #fb923c 28%, transparent);
+  background: color-mix(in oklch, #fb923c 10%, transparent);
+  border: 1px solid color-mix(in oklch, #fb923c 26%, transparent);
 }
 
 .font-inject-no {
   font: 500 10px/1.3 var(--mono-stack, monospace);
   letter-spacing: 0.04em;
-  color: var(--muted-foreground);
+  color: var(--foreground-3);
   padding: 2px 6px;
   border-radius: 3px;
   background: transparent;
-  border: 1px dashed var(--border-strong, rgba(255,255,255,0.14));
+  border: 1px dashed var(--border-strong);
 }
 
 .font-notes {
-  font: 400 11.5px/1.4 var(--sans-stack, system-ui);
-  color: var(--muted-foreground);
+  font: 400 11.5px/1.4 var(--body-stack, var(--sans-stack, system-ui));
+  color: var(--foreground-2);
   letter-spacing: -0.005em;
   flex-basis: 100%;
   margin-top: 2px;
@@ -1441,11 +1446,11 @@
 .font-inventory-legend {
   margin-top: 16px;
   padding: 10px 14px;
-  background: var(--surface-1, rgba(255,255,255,0.02));
+  background: var(--surface-l1);
   border-radius: 4px;
-  border: 1px solid var(--border, rgba(255,255,255,0.06));
-  font: 400 11.5px/1.7 var(--sans-stack, system-ui);
-  color: var(--muted-foreground);
+  border: 1px solid var(--border);
+  font: 400 11.5px/1.7 var(--body-stack, var(--sans-stack, system-ui));
+  color: var(--foreground-2);
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -1459,6 +1464,6 @@
   font: 500 11px var(--mono-stack, monospace);
   padding: 1px 5px;
   border-radius: 3px;
-  background: var(--surface-2, rgba(255,255,255,0.04));
+  background: var(--surface-l2);
   color: var(--foreground);
 }
