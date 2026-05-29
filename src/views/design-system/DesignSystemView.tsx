@@ -160,7 +160,7 @@ function FixedDesignSystemView({ styleKey, slot }: DesignSystemViewProps) {
   const visibleList = Array.from(visible)
 
   return (
-    <div className="ds-container">
+    <div className="ds-container fixed-style-scope">
       {/* Meta panel */}
       <section className="meta-panel">
         <div className="meta-row">
@@ -195,8 +195,8 @@ function FixedDesignSystemView({ styleKey, slot }: DesignSystemViewProps) {
         )}
       </section>
 
-      {/* M-01 Color + M-02 Typography + M-05 RSS */}
-      <Atomic slot={slot} />
+      {/* M-01 Color + M-02b FontInventory (R-122) + M-02 Typography + M-05 RSS */}
+      <Atomic slot={slot} fontFamily={styleKey as any} />
 
       {/* M-03 Charts */}
       <Molecular slot={slot} />
@@ -204,8 +204,8 @@ function FixedDesignSystemView({ styleKey, slot }: DesignSystemViewProps) {
       {/* M-04 Hero Composition */}
       <HeroComposition slot={slot} />
 
-      {/* M-06 Ornaments + M-07 Decorative Pack */}
-      <Ornaments slot={slot} />
+      {/* M-06 Ornaments + M-07 Decorative Pack — R-122 · 传 visible 让 fixed 也按 prompt md filter */}
+      <Ornaments slot={slot} styleKey={styleKey} visible={visible} />
     </div>
   )
 }

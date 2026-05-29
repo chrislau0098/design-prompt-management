@@ -1,12 +1,11 @@
 import { fmtOKLCH, type OklchObj } from './oklch'
-import { FontInventory } from './FontInventory'
-import type { DialFontFamily } from '@/lib/default-dials'
+import { FontInventory, type FontInventoryKey } from './FontInventory'
 
 interface AtomicProps {
   slot: Record<string, any>
-  /** R-119 · default style 时透传 font_family,Atomic 在 Typography section 之上
-      渲染 FontInventory; fixed style 不传则不渲染. */
-  fontFamily?: DialFontFamily
+  /** R-119 / R-122 · 透传 font_family (default) or styleKey (fixed) — Atomic
+      在 Typography section 之上渲染 FontInventory. 不传则不渲染. */
+  fontFamily?: FontInventoryKey
 }
 
 /* ─── Swatch group ─── */

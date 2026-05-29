@@ -1320,6 +1320,26 @@
   margin-top: 8px;
 }
 
+/* R-122.3 · Fixed-style scope alias — chrome index.css 在 :root 永久注
+   `--foreground = oklch(0.92 ...)` (chrome dark mode 浅文字),覆盖 oklch.ts
+   注的 fixed style `--fg` 之后,FontInventory CSS 的 `var(--foreground, var(--fg))`
+   永远拿 chrome 0.92 = white-on-white 看不清。Solution: 在 fixed style
+   scope wrapper 内 alias `--foreground = var(--fg)` 等,反向覆盖 chrome 全局 token. */
+.fixed-style-scope {
+  --foreground: var(--fg);
+  --foreground-2: var(--fg-2);
+  --foreground-3: var(--fg-3);
+  --body-stack: var(--sans-stack);
+  --title-stack: var(--display-stack);
+  --number-stack: var(--display-stack);
+}
+
+/* R-122.2 · FontInventory tokens use double-fallback chains so the section
+   renders correctly in BOTH scopes:
+     - default scope (.ds-canvas-scope):   --foreground / --foreground-2/3 / --body-stack
+     - fixed scope (.fixed-style-scope):   --fg → aliased to --foreground via the rule above
+   The fallback chain stays as a safety net for any tokens not aliased. */
+
 .font-role-block {
   display: grid;
   grid-template-columns: 120px 1fr;
@@ -1334,7 +1354,7 @@
   font: 500 12px/1.4 var(--mono-stack, ui-monospace, monospace);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--foreground-3);
+  color: var(--foreground-3, var(--fg-3));
   padding-top: 2px;
 }
 
@@ -1349,15 +1369,49 @@
 
 .font-stack-item {
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 8px;
-  padding: 6px 10px;
+  padding: 10px 12px;
   background: var(--surface-l2);
   border-radius: 4px;
   border: 1px solid var(--border);
   font-size: 12.5px;
-  color: var(--foreground);
+  color: var(--foreground, var(--fg));
+}
+
+/* R-122 · 字体清单每个条目分上下两行:meta (序号+family+badges) / sample (实际字体渲染) */
+.font-stack-row-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* R-122.4 · sample 分两行 Latin / CJK,大字号 32px 露字形细节 */
+.font-stack-sample-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 0 4px;
+  border-top: 1px solid var(--border);
+  color: var(--foreground, var(--fg));
+  /* Important: font-family is set inline on the block; children inherit */
+}
+
+.font-stack-sample {
+  font-size: 32px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.font-stack-sample-latin {
+  font-feature-settings: "kern", "tnum", "lnum";
+}
+
+.font-stack-sample-cjk {
+  font-size: 24px;
+  letter-spacing: 0.02em;
+  color: var(--foreground-2, var(--fg-2));
 }
 
 .font-stack-order {
@@ -1369,7 +1423,7 @@
   border-radius: 2px;
   background: var(--surface-l3);
   font: 500 10px/1 var(--mono-stack, monospace);
-  color: var(--foreground-2);
+  color: var(--foreground-2, var(--fg-2));
   flex-shrink: 0;
 }
 
@@ -1377,7 +1431,7 @@
   font-weight: 500;
   font-size: 13px;
   letter-spacing: -0.005em;
-  color: var(--foreground);
+  color: var(--foreground, var(--fg));
   min-width: 140px;
 }
 
@@ -1395,29 +1449,29 @@
    these mark CDN provenance, not data; identifiable color recall). */
 .font-source-google-fonts {
   background: color-mix(in oklch, #4285f4 14%, transparent);
-  color: color-mix(in oklch, #4285f4 65%, var(--foreground));
+  color: color-mix(in oklch, #4285f4 65%, var(--foreground, var(--fg)));
   border: 1px solid color-mix(in oklch, #4285f4 32%, transparent);
 }
 .font-source-jsdelivr {
   background: color-mix(in oklch, #f59e0b 14%, transparent);
-  color: color-mix(in oklch, #b45309 60%, var(--foreground));
+  color: color-mix(in oklch, #b45309 60%, var(--foreground, var(--fg)));
   border: 1px solid color-mix(in oklch, #f59e0b 35%, transparent);
 }
 .font-source-zsft {
   background: color-mix(in oklch, #ec4899 14%, transparent);
-  color: color-mix(in oklch, #be185d 60%, var(--foreground));
+  color: color-mix(in oklch, #be185d 60%, var(--foreground, var(--fg)));
   border: 1px solid color-mix(in oklch, #ec4899 32%, transparent);
 }
 .font-source-system {
-  background: color-mix(in oklch, var(--foreground-3) 14%, transparent);
-  color: var(--foreground-2);
+  background: color-mix(in oklch, var(--foreground-3, var(--fg-3)) 14%, transparent);
+  color: var(--foreground-2, var(--fg-2));
   border: 1px solid var(--border-strong);
 }
 
 .font-inject-yes {
   font: 500 10px/1.3 var(--mono-stack, monospace);
   letter-spacing: 0.04em;
-  color: color-mix(in oklch, #fb923c 70%, var(--foreground));
+  color: color-mix(in oklch, #fb923c 70%, var(--foreground, var(--fg)));
   padding: 2px 6px;
   border-radius: 3px;
   background: color-mix(in oklch, #fb923c 10%, transparent);
@@ -1427,7 +1481,7 @@
 .font-inject-no {
   font: 500 10px/1.3 var(--mono-stack, monospace);
   letter-spacing: 0.04em;
-  color: var(--foreground-3);
+  color: var(--foreground-3, var(--fg-3));
   padding: 2px 6px;
   border-radius: 3px;
   background: transparent;
@@ -1436,7 +1490,7 @@
 
 .font-notes {
   font: 400 11.5px/1.4 var(--body-stack, var(--sans-stack, system-ui));
-  color: var(--foreground-2);
+  color: var(--foreground-2, var(--fg-2));
   letter-spacing: -0.005em;
   flex-basis: 100%;
   margin-top: 2px;
@@ -1450,13 +1504,13 @@
   border-radius: 4px;
   border: 1px solid var(--border);
   font: 400 11.5px/1.7 var(--body-stack, var(--sans-stack, system-ui));
-  color: var(--foreground-2);
+  color: var(--foreground-2, var(--fg-2));
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 .font-inventory-legend strong {
-  color: var(--foreground);
+  color: var(--foreground, var(--fg));
   font-weight: 600;
   margin-bottom: 4px;
 }
@@ -1465,5 +1519,5 @@
   padding: 1px 5px;
   border-radius: 3px;
   background: var(--surface-l2);
-  color: var(--foreground);
+  color: var(--foreground, var(--fg));
 }

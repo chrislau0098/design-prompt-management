@@ -151,6 +151,45 @@
   text-transform: uppercase;
 }
 
+/* R-122 fix · Default-style Hero 2-col grid layout (was missing — caused
+   col-copy + col-figure to stack, eyebrow/title/lead 与 num/delta 视觉重叠) */
+.rep-hero.default .rep-hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 48px 56px;
+  align-items: end;
+}
+
+.rep-hero.default .rep-hero-col-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.rep-hero.default .rep-hero-col-figure {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  gap: 16px;
+  min-width: 0;
+}
+
+.rep-hero.default .rep-hero-col-figure .rep-hero-num {
+  margin: 0;
+}
+
+@container report (max-width: 800px) {
+  .rep-hero.default .rep-hero-grid {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+  .rep-hero.default .rep-hero-col-figure {
+    align-items: flex-start;
+    text-align: left;
+  }
+}
+
 .rep-hero-lead {
   font-family: var(--body-stack, var(--sans-stack));
   font-size: 17px;

@@ -718,36 +718,35 @@ export function Ornaments({ slot, styleKey, visible }: OrnamentsProps) {
   const stagger = mt?.stagger_children_s || 0.08
   const inviewMargin = mt?.inview_margin || '-20%'
 
-  // R-102 G7.1 · for default styleKey, filter Atomic ornament cards by what's
-  // actually mentioned in the default v0.1.md prompt. Other styles keep the
-  // full Atomic catalog (legacy behavior).
-  const defaultVisible = isDefault ? (visible ?? new Set<string>()) : null
+  // R-122 · Visible 集合非空时按 prompt md 过滤 (适用 default + 6 fixed styles);
+  //          空时全 show (legacy fallback,e.g. prompt md 加载中 / parse 失败)
+  const activeVisible = visible ?? new Set<string>()
+  const filterActive = activeVisible.size > 0
   function showOrn(...names: string[]): boolean {
-    if (!isDefault) return true
-    return defaultVisible !== null && names.some((n) => defaultVisible.has(n))
+    if (!filterActive) return true
+    return names.some((n) => activeVisible.has(n))
   }
 
-  // Dividers — for default, only Separator (alpha-hairline) is referenced.
+  // Dividers — alpha-hairline / dotdotdot / gradient-hairline 三套
   const dividers = [
-    showOrn('Separator') ? (
+    showOrn('Separator', 'HairlineRule', 'ShadSeparator', 'GoldenHairline') ? (
       <OrnCard key="d3" name="Divider · alpha-hairline" slot="molecular.dividers.content_divider" delay={0}>
         <div className="orn-divider-alpha-hairline" />
       </OrnCard>
     ) : null,
-    !isDefault && (
+    showOrn('ChapterDivider', 'TasselDivider') ? (
       <OrnCard key="d1" name="Divider · hairline-dotdotdot" slot="molecular.dividers.content_divider" delay={stagger}>
         <div className="orn-divider-dotdotdot">·  ·  ·</div>
       </OrnCard>
-    ),
-    !isDefault && (
+    ) : null,
+    showOrn('GoldenHairline', 'OutroSignature') ? (
       <OrnCard key="d2" name="Divider · gradient-hairline" slot="molecular.dividers.accent_divider" delay={stagger * 2}>
         <div className="orn-divider-gradient-hairline" />
       </OrnCard>
-    ),
+    ) : null,
   ].filter(Boolean)
 
-  // Chapter markers — for default, only ChapterBanner (hairline-banner) +
-  // SealStamp (ceremonial only) get referenced.
+  // Chapter markers — hairline-banner / circular stamp / text No.
   const chapterMarkers = [
     showOrn('ChapterBanner') ? (
       <OrnCard key="cm1" name="Marker · ChapterBanner (hairline)" slot="default chapter_opener" delay={0}>
@@ -765,17 +764,17 @@ export function Ornaments({ slot, styleKey, visible }: OrnamentsProps) {
         </svg>
       </OrnCard>
     ) : null,
-    !isDefault && (
+    showOrn('ChapterNumeralLarge') ? (
       <OrnCard key="cm3" name="Marker · ChapterStamp (text)" slot="editorial inline column" delay={stagger * 2}>
         <div style={{ fontFamily: 'var(--mono-stack)', textAlign: 'center' }}>
           <div style={{ fontSize: 10, fontWeight: 500, letterSpacing: '0.08em', color: 'var(--fg-3)' }}>No.</div>
           <div style={{ fontSize: 18, fontWeight: 500, color: 'var(--primary)' }}>03</div>
         </div>
       </OrnCard>
-    ),
+    ) : null,
   ].filter(Boolean)
 
-  // Delta indicators
+  // Delta indicators — inline glyph / pill variant
   const deltaIndicators = [
     showOrn('DeltaIndicator') ? (
       <OrnCard key="di1" name="DeltaIndicator · inline glyph (no pill)" slot="default decorative_pack" delay={0}>
@@ -785,14 +784,15 @@ export function Ornaments({ slot, styleKey, visible }: OrnamentsProps) {
         </div>
       </OrnCard>
     ) : null,
-    !isDefault && (
+    // pill variant 只对 theatrical / instrumental — 用 SpotlightGradient 作 candidate (theatre/cool 都有)
+    showOrn('SpotlightGradient') && !isDefault ? (
       <OrnCard key="di2" name="DeltaIndicator · pill rounded-[4px]" slot="theatrical / instrumental decorative_pack" delay={stagger}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}>
           <span className="delta-pill"><span className="arrow">▲</span><span>18.2%</span></span>
           <span className="delta-pill down"><span className="arrow">▼</span><span>4.7%</span></span>
         </div>
       </OrnCard>
-    ),
+    ) : null,
   ].filter(Boolean)
 
   // Pills
@@ -805,33 +805,34 @@ export function Ornaments({ slot, styleKey, visible }: OrnamentsProps) {
         </div>
       </OrnCard>
     ) : null,
-    !isDefault && (
+    showOrn('OutlinedPill') ? (
       <OrnCard key="p2" name="Pill · OutlinedPill (thin-border)" slot="instrumental decorative_pack" delay={stagger}>
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'center' }}>
           <span className="pill-outlined">Live</span>
           <span className="pill-outlined">Signal</span>
         </div>
       </OrnCard>
-    ),
+    ) : null,
   ].filter(Boolean)
 
   // Quotes — default Prompt md doesn't introduce a Quote archetype ornament
   const quotes = [
-    !isDefault && (
+    showOrn('QuoteBracket') ? (
       <OrnCard key="q1" name="Quote · SVG L-shape 40×40" slot="editorial Quote archetype" delay={0}>
         <svg width={40} height={40} viewBox="0 0 40 40" fill="none" aria-hidden className="quote-bracket-svg">
           <path d="M 2 38 L 2 2 L 38 2" stroke="currentColor" strokeWidth={1} strokeLinecap="square" />
         </svg>
       </OrnCard>
-    ),
-    !isDefault && (
+    ) : null,
+    // lucide Quote 只对 theatrical / instrumental
+    showOrn('SpotlightGradient') && !isDefault ? (
       <OrnCard key="q2" name="Quote · lucide <Quote/>" slot="theatrical / instrumental Quote archetype" delay={stagger}>
         <svg width={32} height={32} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" className="quote-lucide" aria-hidden>
           <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" />
           <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z" />
         </svg>
       </OrnCard>
-    ),
+    ) : null,
   ].filter(Boolean)
 
   // Eyebrow — universal; default uses it as the kicker primitive
@@ -852,7 +853,7 @@ export function Ornaments({ slot, styleKey, visible }: OrnamentsProps) {
 
   const PackContent = () => {
     if (isDefault) {
-      return <DefaultPack visible={defaultVisible ?? new Set()} baseDuration={baseDuration} stagger={stagger} inviewMargin={inviewMargin} />
+      return <DefaultPack visible={activeVisible} baseDuration={baseDuration} stagger={stagger} inviewMargin={inviewMargin} />
     }
     if (pack === 'theatrical') return <TheatricalPack slot={slot} baseDuration={baseDuration} stagger={stagger} inviewMargin={inviewMargin} />
     if (pack === 'instrumental') return <InstrumentalPack slot={slot} baseDuration={baseDuration} stagger={stagger} inviewMargin={inviewMargin} />

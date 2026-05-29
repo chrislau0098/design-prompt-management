@@ -9,7 +9,76 @@
 // FONT_LINK_URLS) because role mapping + system-vs-CDN classification is
 // editorial, not algorithmic.
 
+import { useEffect } from 'react'
 import type { DialFontFamily } from '@/lib/default-dials'
+import { loadFontFamily } from '@/lib/default-fonts'
+
+// R-122 · Support both default-style font_family and 6 fixed style keys
+// (warm/cool/theatre/swiss/festive-royal/festive-editorial). family arg
+// can be any of these — inventory data is per-key authored below.
+export type FontInventoryKey =
+  | DialFontFamily
+  | 'warm' | 'cool' | 'theatre' | 'swiss'
+  | 'festive-royal' | 'festive-editorial'
+
+const DEFAULT_FAMILIES: DialFontFamily[] = ['geometric', 'editorial', 'technical', 'warmth', 'impact', 'ceremonial']
+
+// R-122 fix · Fixed-style CDN link URLs. Fixed styles never had CDN injection
+// before (relied on system fonts) — but FontInventory needs the actual face
+// loaded to render its sample text. Inject lazily on mount.
+const FIXED_FONT_LINK_URLS: Record<string, string[]> = {
+  warm: [
+    // Geist Variable + Noto Sans SC (both already loaded if default editorial/warmth
+    // active, but inject explicitly so fixed-warm visit is self-sufficient).
+    'https://fonts.googleapis.com/css2?family=Geist:wght@400;500;700&display=swap',
+    'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap',
+    'https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&display=swap',
+  ],
+  cool: [
+    // Satoshi via jsDelivr cn-fontsource; MiSans via jsDelivr; Noto Sans SC fallback
+    'https://cdn.jsdelivr.net/npm/cn-fontsource-satoshi-regular/font.css',
+    'https://cdn.jsdelivr.net/npm/cn-fontsource-misans-regular/font.css',
+    'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap',
+    'https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&display=swap',
+  ],
+  theatre: [
+    'https://fonts.googleapis.com/css2?family=Geist:wght@400;500;700&display=swap',
+    'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap',
+    'https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&display=swap',
+  ],
+  swiss: [
+    // IBM Plex Sans / Mono via Google Fonts; Helvetica Neue is system
+    'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap',
+    'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap',
+  ],
+  'festive-royal': [
+    // Cormorant Garamond + Playfair Display + Noto Serif SC
+    'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap',
+    'https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&display=swap',
+    'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&display=swap',
+  ],
+  'festive-editorial': [
+    'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400&display=swap',
+    'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap',
+    'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap',
+  ],
+}
+
+const _fixedLoaded = new Set<string>()
+
+function loadFixedStyleFonts(key: string): void {
+  if (_fixedLoaded.has(key)) return
+  _fixedLoaded.add(key)
+  const urls = FIXED_FONT_LINK_URLS[key]
+  if (!urls) return
+  for (const href of urls) {
+    if (document.querySelector(`link[href="${href}"]`)) continue
+    const link = document.createElement('link')
+    link.rel = 'stylesheet'
+    link.href = href
+    document.head.appendChild(link)
+  }
+}
 
 type FontSource = 'google-fonts' | 'jsdelivr' | 'zsft' | 'system'
 
@@ -34,12 +103,26 @@ const SOURCE_NOTE: Record<FontSource, string> = {
   'system':       '本地系统字体,无需 CDN inject',
 }
 
-const FONT_INVENTORY: Record<DialFontFamily, {
-  title:  FontEntry[]
-  number: FontEntry[]
-  body:   FontEntry[]
-  mono:   FontEntry[]
-}> = {
+type RoleSet = {
+  title?:   FontEntry[]
+  number?:  FontEntry[]
+  body?:    FontEntry[]
+  mono?:    FontEntry[]
+  display?: FontEntry[]
+  sans?:    FontEntry[]
+}
+
+// R-122.3 · CSS spec disallows `inherit` inside a font-family stack — must be a
+// generic family keyword instead. Pick generic family by role + family hint.
+function genericFallbackFor(role: string, family: string): string {
+  if (role === 'mono') return 'ui-monospace, monospace'
+  // Serif heuristic: family name contains serif markers
+  const isSerif = /Garamond|Serif|Songti|Spectral|Cormorant|Playfair|Cinzel|EB Garamond|Zhuque|宋|STSong/i.test(family)
+  if (isSerif) return 'ui-serif, serif'
+  return 'system-ui, sans-serif'
+}
+
+const FONT_INVENTORY: Record<FontInventoryKey, RoleSet> = {
   geometric: {
     title: [
       { family: 'Geist',         source: 'google-fonts', inject: true,  notes: 'Variable 几何无衬线 · Vercel-style' },
@@ -160,14 +243,129 @@ const FONT_INVENTORY: Record<DialFontFamily, {
       { family: 'IBM Plex Mono', source: 'system',       inject: false },
     ],
   },
+
+  // ─── 6 Fixed styles (R-122) ────────────────────────────────────────────────
+  // Each fixed style has display + sans + mono roles per slot.json atomic.typography
+  warm: {
+    display: [
+      { family: 'Geist Variable', source: 'google-fonts', inject: true,  notes: '可变粗细 · 几何无衬线' },
+      { family: 'Geist',          source: 'google-fonts', inject: true,  notes: 'fallback (静态)' },
+      { family: 'Noto Sans SC',   source: 'google-fonts', inject: true,  notes: 'CJK 承接' },
+    ],
+    sans: [
+      { family: 'Noto Sans SC Variable', source: 'google-fonts', inject: true,  notes: 'CJK 正文可变' },
+      { family: 'Noto Sans SC',   source: 'google-fonts', inject: true },
+      { family: 'PingFang SC',    source: 'system',       inject: false, notes: 'macOS / iOS 系统 fallback' },
+      { family: 'Helvetica Neue', source: 'system',       inject: false },
+    ],
+    mono: [
+      { family: 'Geist Mono',     source: 'google-fonts', inject: true,  notes: 'Vercel Mono · 等宽' },
+    ],
+  },
+  cool: {
+    display: [
+      { family: 'Satoshi',        source: 'jsdelivr',     inject: true,  notes: '现代几何无衬线 · cn-fontsource' },
+      { family: 'Geist Mono',     source: 'google-fonts', inject: true,  notes: '冷色调 mono fallback' },
+    ],
+    sans: [
+      { family: 'MiSans',         source: 'jsdelivr',     inject: true,  notes: '小米兰亭 · cn-fontsource' },
+      { family: 'Noto Sans SC',   source: 'google-fonts', inject: true },
+      { family: 'PingFang SC',    source: 'system',       inject: false },
+      { family: 'Source Han Sans SC', source: 'system',   inject: false },
+    ],
+    mono: [
+      { family: 'IBM Plex Mono',  source: 'system',       inject: false, notes: 'IBM 等宽' },
+    ],
+  },
+  theatre: {
+    display: [
+      { family: 'Geist Variable', source: 'google-fonts', inject: true,  notes: '可变粗细 · 大字号 dramatic' },
+      { family: '-apple-system',  source: 'system',       inject: false, notes: 'Apple 系统 fallback' },
+      { family: 'system-ui',      source: 'system',       inject: false },
+    ],
+    sans: [
+      { family: 'Noto Sans SC Variable', source: 'google-fonts', inject: true,  notes: 'CJK 正文可变' },
+      { family: 'PingFang SC',    source: 'system',       inject: false },
+      { family: 'Source Han Sans SC', source: 'system',   inject: false },
+    ],
+    mono: [
+      { family: 'Geist Mono',     source: 'google-fonts', inject: true },
+    ],
+  },
+  swiss: {
+    display: [
+      { family: 'Helvetica Neue', source: 'system',       inject: false, notes: 'Swiss 国际主义经典 · 本地优先' },
+      { family: 'IBM Plex Sans',  source: 'google-fonts', inject: true,  notes: 'CDN 等价 fallback' },
+      { family: 'Neue Haas Grotesk', source: 'system',    inject: false, notes: 'Helvetica 原型 · 较少本地' },
+    ],
+    sans: [
+      { family: 'Helvetica Neue', source: 'system',       inject: false },
+      { family: 'IBM Plex Sans',  source: 'google-fonts', inject: true },
+      { family: 'Noto Sans SC',   source: 'google-fonts', inject: true,  notes: 'CJK 正文' },
+      { family: 'PingFang SC',    source: 'system',       inject: false },
+    ],
+    mono: [
+      { family: 'IBM Plex Mono',  source: 'system',       inject: false },
+    ],
+  },
+  'festive-royal': {
+    display: [
+      { family: 'Cormorant Garamond', source: 'google-fonts', inject: true,  notes: '古典宋衬线 · 金色焦点字' },
+      { family: 'Playfair Display',   source: 'google-fonts', inject: true,  notes: 'didone 备选大字' },
+      { family: 'Noto Serif SC',  source: 'google-fonts', inject: true,  notes: 'CJK 衬线主' },
+      { family: 'Source Han Serif SC', source: 'system',  inject: false },
+    ],
+    sans: [
+      { family: 'Cormorant Garamond', source: 'google-fonts', inject: true,  notes: '正文也走 serif (中国风衬线主导)' },
+      { family: 'Noto Serif SC',  source: 'google-fonts', inject: true },
+      { family: 'Songti SC',      source: 'system',       inject: false, notes: 'macOS 宋体' },
+      { family: 'STSong',         source: 'system',       inject: false, notes: 'Windows 宋体' },
+    ],
+    mono: [
+      { family: 'IBM Plex Mono',  source: 'system',       inject: false },
+    ],
+  },
+  'festive-editorial': {
+    display: [
+      { family: 'Helvetica Neue', source: 'system',       inject: false, notes: 'Swiss-inspired sans 大字' },
+      { family: 'IBM Plex Sans',  source: 'google-fonts', inject: true,  notes: 'CDN fallback' },
+      { family: 'Inter',          source: 'google-fonts', inject: true,  notes: '默认 sans · 可读性强' },
+      { family: 'Noto Sans SC',   source: 'google-fonts', inject: true,  notes: 'CJK 大字' },
+    ],
+    sans: [
+      { family: 'Helvetica Neue', source: 'system',       inject: false },
+      { family: 'IBM Plex Sans',  source: 'google-fonts', inject: true },
+      { family: 'Inter',          source: 'google-fonts', inject: true },
+      { family: 'Noto Sans SC',   source: 'google-fonts', inject: true },
+      { family: 'PingFang SC',    source: 'system',       inject: false },
+    ],
+    mono: [
+      { family: 'IBM Plex Mono',  source: 'system',       inject: false },
+    ],
+  },
 }
 
-const ROLE_LABEL: Record<'title' | 'number' | 'body' | 'mono', string> = {
-  title:  'Title · 标题',
-  number: 'Number · 数字',
-  body:   'Body · 正文',
-  mono:   'Mono · 等宽',
+const ROLE_LABEL: Record<'title' | 'number' | 'body' | 'mono' | 'display' | 'sans', string> = {
+  title:   'Title · 标题',
+  number:  'Number · 数字',
+  body:    'Body · 正文',
+  mono:    'Mono · 等宽',
+  display: 'Display · 大字',
+  sans:    'Sans · 正文',
 }
+
+const ROLE_ORDER: Record<'default' | 'fixed', readonly ('title' | 'number' | 'body' | 'mono' | 'display' | 'sans')[]> = {
+  default: ['title', 'number', 'body', 'mono'] as const,
+  fixed:   ['display', 'sans', 'mono'] as const,
+}
+
+// R-122.4 · Sample text split into Latin / CJK rows so font character can
+// be eyeballed without CJK fallback hiding Latin differences. Each entry
+// renders both rows in the entry.family, but if the family is Latin-only
+// (e.g. Geist, Spectral), the CJK row will visibly fall back to
+// system/Noto, while the Latin row exposes the actual family's letterforms.
+const SAMPLE_LATIN = 'ABCDEFG abcdefg · 0123456789 · !@#$%'
+const SAMPLE_CJK   = '天地玄黄 · 宇宙洪荒 · 设计系统 · 字体清单'
 
 function SourceBadge({ source }: { source: FontSource }) {
   return (
@@ -177,44 +375,70 @@ function SourceBadge({ source }: { source: FontSource }) {
   )
 }
 
-export function FontInventory({ family }: { family: DialFontFamily }) {
+export function FontInventory({ family }: { family: FontInventoryKey }) {
   const inventory = FONT_INVENTORY[family]
+
+  // Detect whether this is a default-style 4-role inventory or a fixed-style
+  // 3-role inventory (display/sans/mono).
+  const isFixedStyle = inventory ? ('display' in inventory || 'sans' in inventory) : false
+
+  // R-122 fix · ensure CDN-injected fonts actually load so sample text 真的渲染
+  //   - default 4-role: load all 6 default families (so 切换 dial 时不重复 inject)
+  //   - fixed 3-role: load this style's CDN URL list
+  useEffect(() => {
+    if (!inventory) return
+    if (isFixedStyle) {
+      loadFixedStyleFonts(family as string)
+    } else {
+      for (const f of DEFAULT_FAMILIES) loadFontFamily(f)
+    }
+  }, [family, inventory, isFixedStyle])
+
   if (!inventory) return null
 
-  const roleKeys = ['title', 'number', 'body', 'mono'] as const
+  const roleKeys = isFixedStyle ? ROLE_ORDER.fixed : ROLE_ORDER.default
 
   return (
     <section className="section font-inventory-section" id="m-font-inventory">
       <div className="section-header">
         <span className="section-num">M-02b</span>
         <h2 className="section-title">Font Inventory · 字体清单</h2>
-        <span className="section-desc">font_family = <code>{family}</code> · 4 role · CDN 来源标注</span>
+        <span className="section-desc">{isFixedStyle ? 'style' : 'font_family'} = <code>{family}</code> · {roleKeys.length} role · CDN 来源标注 · 渲染样例</span>
       </div>
 
       <div className="font-inventory-table">
         {roleKeys.map((role) => {
           const entries = inventory[role]
+          if (!entries) return null
           return (
             <div className="font-role-block" key={role}>
               <div className="font-role-label">{ROLE_LABEL[role]}</div>
               <ol className="font-stack-list">
                 {entries.map((entry, idx) => (
                   <li className="font-stack-item" key={idx}>
-                    <span className="font-stack-order">{idx + 1}</span>
-                    <span className="font-stack-family" style={{ fontFamily: `"${entry.family}", inherit` }}>
-                      {entry.family}
-                    </span>
-                    <SourceBadge source={entry.source} />
-                    {entry.inject ? (
-                      <span className="font-inject-yes" title="CDN inject 必需 — 通过 <link rel='stylesheet'> 加载">
-                        CDN inject
-                      </span>
-                    ) : (
-                      <span className="font-inject-no" title="本地系统字体,无需 inject">
-                        local
-                      </span>
-                    )}
-                    {entry.notes && <span className="font-notes">{entry.notes}</span>}
+                    <div className="font-stack-row-meta">
+                      <span className="font-stack-order">{idx + 1}</span>
+                      <span className="font-stack-family">{entry.family}</span>
+                      <SourceBadge source={entry.source} />
+                      {entry.inject ? (
+                        <span className="font-inject-yes" title="CDN inject 必需 — 通过 <link rel='stylesheet'> 加载">
+                          CDN inject
+                        </span>
+                      ) : (
+                        <span className="font-inject-no" title="本地系统字体,无需 inject">
+                          local
+                        </span>
+                      )}
+                      {entry.notes && <span className="font-notes">{entry.notes}</span>}
+                    </div>
+                    <div
+                      className="font-stack-sample-block"
+                      style={{ fontFamily: `"${entry.family}", ${genericFallbackFor(role, entry.family)}` }}
+                      aria-label={`${entry.family} sample`}
+                    >
+                      <div className="font-stack-sample font-stack-sample-latin">{SAMPLE_LATIN}</div>
+                      <div className="font-stack-sample font-stack-sample-cjk">{SAMPLE_CJK}</div>
+                    </div>
                   </li>
                 ))}
               </ol>
